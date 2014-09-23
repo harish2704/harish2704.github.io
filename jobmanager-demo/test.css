@@ -1,0 +1,47 @@
+.worker {
+  width: 46px;
+  height: 30px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  float: left;
+  margin-right: 10px;
+}
+
+div.task {
+float: left;
+margin-right: 10px;
+background: rgba(255, 0, 0, 0.22);
+}
+
+#target {
+  width:300px;
+  height: 300px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  float: left;
+}
+
+#worker-1 {
+  background: rgba(223, 17, 116, 0.27);
+}
+#worker-2 {
+  background: rgba(27, 203, 111, 0.27);;
+}
+#worker-3 {
+  background: rgba(183, 37, 37, 0.27);
+}
+#worker-4 {
+  background: rgba(196, 17, 53, 0.46);
+}
+#worker-5 {
+  background: rgba(217, 224, 41, 0.8);
+}
+#worker-6 {
+  background: rgba(103, 67, 226, 0.27);
+}
+
+#messages {
+  color: red;
+  font-size:18px;
+  font-weight: bold;
+}
