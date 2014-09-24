@@ -124,6 +124,9 @@ $(document).ready( function(){
             cb();
         });
     };
+    jm.onStopped = function(){
+        flashMessage('onStopped()');
+    };
     jm.workers = workers;
     jm.work = function( task, worker, cb ){
         worker.doTask(task, cb);
