@@ -114,7 +114,7 @@ $(document).ready( function(){
 
 
     JobManager = require('./job-manager').JobManager;
-    jm = new JobManager( { concurrency: 4});
+    jm = new JobManager( { concurrency: 4, minConcurrency:0 });
 
     jm.onLoadMore = function(cb){
         flashMessage( 'onLoadMore()');
