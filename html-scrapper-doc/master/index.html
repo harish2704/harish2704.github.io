@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>html-scrapper</h1><p>A general purpose web scrapper written in server side JavaScript. It is written for ease of use.</p>
+<h1>Example</h1><p>Example of scrapping github's explore page.</p>
+<pre class="prettyprint source lang-js"><code>
+var scrapper = require('../');
+
+var Source = scrapper.Source;
+var Extractor = scrapper.Extractor;
+var Fn = scrapper.Fn;
+
+
+var github = new Source('get', 'https://github.com/explore' );
+var dataSchema = {
+    trendingRepos:[ {
+        $rule: '#explore-trending .explore-collection > ul > li',
+        name: '.repo-name',
+        forks: ':nth-child(1)',
+        stars: {
+            $rule: ':nth-child(2)',
+            $fn: Fn.asInt
+        }
+    }]
+};
+
+var extractor = new Extractor( dataSchema );
+github.read(function(err, res ){
+    var data = extractor.extract( res.body );
+    console.log( data );
+});
+
+/*
+Returns
+
+{ trendingRepos: 
+   [ { name: 'calmh/syncthing', forks: '77', stars: 2019 },
+     { name: 'quilljs/quill', forks: '47', stars: 1312 },
+     { name: 'filamentgroup/tablesaw', forks: '31', stars: 1128 },
+     { name: 'atom/atom', forks: '142', stars: 1035 },
+     { name: 'dennis714/RE-for-beginners', forks: '67', stars: 1072 },
+     { name: 'mdo/wtf-forms', forks: '43', stars: 912 } ] }
+
+*/</code></pre><h1>Usage</h1><h2><a href="http://harish2704.github.io/html-scrapper-doc/master/Fn.html"> Collection Fn </a></h2><p>Fn contains some usefull data extraction functions that can be used as $fn.</p>
+<p>Available functions:</p>
+<ol>
+<li>text<ul>
+<li>trimmed text content</li>
+</ul>
+</li>
+<li>link <ul>
+<li>href attribute</li>
+</ul>
+</li>
+<li>data <ul>
+<li>data-name=value is returned as {name: value}</li>
+</ul>
+</li>
+<li>classes <ul>
+<li>class attribute</li>
+</ul>
+</li>
+<li>asInt <ul>
+<li>text is parsed as integer. all comas are removed</li>
+</ul>
+</li>
+<li>asFloat<ul>
+<li>same as asInt but casts to Float.</li>
+</ul>
+</li>
+</ol>
+<h2><a href="http://harish2704.github.io/html-scrapper-doc/master/Browser.html"> Class Browser </a></h2><p>A simple Browser class implementation. It uses <code>request</code> module for http requests and stores session data in its instance.
+Only <code>get</code> method is implemented right now.</p>
+<h2><a href="http://harish2704.github.io/html-scrapper-doc/master/Crawler.html"> Class Crawler </a></h2><p>A simple web Crawler class. It uses the following libraries</p>
+<ul>
+<li><a href="https://github.com/harish2704/node-job-manager">job-manage</a>: It is the backbone of Crawler. JobManager is a asynchronous queue manager library. It is used to automatically collect pageUrls, scrap each pages, manage concurrency and to start, pause and resume the crawling.</li>
+<li><a href="https://github.com/harish2704/node-buffered-sink">BufferedSink</a>: Used to write the scraped data.</li>
+</ul>
+<p>It need following data to be passed to its constructor.</p>
+<ul>
+<li><code>loadPageList</code>: A function with signature <code>function( pageLoaderData, cb )</code>. It is used to collect urls of pages that need to be scraped.<ul>
+<li>pageLoaderData: A normal Object used to store any arbitrary data by this function.
+if <code>bundle.$endReached</code> is set <code>true</code>, then it will stop furthon invocation of loadPageList function.</li>
+<li>cb: A callback function with signature<code>function(err, [ pageData, ... ])</code></li>
+</ul>
+</li>
+<li><code>scrapePage</code>: A function <code>function( pageData, cb)</code>. <ul>
+<li>pageData: single item from the collection passed to callback function of loadPageList function.</li>
+<li>cb: callback function.</li>
+</ul>
+</li>
+<li><code>bs</code>: A BufferedSink instance used to write the data to output medium. See examples/blogspot  for a simple implementation that appends data to a json file</li>
+<li><code>pageListFilter</code>: An optional function. It it is present, all output from loadPageList function is passed through this function. Even if filtered output is empty we need not to worry about that, Crawler will manage that by repeated calling of loadPageList function until it gets some data or loadPageList function returns an empty result.</li>
+<li><code>onError</code>: a function <code>function(err)</code> called upon error. It will not stop the Crawler.</li>
+<li><code>onFinish</code>: a function called upon the completion of whole tasks.</li>
+<li><code>concurrency</code>: no.of parallel requests to processed during scraping.</li>
+</ul>
+<p>See the <code>examples/blogspot/</code> for an example crawler that scraps whole posts from a blogspot blog and dumps into a json file.</p>
+<h2>Class Source</h2><p>  Depreciated.
+  Browser class which is more simple ( and of course feature less ) instead.
+  We should extend Browser to meet our custom use</p>
+<h2><a href="http://harish2704.github.io/html-scrapper-doc/master/Extractor.html">Class Extractor</a></h2><p>Documentation is not yet complete
+see source code for undocumented features..</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Browser.html">Browser</a></li><li><a href="Crawler.html">Crawler</a></li><li><a href="Extractor.html">Extractor</a></li></ul><h3>Mixins</h3><ul><li><a href="Fn.html">Fn</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Fri Jul 03 2015 15:17:13 GMT+0530 (IST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
