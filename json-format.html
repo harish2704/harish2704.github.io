@@ -36,7 +36,7 @@
         var ipElem = document.getElementById('txt-input');
         var opElem = document.getElementById('txt-output');
         try {
-          opElem.value = JSON.stringify( JSON.parse( ipElem.value), null, ' ' );
+          opElem.value = JSON.stringify( JSON.parse( ipElem.value), null, '\t' );
         } catch (e) {
           alert( 'Error: ' + e );
         }
