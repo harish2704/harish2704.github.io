@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Json formatter</title>
+
+    <style type="text/css" media="all">
+      #container > div {
+        width: 50%;
+        display: block;
+        float: left;
+      }
+
+      textarea {
+        width: 95%;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div id="container">
+      <div id="input">
+        <form action="" accept-charset="utf-8" onsubmit="return updateView();">
+          <textarea id="txt-input" rows="30" cols="40" placeholder="Input JSON"></textarea>
+          <button type="submit">Update</button>
+        </form>
+      </div>
+      <div id="output">
+        <textarea id="txt-output" rows="30" cols="40" placeholder="Formated JSON"></textarea>
+      </div>
+    </div>
+
+
+    <script type="text/javascript" charset="utf-8">
+      function updateView() {
+        var ipElem = document.getElementById('txt-input');
+        var opElem = document.getElementById('txt-output');
+        try {
+          opElem.value = JSON.stringify( JSON.parse( ipElem.value), null, '  ' );
+        } catch (e) {
+          alert( 'Error: ' + e );
+        }
+        return false;
+      }
+    </script>
+
+  </body>
+</html>
