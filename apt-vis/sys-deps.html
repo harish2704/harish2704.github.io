@@ -1,0 +1,49 @@
+<!-- START SIGMA IMPORTS -->
+<script src="./bundle.js"></script>
+<div id="container">
+  <style>
+    #graph-container {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      position: absolute;
+    }
+  </style>
+  <div id="graph-container"></div>
+</div>
+<script>
+/**
+ * Here is just a basic example on how to properly display a graph
+ * exported from Gephi as a JSON file, with the JSON Exporter plugin from
+ * the Oxford Internet Institute:
+ *
+ *  > https://marketplace.gephi.org/plugin/json-exporter/
+ *
+ * The plugin sigma.parsers.json can load and parse the JSON graph file,
+ * and instantiate sigma when the graph is received.
+ *
+ * The object given as the second parameter is the base of the instance
+ * configuration object. The plugin will just add the "graph" key to it
+ * before the instanciation.
+ */
+
+s = new sigma({
+  renderer: {
+    // IMPORTANT:
+    // This works only with the canvas renderer, so the
+    // renderer type set as "canvas" is necessary here.
+    container: document.getElementById('graph-container'),
+    type: 'canvas'
+  },
+  settings: {
+    minNodeSize: 1,
+    maxNodeSize: 2,
+    minEdgeSize: 0.1,
+    maxEdgeSize: 0.1,
+    enableEdgeHovering: true,
+    edgeHoverSizeRatio: 2
+  }
+});
+  sigma.parsers.json('data.json', s, function(){ s.refresh(); });
+</script>
