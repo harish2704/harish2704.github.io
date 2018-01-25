@@ -10475,7 +10475,10 @@ Object.assign(window, {
 });
 
 $(function () {
-
+  if (!KerasJS.GPU_SUPPORT) {
+    alert('Sorry. WebGL 2 support not found. \nExiting...');
+    $('.container').hide();
+  }
   var img = $('#for-cropper');
   var output = $('#output');
   var tmpScaleCanvas = document.createElement('canvas');
