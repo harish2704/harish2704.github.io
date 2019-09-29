@@ -65,111 +65,3486 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-eval("var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!\n * jQuery JavaScript Library v3.3.1\n * https://jquery.com/\n *\n * Includes Sizzle.js\n * https://sizzlejs.com/\n *\n * Copyright JS Foundation and other contributors\n * Released under the MIT license\n * https://jquery.org/license\n *\n * Date: 2018-01-20T17:24Z\n */\n( function( global, factory ) {\n\n\t\"use strict\";\n\n\tif ( typeof module === \"object\" && typeof module.exports === \"object\" ) {\n\n\t\t// For CommonJS and CommonJS-like environments where a proper `window`\n\t\t// is present, execute the factory and get jQuery.\n\t\t// For environments that do not have a `window` with a `document`\n\t\t// (such as Node.js), expose a factory as module.exports.\n\t\t// This accentuates the need for the creation of a real `window`.\n\t\t// e.g. var jQuery = require(\"jquery\")(window);\n\t\t// See ticket #14549 for more info.\n\t\tmodule.exports = global.document ?\n\t\t\tfactory( global, true ) :\n\t\t\tfunction( w ) {\n\t\t\t\tif ( !w.document ) {\n\t\t\t\t\tthrow new Error( \"jQuery requires a window with a document\" );\n\t\t\t\t}\n\t\t\t\treturn factory( w );\n\t\t\t};\n\t} else {\n\t\tfactory( global );\n\t}\n\n// Pass this if window is not defined yet\n} )( typeof window !== \"undefined\" ? window : this, function( window, noGlobal ) {\n\n// Edge <= 12 - 13+, Firefox <=18 - 45+, IE 10 - 11, Safari 5.1 - 9+, iOS 6 - 9.1\n// throw exceptions when non-strict code (e.g., ASP.NET 4.5) accesses strict mode\n// arguments.callee.caller (trac-13335). But as of jQuery 3.0 (2016), strict mode should be common\n// enough that all such attempts are guarded in a try block.\n\"use strict\";\n\nvar arr = [];\n\nvar document = window.document;\n\nvar getProto = Object.getPrototypeOf;\n\nvar slice = arr.slice;\n\nvar concat = arr.concat;\n\nvar push = arr.push;\n\nvar indexOf = arr.indexOf;\n\nvar class2type = {};\n\nvar toString = class2type.toString;\n\nvar hasOwn = class2type.hasOwnProperty;\n\nvar fnToString = hasOwn.toString;\n\nvar ObjectFunctionString = fnToString.call( Object );\n\nvar support = {};\n\nvar isFunction = function isFunction( obj ) {\n\n      // Support: Chrome <=57, Firefox <=52\n      // In some browsers, typeof returns \"function\" for HTML <object> elements\n      // (i.e., `typeof document.createElement( \"object\" ) === \"function\"`).\n      // We don't want to classify *any* DOM node as a function.\n      return typeof obj === \"function\" && typeof obj.nodeType !== \"number\";\n  };\n\n\nvar isWindow = function isWindow( obj ) {\n\t\treturn obj != null && obj === obj.window;\n\t};\n\n\n\n\n\tvar preservedScriptAttributes = {\n\t\ttype: true,\n\t\tsrc: true,\n\t\tnoModule: true\n\t};\n\n\tfunction DOMEval( code, doc, node ) {\n\t\tdoc = doc || document;\n\n\t\tvar i,\n\t\t\tscript = doc.createElement( \"script\" );\n\n\t\tscript.text = code;\n\t\tif ( node ) {\n\t\t\tfor ( i in preservedScriptAttributes ) {\n\t\t\t\tif ( node[ i ] ) {\n\t\t\t\t\tscript[ i ] = node[ i ];\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tdoc.head.appendChild( script ).parentNode.removeChild( script );\n\t}\n\n\nfunction toType( obj ) {\n\tif ( obj == null ) {\n\t\treturn obj + \"\";\n\t}\n\n\t// Support: Android <=2.3 only (functionish RegExp)\n\treturn typeof obj === \"object\" || typeof obj === \"function\" ?\n\t\tclass2type[ toString.call( obj ) ] || \"object\" :\n\t\ttypeof obj;\n}\n/* global Symbol */\n// Defining this global in .eslintrc.json would create a danger of using the global\n// unguarded in another place, it seems safer to define global only for this module\n\n\n\nvar\n\tversion = \"3.3.1\",\n\n\t// Define a local copy of jQuery\n\tjQuery = function( selector, context ) {\n\n\t\t// The jQuery object is actually just the init constructor 'enhanced'\n\t\t// Need init if jQuery is called (just allow error to be thrown if not included)\n\t\treturn new jQuery.fn.init( selector, context );\n\t},\n\n\t// Support: Android <=4.0 only\n\t// Make sure we trim BOM and NBSP\n\trtrim = /^[\\s\\uFEFF\\xA0]+|[\\s\\uFEFF\\xA0]+$/g;\n\njQuery.fn = jQuery.prototype = {\n\n\t// The current version of jQuery being used\n\tjquery: version,\n\n\tconstructor: jQuery,\n\n\t// The default length of a jQuery object is 0\n\tlength: 0,\n\n\ttoArray: function() {\n\t\treturn slice.call( this );\n\t},\n\n\t// Get the Nth element in the matched element set OR\n\t// Get the whole matched element set as a clean array\n\tget: function( num ) {\n\n\t\t// Return all the elements in a clean array\n\t\tif ( num == null ) {\n\t\t\treturn slice.call( this );\n\t\t}\n\n\t\t// Return just the one element from the set\n\t\treturn num < 0 ? this[ num + this.length ] : this[ num ];\n\t},\n\n\t// Take an array of elements and push it onto the stack\n\t// (returning the new matched element set)\n\tpushStack: function( elems ) {\n\n\t\t// Build a new jQuery matched element set\n\t\tvar ret = jQuery.merge( this.constructor(), elems );\n\n\t\t// Add the old object onto the stack (as a reference)\n\t\tret.prevObject = this;\n\n\t\t// Return the newly-formed element set\n\t\treturn ret;\n\t},\n\n\t// Execute a callback for every element in the matched set.\n\teach: function( callback ) {\n\t\treturn jQuery.each( this, callback );\n\t},\n\n\tmap: function( callback ) {\n\t\treturn this.pushStack( jQuery.map( this, function( elem, i ) {\n\t\t\treturn callback.call( elem, i, elem );\n\t\t} ) );\n\t},\n\n\tslice: function() {\n\t\treturn this.pushStack( slice.apply( this, arguments ) );\n\t},\n\n\tfirst: function() {\n\t\treturn this.eq( 0 );\n\t},\n\n\tlast: function() {\n\t\treturn this.eq( -1 );\n\t},\n\n\teq: function( i ) {\n\t\tvar len = this.length,\n\t\t\tj = +i + ( i < 0 ? len : 0 );\n\t\treturn this.pushStack( j >= 0 && j < len ? [ this[ j ] ] : [] );\n\t},\n\n\tend: function() {\n\t\treturn this.prevObject || this.constructor();\n\t},\n\n\t// For internal use only.\n\t// Behaves like an Array's method, not like a jQuery method.\n\tpush: push,\n\tsort: arr.sort,\n\tsplice: arr.splice\n};\n\njQuery.extend = jQuery.fn.extend = function() {\n\tvar options, name, src, copy, copyIsArray, clone,\n\t\ttarget = arguments[ 0 ] || {},\n\t\ti = 1,\n\t\tlength = arguments.length,\n\t\tdeep = false;\n\n\t// Handle a deep copy situation\n\tif ( typeof target === \"boolean\" ) {\n\t\tdeep = target;\n\n\t\t// Skip the boolean and the target\n\t\ttarget = arguments[ i ] || {};\n\t\ti++;\n\t}\n\n\t// Handle case when target is a string or something (possible in deep copy)\n\tif ( typeof target !== \"object\" && !isFunction( target ) ) {\n\t\ttarget = {};\n\t}\n\n\t// Extend jQuery itself if only one argument is passed\n\tif ( i === length ) {\n\t\ttarget = this;\n\t\ti--;\n\t}\n\n\tfor ( ; i < length; i++ ) {\n\n\t\t// Only deal with non-null/undefined values\n\t\tif ( ( options = arguments[ i ] ) != null ) {\n\n\t\t\t// Extend the base object\n\t\t\tfor ( name in options ) {\n\t\t\t\tsrc = target[ name ];\n\t\t\t\tcopy = options[ name ];\n\n\t\t\t\t// Prevent never-ending loop\n\t\t\t\tif ( target === copy ) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\n\t\t\t\t// Recurse if we're merging plain objects or arrays\n\t\t\t\tif ( deep && copy && ( jQuery.isPlainObject( copy ) ||\n\t\t\t\t\t( copyIsArray = Array.isArray( copy ) ) ) ) {\n\n\t\t\t\t\tif ( copyIsArray ) {\n\t\t\t\t\t\tcopyIsArray = false;\n\t\t\t\t\t\tclone = src && Array.isArray( src ) ? src : [];\n\n\t\t\t\t\t} else {\n\t\t\t\t\t\tclone = src && jQuery.isPlainObject( src ) ? src : {};\n\t\t\t\t\t}\n\n\t\t\t\t\t// Never move original objects, clone them\n\t\t\t\t\ttarget[ name ] = jQuery.extend( deep, clone, copy );\n\n\t\t\t\t// Don't bring in undefined values\n\t\t\t\t} else if ( copy !== undefined ) {\n\t\t\t\t\ttarget[ name ] = copy;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\t// Return the modified object\n\treturn target;\n};\n\njQuery.extend( {\n\n\t// Unique for each copy of jQuery on the page\n\texpando: \"jQuery\" + ( version + Math.random() ).replace( /\\D/g, \"\" ),\n\n\t// Assume jQuery is ready without the ready module\n\tisReady: true,\n\n\terror: function( msg ) {\n\t\tthrow new Error( msg );\n\t},\n\n\tnoop: function() {},\n\n\tisPlainObject: function( obj ) {\n\t\tvar proto, Ctor;\n\n\t\t// Detect obvious negatives\n\t\t// Use toString instead of jQuery.type to catch host objects\n\t\tif ( !obj || toString.call( obj ) !== \"[object Object]\" ) {\n\t\t\treturn false;\n\t\t}\n\n\t\tproto = getProto( obj );\n\n\t\t// Objects with no prototype (e.g., `Object.create( null )`) are plain\n\t\tif ( !proto ) {\n\t\t\treturn true;\n\t\t}\n\n\t\t// Objects with prototype are plain iff they were constructed by a global Object function\n\t\tCtor = hasOwn.call( proto, \"constructor\" ) && proto.constructor;\n\t\treturn typeof Ctor === \"function\" && fnToString.call( Ctor ) === ObjectFunctionString;\n\t},\n\n\tisEmptyObject: function( obj ) {\n\n\t\t/* eslint-disable no-unused-vars */\n\t\t// See https://github.com/eslint/eslint/issues/6125\n\t\tvar name;\n\n\t\tfor ( name in obj ) {\n\t\t\treturn false;\n\t\t}\n\t\treturn true;\n\t},\n\n\t// Evaluates a script in a global context\n\tglobalEval: function( code ) {\n\t\tDOMEval( code );\n\t},\n\n\teach: function( obj, callback ) {\n\t\tvar length, i = 0;\n\n\t\tif ( isArrayLike( obj ) ) {\n\t\t\tlength = obj.length;\n\t\t\tfor ( ; i < length; i++ ) {\n\t\t\t\tif ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\t\t} else {\n\t\t\tfor ( i in obj ) {\n\t\t\t\tif ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn obj;\n\t},\n\n\t// Support: Android <=4.0 only\n\ttrim: function( text ) {\n\t\treturn text == null ?\n\t\t\t\"\" :\n\t\t\t( text + \"\" ).replace( rtrim, \"\" );\n\t},\n\n\t// results is for internal usage only\n\tmakeArray: function( arr, results ) {\n\t\tvar ret = results || [];\n\n\t\tif ( arr != null ) {\n\t\t\tif ( isArrayLike( Object( arr ) ) ) {\n\t\t\t\tjQuery.merge( ret,\n\t\t\t\t\ttypeof arr === \"string\" ?\n\t\t\t\t\t[ arr ] : arr\n\t\t\t\t);\n\t\t\t} else {\n\t\t\t\tpush.call( ret, arr );\n\t\t\t}\n\t\t}\n\n\t\treturn ret;\n\t},\n\n\tinArray: function( elem, arr, i ) {\n\t\treturn arr == null ? -1 : indexOf.call( arr, elem, i );\n\t},\n\n\t// Support: Android <=4.0 only, PhantomJS 1 only\n\t// push.apply(_, arraylike) throws on ancient WebKit\n\tmerge: function( first, second ) {\n\t\tvar len = +second.length,\n\t\t\tj = 0,\n\t\t\ti = first.length;\n\n\t\tfor ( ; j < len; j++ ) {\n\t\t\tfirst[ i++ ] = second[ j ];\n\t\t}\n\n\t\tfirst.length = i;\n\n\t\treturn first;\n\t},\n\n\tgrep: function( elems, callback, invert ) {\n\t\tvar callbackInverse,\n\t\t\tmatches = [],\n\t\t\ti = 0,\n\t\t\tlength = elems.length,\n\t\t\tcallbackExpect = !invert;\n\n\t\t// Go through the array, only saving the items\n\t\t// that pass the validator function\n\t\tfor ( ; i < length; i++ ) {\n\t\t\tcallbackInverse = !callback( elems[ i ], i );\n\t\t\tif ( callbackInverse !== callbackExpect ) {\n\t\t\t\tmatches.push( elems[ i ] );\n\t\t\t}\n\t\t}\n\n\t\treturn matches;\n\t},\n\n\t// arg is for internal usage only\n\tmap: function( elems, callback, arg ) {\n\t\tvar length, value,\n\t\t\ti = 0,\n\t\t\tret = [];\n\n\t\t// Go through the array, translating each of the items to their new values\n\t\tif ( isArrayLike( elems ) ) {\n\t\t\tlength = elems.length;\n\t\t\tfor ( ; i < length; i++ ) {\n\t\t\t\tvalue = callback( elems[ i ], i, arg );\n\n\t\t\t\tif ( value != null ) {\n\t\t\t\t\tret.push( value );\n\t\t\t\t}\n\t\t\t}\n\n\t\t// Go through every key on the object,\n\t\t} else {\n\t\t\tfor ( i in elems ) {\n\t\t\t\tvalue = callback( elems[ i ], i, arg );\n\n\t\t\t\tif ( value != null ) {\n\t\t\t\t\tret.push( value );\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\t// Flatten any nested arrays\n\t\treturn concat.apply( [], ret );\n\t},\n\n\t// A global GUID counter for objects\n\tguid: 1,\n\n\t// jQuery.support is not used in Core but other projects attach their\n\t// properties to it so it needs to exist.\n\tsupport: support\n} );\n\nif ( typeof Symbol === \"function\" ) {\n\tjQuery.fn[ Symbol.iterator ] = arr[ Symbol.iterator ];\n}\n\n// Populate the class2type map\njQuery.each( \"Boolean Number String Function Array Date RegExp Object Error Symbol\".split( \" \" ),\nfunction( i, name ) {\n\tclass2type[ \"[object \" + name + \"]\" ] = name.toLowerCase();\n} );\n\nfunction isArrayLike( obj ) {\n\n\t// Support: real iOS 8.2 only (not reproducible in simulator)\n\t// `in` check used to prevent JIT error (gh-2145)\n\t// hasOwn isn't used here due to false negatives\n\t// regarding Nodelist length in IE\n\tvar length = !!obj && \"length\" in obj && obj.length,\n\t\ttype = toType( obj );\n\n\tif ( isFunction( obj ) || isWindow( obj ) ) {\n\t\treturn false;\n\t}\n\n\treturn type === \"array\" || length === 0 ||\n\t\ttypeof length === \"number\" && length > 0 && ( length - 1 ) in obj;\n}\nvar Sizzle =\n/*!\n * Sizzle CSS Selector Engine v2.3.3\n * https://sizzlejs.com/\n *\n * Copyright jQuery Foundation and other contributors\n * Released under the MIT license\n * http://jquery.org/license\n *\n * Date: 2016-08-08\n */\n(function( window ) {\n\nvar i,\n\tsupport,\n\tExpr,\n\tgetText,\n\tisXML,\n\ttokenize,\n\tcompile,\n\tselect,\n\toutermostContext,\n\tsortInput,\n\thasDuplicate,\n\n\t// Local document vars\n\tsetDocument,\n\tdocument,\n\tdocElem,\n\tdocumentIsHTML,\n\trbuggyQSA,\n\trbuggyMatches,\n\tmatches,\n\tcontains,\n\n\t// Instance-specific data\n\texpando = \"sizzle\" + 1 * new Date(),\n\tpreferredDoc = window.document,\n\tdirruns = 0,\n\tdone = 0,\n\tclassCache = createCache(),\n\ttokenCache = createCache(),\n\tcompilerCache = createCache(),\n\tsortOrder = function( a, b ) {\n\t\tif ( a === b ) {\n\t\t\thasDuplicate = true;\n\t\t}\n\t\treturn 0;\n\t},\n\n\t// Instance methods\n\thasOwn = ({}).hasOwnProperty,\n\tarr = [],\n\tpop = arr.pop,\n\tpush_native = arr.push,\n\tpush = arr.push,\n\tslice = arr.slice,\n\t// Use a stripped-down indexOf as it's faster than native\n\t// https://jsperf.com/thor-indexof-vs-for/5\n\tindexOf = function( list, elem ) {\n\t\tvar i = 0,\n\t\t\tlen = list.length;\n\t\tfor ( ; i < len; i++ ) {\n\t\t\tif ( list[i] === elem ) {\n\t\t\t\treturn i;\n\t\t\t}\n\t\t}\n\t\treturn -1;\n\t},\n\n\tbooleans = \"checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|required|scoped\",\n\n\t// Regular expressions\n\n\t// http://www.w3.org/TR/css3-selectors/#whitespace\n\twhitespace = \"[\\\\x20\\\\t\\\\r\\\\n\\\\f]\",\n\n\t// http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier\n\tidentifier = \"(?:\\\\\\\\.|[\\\\w-]|[^\\0-\\\\xa0])+\",\n\n\t// Attribute selectors: http://www.w3.org/TR/selectors/#attribute-selectors\n\tattributes = \"\\\\[\" + whitespace + \"*(\" + identifier + \")(?:\" + whitespace +\n\t\t// Operator (capture 2)\n\t\t\"*([*^$|!~]?=)\" + whitespace +\n\t\t// \"Attribute values must be CSS identifiers [capture 5] or strings [capture 3 or capture 4]\"\n\t\t\"*(?:'((?:\\\\\\\\.|[^\\\\\\\\'])*)'|\\\"((?:\\\\\\\\.|[^\\\\\\\\\\\"])*)\\\"|(\" + identifier + \"))|)\" + whitespace +\n\t\t\"*\\\\]\",\n\n\tpseudos = \":(\" + identifier + \")(?:\\\\((\" +\n\t\t// To reduce the number of selectors needing tokenize in the preFilter, prefer arguments:\n\t\t// 1. quoted (capture 3; capture 4 or capture 5)\n\t\t\"('((?:\\\\\\\\.|[^\\\\\\\\'])*)'|\\\"((?:\\\\\\\\.|[^\\\\\\\\\\\"])*)\\\")|\" +\n\t\t// 2. simple (capture 6)\n\t\t\"((?:\\\\\\\\.|[^\\\\\\\\()[\\\\]]|\" + attributes + \")*)|\" +\n\t\t// 3. anything else (capture 2)\n\t\t\".*\" +\n\t\t\")\\\\)|)\",\n\n\t// Leading and non-escaped trailing whitespace, capturing some non-whitespace characters preceding the latter\n\trwhitespace = new RegExp( whitespace + \"+\", \"g\" ),\n\trtrim = new RegExp( \"^\" + whitespace + \"+|((?:^|[^\\\\\\\\])(?:\\\\\\\\.)*)\" + whitespace + \"+$\", \"g\" ),\n\n\trcomma = new RegExp( \"^\" + whitespace + \"*,\" + whitespace + \"*\" ),\n\trcombinators = new RegExp( \"^\" + whitespace + \"*([>+~]|\" + whitespace + \")\" + whitespace + \"*\" ),\n\n\trattributeQuotes = new RegExp( \"=\" + whitespace + \"*([^\\\\]'\\\"]*?)\" + whitespace + \"*\\\\]\", \"g\" ),\n\n\trpseudo = new RegExp( pseudos ),\n\tridentifier = new RegExp( \"^\" + identifier + \"$\" ),\n\n\tmatchExpr = {\n\t\t\"ID\": new RegExp( \"^#(\" + identifier + \")\" ),\n\t\t\"CLASS\": new RegExp( \"^\\\\.(\" + identifier + \")\" ),\n\t\t\"TAG\": new RegExp( \"^(\" + identifier + \"|[*])\" ),\n\t\t\"ATTR\": new RegExp( \"^\" + attributes ),\n\t\t\"PSEUDO\": new RegExp( \"^\" + pseudos ),\n\t\t\"CHILD\": new RegExp( \"^:(only|first|last|nth|nth-last)-(child|of-type)(?:\\\\(\" + whitespace +\n\t\t\t\"*(even|odd|(([+-]|)(\\\\d*)n|)\" + whitespace + \"*(?:([+-]|)\" + whitespace +\n\t\t\t\"*(\\\\d+)|))\" + whitespace + \"*\\\\)|)\", \"i\" ),\n\t\t\"bool\": new RegExp( \"^(?:\" + booleans + \")$\", \"i\" ),\n\t\t// For use in libraries implementing .is()\n\t\t// We use this for POS matching in `select`\n\t\t\"needsContext\": new RegExp( \"^\" + whitespace + \"*[>+~]|:(even|odd|eq|gt|lt|nth|first|last)(?:\\\\(\" +\n\t\t\twhitespace + \"*((?:-\\\\d)?\\\\d*)\" + whitespace + \"*\\\\)|)(?=[^-]|$)\", \"i\" )\n\t},\n\n\trinputs = /^(?:input|select|textarea|button)$/i,\n\trheader = /^h\\d$/i,\n\n\trnative = /^[^{]+\\{\\s*\\[native \\w/,\n\n\t// Easily-parseable/retrievable ID or TAG or CLASS selectors\n\trquickExpr = /^(?:#([\\w-]+)|(\\w+)|\\.([\\w-]+))$/,\n\n\trsibling = /[+~]/,\n\n\t// CSS escapes\n\t// http://www.w3.org/TR/CSS21/syndata.html#escaped-characters\n\trunescape = new RegExp( \"\\\\\\\\([\\\\da-f]{1,6}\" + whitespace + \"?|(\" + whitespace + \")|.)\", \"ig\" ),\n\tfunescape = function( _, escaped, escapedWhitespace ) {\n\t\tvar high = \"0x\" + escaped - 0x10000;\n\t\t// NaN means non-codepoint\n\t\t// Support: Firefox<24\n\t\t// Workaround erroneous numeric interpretation of +\"0x\"\n\t\treturn high !== high || escapedWhitespace ?\n\t\t\tescaped :\n\t\t\thigh < 0 ?\n\t\t\t\t// BMP codepoint\n\t\t\t\tString.fromCharCode( high + 0x10000 ) :\n\t\t\t\t// Supplemental Plane codepoint (surrogate pair)\n\t\t\t\tString.fromCharCode( high >> 10 | 0xD800, high & 0x3FF | 0xDC00 );\n\t},\n\n\t// CSS string/identifier serialization\n\t// https://drafts.csswg.org/cssom/#common-serializing-idioms\n\trcssescape = /([\\0-\\x1f\\x7f]|^-?\\d)|^-$|[^\\0-\\x1f\\x7f-\\uFFFF\\w-]/g,\n\tfcssescape = function( ch, asCodePoint ) {\n\t\tif ( asCodePoint ) {\n\n\t\t\t// U+0000 NULL becomes U+FFFD REPLACEMENT CHARACTER\n\t\t\tif ( ch === \"\\0\" ) {\n\t\t\t\treturn \"\\uFFFD\";\n\t\t\t}\n\n\t\t\t// Control characters and (dependent upon position) numbers get escaped as code points\n\t\t\treturn ch.slice( 0, -1 ) + \"\\\\\" + ch.charCodeAt( ch.length - 1 ).toString( 16 ) + \" \";\n\t\t}\n\n\t\t// Other potentially-special ASCII characters get backslash-escaped\n\t\treturn \"\\\\\" + ch;\n\t},\n\n\t// Used for iframes\n\t// See setDocument()\n\t// Removing the function wrapper causes a \"Permission Denied\"\n\t// error in IE\n\tunloadHandler = function() {\n\t\tsetDocument();\n\t},\n\n\tdisabledAncestor = addCombinator(\n\t\tfunction( elem ) {\n\t\t\treturn elem.disabled === true && (\"form\" in elem || \"label\" in elem);\n\t\t},\n\t\t{ dir: \"parentNode\", next: \"legend\" }\n\t);\n\n// Optimize for push.apply( _, NodeList )\ntry {\n\tpush.apply(\n\t\t(arr = slice.call( preferredDoc.childNodes )),\n\t\tpreferredDoc.childNodes\n\t);\n\t// Support: Android<4.0\n\t// Detect silently failing push.apply\n\tarr[ preferredDoc.childNodes.length ].nodeType;\n} catch ( e ) {\n\tpush = { apply: arr.length ?\n\n\t\t// Leverage slice if possible\n\t\tfunction( target, els ) {\n\t\t\tpush_native.apply( target, slice.call(els) );\n\t\t} :\n\n\t\t// Support: IE<9\n\t\t// Otherwise append directly\n\t\tfunction( target, els ) {\n\t\t\tvar j = target.length,\n\t\t\t\ti = 0;\n\t\t\t// Can't trust NodeList.length\n\t\t\twhile ( (target[j++] = els[i++]) ) {}\n\t\t\ttarget.length = j - 1;\n\t\t}\n\t};\n}\n\nfunction Sizzle( selector, context, results, seed ) {\n\tvar m, i, elem, nid, match, groups, newSelector,\n\t\tnewContext = context && context.ownerDocument,\n\n\t\t// nodeType defaults to 9, since context defaults to document\n\t\tnodeType = context ? context.nodeType : 9;\n\n\tresults = results || [];\n\n\t// Return early from calls with invalid selector or context\n\tif ( typeof selector !== \"string\" || !selector ||\n\t\tnodeType !== 1 && nodeType !== 9 && nodeType !== 11 ) {\n\n\t\treturn results;\n\t}\n\n\t// Try to shortcut find operations (as opposed to filters) in HTML documents\n\tif ( !seed ) {\n\n\t\tif ( ( context ? context.ownerDocument || context : preferredDoc ) !== document ) {\n\t\t\tsetDocument( context );\n\t\t}\n\t\tcontext = context || document;\n\n\t\tif ( documentIsHTML ) {\n\n\t\t\t// If the selector is sufficiently simple, try using a \"get*By*\" DOM method\n\t\t\t// (excepting DocumentFragment context, where the methods don't exist)\n\t\t\tif ( nodeType !== 11 && (match = rquickExpr.exec( selector )) ) {\n\n\t\t\t\t// ID selector\n\t\t\t\tif ( (m = match[1]) ) {\n\n\t\t\t\t\t// Document context\n\t\t\t\t\tif ( nodeType === 9 ) {\n\t\t\t\t\t\tif ( (elem = context.getElementById( m )) ) {\n\n\t\t\t\t\t\t\t// Support: IE, Opera, Webkit\n\t\t\t\t\t\t\t// TODO: identify versions\n\t\t\t\t\t\t\t// getElementById can match elements by name instead of ID\n\t\t\t\t\t\t\tif ( elem.id === m ) {\n\t\t\t\t\t\t\t\tresults.push( elem );\n\t\t\t\t\t\t\t\treturn results;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\treturn results;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t// Element context\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\t// Support: IE, Opera, Webkit\n\t\t\t\t\t\t// TODO: identify versions\n\t\t\t\t\t\t// getElementById can match elements by name instead of ID\n\t\t\t\t\t\tif ( newContext && (elem = newContext.getElementById( m )) &&\n\t\t\t\t\t\t\tcontains( context, elem ) &&\n\t\t\t\t\t\t\telem.id === m ) {\n\n\t\t\t\t\t\t\tresults.push( elem );\n\t\t\t\t\t\t\treturn results;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t// Type selector\n\t\t\t\t} else if ( match[2] ) {\n\t\t\t\t\tpush.apply( results, context.getElementsByTagName( selector ) );\n\t\t\t\t\treturn results;\n\n\t\t\t\t// Class selector\n\t\t\t\t} else if ( (m = match[3]) && support.getElementsByClassName &&\n\t\t\t\t\tcontext.getElementsByClassName ) {\n\n\t\t\t\t\tpush.apply( results, context.getElementsByClassName( m ) );\n\t\t\t\t\treturn results;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// Take advantage of querySelectorAll\n\t\t\tif ( support.qsa &&\n\t\t\t\t!compilerCache[ selector + \" \" ] &&\n\t\t\t\t(!rbuggyQSA || !rbuggyQSA.test( selector )) ) {\n\n\t\t\t\tif ( nodeType !== 1 ) {\n\t\t\t\t\tnewContext = context;\n\t\t\t\t\tnewSelector = selector;\n\n\t\t\t\t// qSA looks outside Element context, which is not what we want\n\t\t\t\t// Thanks to Andrew Dupont for this workaround technique\n\t\t\t\t// Support: IE <=8\n\t\t\t\t// Exclude object elements\n\t\t\t\t} else if ( context.nodeName.toLowerCase() !== \"object\" ) {\n\n\t\t\t\t\t// Capture the context ID, setting it first if necessary\n\t\t\t\t\tif ( (nid = context.getAttribute( \"id\" )) ) {\n\t\t\t\t\t\tnid = nid.replace( rcssescape, fcssescape );\n\t\t\t\t\t} else {\n\t\t\t\t\t\tcontext.setAttribute( \"id\", (nid = expando) );\n\t\t\t\t\t}\n\n\t\t\t\t\t// Prefix every selector in the list\n\t\t\t\t\tgroups = tokenize( selector );\n\t\t\t\t\ti = groups.length;\n\t\t\t\t\twhile ( i-- ) {\n\t\t\t\t\t\tgroups[i] = \"#\" + nid + \" \" + toSelector( groups[i] );\n\t\t\t\t\t}\n\t\t\t\t\tnewSelector = groups.join( \",\" );\n\n\t\t\t\t\t// Expand context for sibling selectors\n\t\t\t\t\tnewContext = rsibling.test( selector ) && testContext( context.parentNode ) ||\n\t\t\t\t\t\tcontext;\n\t\t\t\t}\n\n\t\t\t\tif ( newSelector ) {\n\t\t\t\t\ttry {\n\t\t\t\t\t\tpush.apply( results,\n\t\t\t\t\t\t\tnewContext.querySelectorAll( newSelector )\n\t\t\t\t\t\t);\n\t\t\t\t\t\treturn results;\n\t\t\t\t\t} catch ( qsaError ) {\n\t\t\t\t\t} finally {\n\t\t\t\t\t\tif ( nid === expando ) {\n\t\t\t\t\t\t\tcontext.removeAttribute( \"id\" );\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\t// All others\n\treturn select( selector.replace( rtrim, \"$1\" ), context, results, seed );\n}\n\n/**\n * Create key-value caches of limited size\n * @returns {function(string, object)} Returns the Object data after storing it on itself with\n *\tproperty name the (space-suffixed) string and (if the cache is larger than Expr.cacheLength)\n *\tdeleting the oldest entry\n */\nfunction createCache() {\n\tvar keys = [];\n\n\tfunction cache( key, value ) {\n\t\t// Use (key + \" \") to avoid collision with native prototype properties (see Issue #157)\n\t\tif ( keys.push( key + \" \" ) > Expr.cacheLength ) {\n\t\t\t// Only keep the most recent entries\n\t\t\tdelete cache[ keys.shift() ];\n\t\t}\n\t\treturn (cache[ key + \" \" ] = value);\n\t}\n\treturn cache;\n}\n\n/**\n * Mark a function for special use by Sizzle\n * @param {Function} fn The function to mark\n */\nfunction markFunction( fn ) {\n\tfn[ expando ] = true;\n\treturn fn;\n}\n\n/**\n * Support testing using an element\n * @param {Function} fn Passed the created element and returns a boolean result\n */\nfunction assert( fn ) {\n\tvar el = document.createElement(\"fieldset\");\n\n\ttry {\n\t\treturn !!fn( el );\n\t} catch (e) {\n\t\treturn false;\n\t} finally {\n\t\t// Remove from its parent by default\n\t\tif ( el.parentNode ) {\n\t\t\tel.parentNode.removeChild( el );\n\t\t}\n\t\t// release memory in IE\n\t\tel = null;\n\t}\n}\n\n/**\n * Adds the same handler for all of the specified attrs\n * @param {String} attrs Pipe-separated list of attributes\n * @param {Function} handler The method that will be applied\n */\nfunction addHandle( attrs, handler ) {\n\tvar arr = attrs.split(\"|\"),\n\t\ti = arr.length;\n\n\twhile ( i-- ) {\n\t\tExpr.attrHandle[ arr[i] ] = handler;\n\t}\n}\n\n/**\n * Checks document order of two siblings\n * @param {Element} a\n * @param {Element} b\n * @returns {Number} Returns less than 0 if a precedes b, greater than 0 if a follows b\n */\nfunction siblingCheck( a, b ) {\n\tvar cur = b && a,\n\t\tdiff = cur && a.nodeType === 1 && b.nodeType === 1 &&\n\t\t\ta.sourceIndex - b.sourceIndex;\n\n\t// Use IE sourceIndex if available on both nodes\n\tif ( diff ) {\n\t\treturn diff;\n\t}\n\n\t// Check if b follows a\n\tif ( cur ) {\n\t\twhile ( (cur = cur.nextSibling) ) {\n\t\t\tif ( cur === b ) {\n\t\t\t\treturn -1;\n\t\t\t}\n\t\t}\n\t}\n\n\treturn a ? 1 : -1;\n}\n\n/**\n * Returns a function to use in pseudos for input types\n * @param {String} type\n */\nfunction createInputPseudo( type ) {\n\treturn function( elem ) {\n\t\tvar name = elem.nodeName.toLowerCase();\n\t\treturn name === \"input\" && elem.type === type;\n\t};\n}\n\n/**\n * Returns a function to use in pseudos for buttons\n * @param {String} type\n */\nfunction createButtonPseudo( type ) {\n\treturn function( elem ) {\n\t\tvar name = elem.nodeName.toLowerCase();\n\t\treturn (name === \"input\" || name === \"button\") && elem.type === type;\n\t};\n}\n\n/**\n * Returns a function to use in pseudos for :enabled/:disabled\n * @param {Boolean} disabled true for :disabled; false for :enabled\n */\nfunction createDisabledPseudo( disabled ) {\n\n\t// Known :disabled false positives: fieldset[disabled] > legend:nth-of-type(n+2) :can-disable\n\treturn function( elem ) {\n\n\t\t// Only certain elements can match :enabled or :disabled\n\t\t// https://html.spec.whatwg.org/multipage/scripting.html#selector-enabled\n\t\t// https://html.spec.whatwg.org/multipage/scripting.html#selector-disabled\n\t\tif ( \"form\" in elem ) {\n\n\t\t\t// Check for inherited disabledness on relevant non-disabled elements:\n\t\t\t// * listed form-associated elements in a disabled fieldset\n\t\t\t//   https://html.spec.whatwg.org/multipage/forms.html#category-listed\n\t\t\t//   https://html.spec.whatwg.org/multipage/forms.html#concept-fe-disabled\n\t\t\t// * option elements in a disabled optgroup\n\t\t\t//   https://html.spec.whatwg.org/multipage/forms.html#concept-option-disabled\n\t\t\t// All such elements have a \"form\" property.\n\t\t\tif ( elem.parentNode && elem.disabled === false ) {\n\n\t\t\t\t// Option elements defer to a parent optgroup if present\n\t\t\t\tif ( \"label\" in elem ) {\n\t\t\t\t\tif ( \"label\" in elem.parentNode ) {\n\t\t\t\t\t\treturn elem.parentNode.disabled === disabled;\n\t\t\t\t\t} else {\n\t\t\t\t\t\treturn elem.disabled === disabled;\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\t// Support: IE 6 - 11\n\t\t\t\t// Use the isDisabled shortcut property to check for disabled fieldset ancestors\n\t\t\t\treturn elem.isDisabled === disabled ||\n\n\t\t\t\t\t// Where there is no isDisabled, check manually\n\t\t\t\t\t/* jshint -W018 */\n\t\t\t\t\telem.isDisabled !== !disabled &&\n\t\t\t\t\t\tdisabledAncestor( elem ) === disabled;\n\t\t\t}\n\n\t\t\treturn elem.disabled === disabled;\n\n\t\t// Try to winnow out elements that can't be disabled before trusting the disabled property.\n\t\t// Some victims get caught in our net (label, legend, menu, track), but it shouldn't\n\t\t// even exist on them, let alone have a boolean value.\n\t\t} else if ( \"label\" in elem ) {\n\t\t\treturn elem.disabled === disabled;\n\t\t}\n\n\t\t// Remaining elements are neither :enabled nor :disabled\n\t\treturn false;\n\t};\n}\n\n/**\n * Returns a function to use in pseudos for positionals\n * @param {Function} fn\n */\nfunction createPositionalPseudo( fn ) {\n\treturn markFunction(function( argument ) {\n\t\targument = +argument;\n\t\treturn markFunction(function( seed, matches ) {\n\t\t\tvar j,\n\t\t\t\tmatchIndexes = fn( [], seed.length, argument ),\n\t\t\t\ti = matchIndexes.length;\n\n\t\t\t// Match elements found at the specified indexes\n\t\t\twhile ( i-- ) {\n\t\t\t\tif ( seed[ (j = matchIndexes[i]) ] ) {\n\t\t\t\t\tseed[j] = !(matches[j] = seed[j]);\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t});\n}\n\n/**\n * Checks a node for validity as a Sizzle context\n * @param {Element|Object=} context\n * @returns {Element|Object|Boolean} The input node if acceptable, otherwise a falsy value\n */\nfunction testContext( context ) {\n\treturn context && typeof context.getElementsByTagName !== \"undefined\" && context;\n}\n\n// Expose support vars for convenience\nsupport = Sizzle.support = {};\n\n/**\n * Detects XML nodes\n * @param {Element|Object} elem An element or a document\n * @returns {Boolean} True iff elem is a non-HTML XML node\n */\nisXML = Sizzle.isXML = function( elem ) {\n\t// documentElement is verified for cases where it doesn't yet exist\n\t// (such as loading iframes in IE - #4833)\n\tvar documentElement = elem && (elem.ownerDocument || elem).documentElement;\n\treturn documentElement ? documentElement.nodeName !== \"HTML\" : false;\n};\n\n/**\n * Sets document-related variables once based on the current document\n * @param {Element|Object} [doc] An element or document object to use to set the document\n * @returns {Object} Returns the current document\n */\nsetDocument = Sizzle.setDocument = function( node ) {\n\tvar hasCompare, subWindow,\n\t\tdoc = node ? node.ownerDocument || node : preferredDoc;\n\n\t// Return early if doc is invalid or already selected\n\tif ( doc === document || doc.nodeType !== 9 || !doc.documentElement ) {\n\t\treturn document;\n\t}\n\n\t// Update global variables\n\tdocument = doc;\n\tdocElem = document.documentElement;\n\tdocumentIsHTML = !isXML( document );\n\n\t// Support: IE 9-11, Edge\n\t// Accessing iframe documents after unload throws \"permission denied\" errors (jQuery #13936)\n\tif ( preferredDoc !== document &&\n\t\t(subWindow = document.defaultView) && subWindow.top !== subWindow ) {\n\n\t\t// Support: IE 11, Edge\n\t\tif ( subWindow.addEventListener ) {\n\t\t\tsubWindow.addEventListener( \"unload\", unloadHandler, false );\n\n\t\t// Support: IE 9 - 10 only\n\t\t} else if ( subWindow.attachEvent ) {\n\t\t\tsubWindow.attachEvent( \"onunload\", unloadHandler );\n\t\t}\n\t}\n\n\t/* Attributes\n\t---------------------------------------------------------------------- */\n\n\t// Support: IE<8\n\t// Verify that getAttribute really returns attributes and not properties\n\t// (excepting IE8 booleans)\n\tsupport.attributes = assert(function( el ) {\n\t\tel.className = \"i\";\n\t\treturn !el.getAttribute(\"className\");\n\t});\n\n\t/* getElement(s)By*\n\t---------------------------------------------------------------------- */\n\n\t// Check if getElementsByTagName(\"*\") returns only elements\n\tsupport.getElementsByTagName = assert(function( el ) {\n\t\tel.appendChild( document.createComment(\"\") );\n\t\treturn !el.getElementsByTagName(\"*\").length;\n\t});\n\n\t// Support: IE<9\n\tsupport.getElementsByClassName = rnative.test( document.getElementsByClassName );\n\n\t// Support: IE<10\n\t// Check if getElementById returns elements by name\n\t// The broken getElementById methods don't pick up programmatically-set names,\n\t// so use a roundabout getElementsByName test\n\tsupport.getById = assert(function( el ) {\n\t\tdocElem.appendChild( el ).id = expando;\n\t\treturn !document.getElementsByName || !document.getElementsByName( expando ).length;\n\t});\n\n\t// ID filter and find\n\tif ( support.getById ) {\n\t\tExpr.filter[\"ID\"] = function( id ) {\n\t\t\tvar attrId = id.replace( runescape, funescape );\n\t\t\treturn function( elem ) {\n\t\t\t\treturn elem.getAttribute(\"id\") === attrId;\n\t\t\t};\n\t\t};\n\t\tExpr.find[\"ID\"] = function( id, context ) {\n\t\t\tif ( typeof context.getElementById !== \"undefined\" && documentIsHTML ) {\n\t\t\t\tvar elem = context.getElementById( id );\n\t\t\t\treturn elem ? [ elem ] : [];\n\t\t\t}\n\t\t};\n\t} else {\n\t\tExpr.filter[\"ID\"] =  function( id ) {\n\t\t\tvar attrId = id.replace( runescape, funescape );\n\t\t\treturn function( elem ) {\n\t\t\t\tvar node = typeof elem.getAttributeNode !== \"undefined\" &&\n\t\t\t\t\telem.getAttributeNode(\"id\");\n\t\t\t\treturn node && node.value === attrId;\n\t\t\t};\n\t\t};\n\n\t\t// Support: IE 6 - 7 only\n\t\t// getElementById is not reliable as a find shortcut\n\t\tExpr.find[\"ID\"] = function( id, context ) {\n\t\t\tif ( typeof context.getElementById !== \"undefined\" && documentIsHTML ) {\n\t\t\t\tvar node, i, elems,\n\t\t\t\t\telem = context.getElementById( id );\n\n\t\t\t\tif ( elem ) {\n\n\t\t\t\t\t// Verify the id attribute\n\t\t\t\t\tnode = elem.getAttributeNode(\"id\");\n\t\t\t\t\tif ( node && node.value === id ) {\n\t\t\t\t\t\treturn [ elem ];\n\t\t\t\t\t}\n\n\t\t\t\t\t// Fall back on getElementsByName\n\t\t\t\t\telems = context.getElementsByName( id );\n\t\t\t\t\ti = 0;\n\t\t\t\t\twhile ( (elem = elems[i++]) ) {\n\t\t\t\t\t\tnode = elem.getAttributeNode(\"id\");\n\t\t\t\t\t\tif ( node && node.value === id ) {\n\t\t\t\t\t\t\treturn [ elem ];\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\treturn [];\n\t\t\t}\n\t\t};\n\t}\n\n\t// Tag\n\tExpr.find[\"TAG\"] = support.getElementsByTagName ?\n\t\tfunction( tag, context ) {\n\t\t\tif ( typeof context.getElementsByTagName !== \"undefined\" ) {\n\t\t\t\treturn context.getElementsByTagName( tag );\n\n\t\t\t// DocumentFragment nodes don't have gEBTN\n\t\t\t} else if ( support.qsa ) {\n\t\t\t\treturn context.querySelectorAll( tag );\n\t\t\t}\n\t\t} :\n\n\t\tfunction( tag, context ) {\n\t\t\tvar elem,\n\t\t\t\ttmp = [],\n\t\t\t\ti = 0,\n\t\t\t\t// By happy coincidence, a (broken) gEBTN appears on DocumentFragment nodes too\n\t\t\t\tresults = context.getElementsByTagName( tag );\n\n\t\t\t// Filter out possible comments\n\t\t\tif ( tag === \"*\" ) {\n\t\t\t\twhile ( (elem = results[i++]) ) {\n\t\t\t\t\tif ( elem.nodeType === 1 ) {\n\t\t\t\t\t\ttmp.push( elem );\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\treturn tmp;\n\t\t\t}\n\t\t\treturn results;\n\t\t};\n\n\t// Class\n\tExpr.find[\"CLASS\"] = support.getElementsByClassName && function( className, context ) {\n\t\tif ( typeof context.getElementsByClassName !== \"undefined\" && documentIsHTML ) {\n\t\t\treturn context.getElementsByClassName( className );\n\t\t}\n\t};\n\n\t/* QSA/matchesSelector\n\t---------------------------------------------------------------------- */\n\n\t// QSA and matchesSelector support\n\n\t// matchesSelector(:active) reports false when true (IE9/Opera 11.5)\n\trbuggyMatches = [];\n\n\t// qSa(:focus) reports false when true (Chrome 21)\n\t// We allow this because of a bug in IE8/9 that throws an error\n\t// whenever `document.activeElement` is accessed on an iframe\n\t// So, we allow :focus to pass through QSA all the time to avoid the IE error\n\t// See https://bugs.jquery.com/ticket/13378\n\trbuggyQSA = [];\n\n\tif ( (support.qsa = rnative.test( document.querySelectorAll )) ) {\n\t\t// Build QSA regex\n\t\t// Regex strategy adopted from Diego Perini\n\t\tassert(function( el ) {\n\t\t\t// Select is set to empty string on purpose\n\t\t\t// This is to test IE's treatment of not explicitly\n\t\t\t// setting a boolean content attribute,\n\t\t\t// since its presence should be enough\n\t\t\t// https://bugs.jquery.com/ticket/12359\n\t\t\tdocElem.appendChild( el ).innerHTML = \"<a id='\" + expando + \"'></a>\" +\n\t\t\t\t\"<select id='\" + expando + \"-\\r\\\\' msallowcapture=''>\" +\n\t\t\t\t\"<option selected=''></option></select>\";\n\n\t\t\t// Support: IE8, Opera 11-12.16\n\t\t\t// Nothing should be selected when empty strings follow ^= or $= or *=\n\t\t\t// The test attribute must be unknown in Opera but \"safe\" for WinRT\n\t\t\t// https://msdn.microsoft.com/en-us/library/ie/hh465388.aspx#attribute_section\n\t\t\tif ( el.querySelectorAll(\"[msallowcapture^='']\").length ) {\n\t\t\t\trbuggyQSA.push( \"[*^$]=\" + whitespace + \"*(?:''|\\\"\\\")\" );\n\t\t\t}\n\n\t\t\t// Support: IE8\n\t\t\t// Boolean attributes and \"value\" are not treated correctly\n\t\t\tif ( !el.querySelectorAll(\"[selected]\").length ) {\n\t\t\t\trbuggyQSA.push( \"\\\\[\" + whitespace + \"*(?:value|\" + booleans + \")\" );\n\t\t\t}\n\n\t\t\t// Support: Chrome<29, Android<4.4, Safari<7.0+, iOS<7.0+, PhantomJS<1.9.8+\n\t\t\tif ( !el.querySelectorAll( \"[id~=\" + expando + \"-]\" ).length ) {\n\t\t\t\trbuggyQSA.push(\"~=\");\n\t\t\t}\n\n\t\t\t// Webkit/Opera - :checked should return selected option elements\n\t\t\t// http://www.w3.org/TR/2011/REC-css3-selectors-20110929/#checked\n\t\t\t// IE8 throws error here and will not see later tests\n\t\t\tif ( !el.querySelectorAll(\":checked\").length ) {\n\t\t\t\trbuggyQSA.push(\":checked\");\n\t\t\t}\n\n\t\t\t// Support: Safari 8+, iOS 8+\n\t\t\t// https://bugs.webkit.org/show_bug.cgi?id=136851\n\t\t\t// In-page `selector#id sibling-combinator selector` fails\n\t\t\tif ( !el.querySelectorAll( \"a#\" + expando + \"+*\" ).length ) {\n\t\t\t\trbuggyQSA.push(\".#.+[+~]\");\n\t\t\t}\n\t\t});\n\n\t\tassert(function( el ) {\n\t\t\tel.innerHTML = \"<a href='' disabled='disabled'></a>\" +\n\t\t\t\t\"<select disabled='disabled'><option/></select>\";\n\n\t\t\t// Support: Windows 8 Native Apps\n\t\t\t// The type and name attributes are restricted during .innerHTML assignment\n\t\t\tvar input = document.createElement(\"input\");\n\t\t\tinput.setAttribute( \"type\", \"hidden\" );\n\t\t\tel.appendChild( input ).setAttribute( \"name\", \"D\" );\n\n\t\t\t// Support: IE8\n\t\t\t// Enforce case-sensitivity of name attribute\n\t\t\tif ( el.querySelectorAll(\"[name=d]\").length ) {\n\t\t\t\trbuggyQSA.push( \"name\" + whitespace + \"*[*^$|!~]?=\" );\n\t\t\t}\n\n\t\t\t// FF 3.5 - :enabled/:disabled and hidden elements (hidden elements are still enabled)\n\t\t\t// IE8 throws error here and will not see later tests\n\t\t\tif ( el.querySelectorAll(\":enabled\").length !== 2 ) {\n\t\t\t\trbuggyQSA.push( \":enabled\", \":disabled\" );\n\t\t\t}\n\n\t\t\t// Support: IE9-11+\n\t\t\t// IE's :disabled selector does not pick up the children of disabled fieldsets\n\t\t\tdocElem.appendChild( el ).disabled = true;\n\t\t\tif ( el.querySelectorAll(\":disabled\").length !== 2 ) {\n\t\t\t\trbuggyQSA.push( \":enabled\", \":disabled\" );\n\t\t\t}\n\n\t\t\t// Opera 10-11 does not throw on post-comma invalid pseudos\n\t\t\tel.querySelectorAll(\"*,:x\");\n\t\t\trbuggyQSA.push(\",.*:\");\n\t\t});\n\t}\n\n\tif ( (support.matchesSelector = rnative.test( (matches = docElem.matches ||\n\t\tdocElem.webkitMatchesSelector ||\n\t\tdocElem.mozMatchesSelector ||\n\t\tdocElem.oMatchesSelector ||\n\t\tdocElem.msMatchesSelector) )) ) {\n\n\t\tassert(function( el ) {\n\t\t\t// Check to see if it's possible to do matchesSelector\n\t\t\t// on a disconnected node (IE 9)\n\t\t\tsupport.disconnectedMatch = matches.call( el, \"*\" );\n\n\t\t\t// This should fail with an exception\n\t\t\t// Gecko does not error, returns false instead\n\t\t\tmatches.call( el, \"[s!='']:x\" );\n\t\t\trbuggyMatches.push( \"!=\", pseudos );\n\t\t});\n\t}\n\n\trbuggyQSA = rbuggyQSA.length && new RegExp( rbuggyQSA.join(\"|\") );\n\trbuggyMatches = rbuggyMatches.length && new RegExp( rbuggyMatches.join(\"|\") );\n\n\t/* Contains\n\t---------------------------------------------------------------------- */\n\thasCompare = rnative.test( docElem.compareDocumentPosition );\n\n\t// Element contains another\n\t// Purposefully self-exclusive\n\t// As in, an element does not contain itself\n\tcontains = hasCompare || rnative.test( docElem.contains ) ?\n\t\tfunction( a, b ) {\n\t\t\tvar adown = a.nodeType === 9 ? a.documentElement : a,\n\t\t\t\tbup = b && b.parentNode;\n\t\t\treturn a === bup || !!( bup && bup.nodeType === 1 && (\n\t\t\t\tadown.contains ?\n\t\t\t\t\tadown.contains( bup ) :\n\t\t\t\t\ta.compareDocumentPosition && a.compareDocumentPosition( bup ) & 16\n\t\t\t));\n\t\t} :\n\t\tfunction( a, b ) {\n\t\t\tif ( b ) {\n\t\t\t\twhile ( (b = b.parentNode) ) {\n\t\t\t\t\tif ( b === a ) {\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\treturn false;\n\t\t};\n\n\t/* Sorting\n\t---------------------------------------------------------------------- */\n\n\t// Document order sorting\n\tsortOrder = hasCompare ?\n\tfunction( a, b ) {\n\n\t\t// Flag for duplicate removal\n\t\tif ( a === b ) {\n\t\t\thasDuplicate = true;\n\t\t\treturn 0;\n\t\t}\n\n\t\t// Sort on method existence if only one input has compareDocumentPosition\n\t\tvar compare = !a.compareDocumentPosition - !b.compareDocumentPosition;\n\t\tif ( compare ) {\n\t\t\treturn compare;\n\t\t}\n\n\t\t// Calculate position if both inputs belong to the same document\n\t\tcompare = ( a.ownerDocument || a ) === ( b.ownerDocument || b ) ?\n\t\t\ta.compareDocumentPosition( b ) :\n\n\t\t\t// Otherwise we know they are disconnected\n\t\t\t1;\n\n\t\t// Disconnected nodes\n\t\tif ( compare & 1 ||\n\t\t\t(!support.sortDetached && b.compareDocumentPosition( a ) === compare) ) {\n\n\t\t\t// Choose the first element that is related to our preferred document\n\t\t\tif ( a === document || a.ownerDocument === preferredDoc && contains(preferredDoc, a) ) {\n\t\t\t\treturn -1;\n\t\t\t}\n\t\t\tif ( b === document || b.ownerDocument === preferredDoc && contains(preferredDoc, b) ) {\n\t\t\t\treturn 1;\n\t\t\t}\n\n\t\t\t// Maintain original order\n\t\t\treturn sortInput ?\n\t\t\t\t( indexOf( sortInput, a ) - indexOf( sortInput, b ) ) :\n\t\t\t\t0;\n\t\t}\n\n\t\treturn compare & 4 ? -1 : 1;\n\t} :\n\tfunction( a, b ) {\n\t\t// Exit early if the nodes are identical\n\t\tif ( a === b ) {\n\t\t\thasDuplicate = true;\n\t\t\treturn 0;\n\t\t}\n\n\t\tvar cur,\n\t\t\ti = 0,\n\t\t\taup = a.parentNode,\n\t\t\tbup = b.parentNode,\n\t\t\tap = [ a ],\n\t\t\tbp = [ b ];\n\n\t\t// Parentless nodes are either documents or disconnected\n\t\tif ( !aup || !bup ) {\n\t\t\treturn a === document ? -1 :\n\t\t\t\tb === document ? 1 :\n\t\t\t\taup ? -1 :\n\t\t\t\tbup ? 1 :\n\t\t\t\tsortInput ?\n\t\t\t\t( indexOf( sortInput, a ) - indexOf( sortInput, b ) ) :\n\t\t\t\t0;\n\n\t\t// If the nodes are siblings, we can do a quick check\n\t\t} else if ( aup === bup ) {\n\t\t\treturn siblingCheck( a, b );\n\t\t}\n\n\t\t// Otherwise we need full lists of their ancestors for comparison\n\t\tcur = a;\n\t\twhile ( (cur = cur.parentNode) ) {\n\t\t\tap.unshift( cur );\n\t\t}\n\t\tcur = b;\n\t\twhile ( (cur = cur.parentNode) ) {\n\t\t\tbp.unshift( cur );\n\t\t}\n\n\t\t// Walk down the tree looking for a discrepancy\n\t\twhile ( ap[i] === bp[i] ) {\n\t\t\ti++;\n\t\t}\n\n\t\treturn i ?\n\t\t\t// Do a sibling check if the nodes have a common ancestor\n\t\t\tsiblingCheck( ap[i], bp[i] ) :\n\n\t\t\t// Otherwise nodes in our document sort first\n\t\t\tap[i] === preferredDoc ? -1 :\n\t\t\tbp[i] === preferredDoc ? 1 :\n\t\t\t0;\n\t};\n\n\treturn document;\n};\n\nSizzle.matches = function( expr, elements ) {\n\treturn Sizzle( expr, null, null, elements );\n};\n\nSizzle.matchesSelector = function( elem, expr ) {\n\t// Set document vars if needed\n\tif ( ( elem.ownerDocument || elem ) !== document ) {\n\t\tsetDocument( elem );\n\t}\n\n\t// Make sure that attribute selectors are quoted\n\texpr = expr.replace( rattributeQuotes, \"='$1']\" );\n\n\tif ( support.matchesSelector && documentIsHTML &&\n\t\t!compilerCache[ expr + \" \" ] &&\n\t\t( !rbuggyMatches || !rbuggyMatches.test( expr ) ) &&\n\t\t( !rbuggyQSA     || !rbuggyQSA.test( expr ) ) ) {\n\n\t\ttry {\n\t\t\tvar ret = matches.call( elem, expr );\n\n\t\t\t// IE 9's matchesSelector returns false on disconnected nodes\n\t\t\tif ( ret || support.disconnectedMatch ||\n\t\t\t\t\t// As well, disconnected nodes are said to be in a document\n\t\t\t\t\t// fragment in IE 9\n\t\t\t\t\telem.document && elem.document.nodeType !== 11 ) {\n\t\t\t\treturn ret;\n\t\t\t}\n\t\t} catch (e) {}\n\t}\n\n\treturn Sizzle( expr, document, null, [ elem ] ).length > 0;\n};\n\nSizzle.contains = function( context, elem ) {\n\t// Set document vars if needed\n\tif ( ( context.ownerDocument || context ) !== document ) {\n\t\tsetDocument( context );\n\t}\n\treturn contains( context, elem );\n};\n\nSizzle.attr = function( elem, name ) {\n\t// Set document vars if needed\n\tif ( ( elem.ownerDocument || elem ) !== document ) {\n\t\tsetDocument( elem );\n\t}\n\n\tvar fn = Expr.attrHandle[ name.toLowerCase() ],\n\t\t// Don't get fooled by Object.prototype properties (jQuery #13807)\n\t\tval = fn && hasOwn.call( Expr.attrHandle, name.toLowerCase() ) ?\n\t\t\tfn( elem, name, !documentIsHTML ) :\n\t\t\tundefined;\n\n\treturn val !== undefined ?\n\t\tval :\n\t\tsupport.attributes || !documentIsHTML ?\n\t\t\telem.getAttribute( name ) :\n\t\t\t(val = elem.getAttributeNode(name)) && val.specified ?\n\t\t\t\tval.value :\n\t\t\t\tnull;\n};\n\nSizzle.escape = function( sel ) {\n\treturn (sel + \"\").replace( rcssescape, fcssescape );\n};\n\nSizzle.error = function( msg ) {\n\tthrow new Error( \"Syntax error, unrecognized expression: \" + msg );\n};\n\n/**\n * Document sorting and removing duplicates\n * @param {ArrayLike} results\n */\nSizzle.uniqueSort = function( results ) {\n\tvar elem,\n\t\tduplicates = [],\n\t\tj = 0,\n\t\ti = 0;\n\n\t// Unless we *know* we can detect duplicates, assume their presence\n\thasDuplicate = !support.detectDuplicates;\n\tsortInput = !support.sortStable && results.slice( 0 );\n\tresults.sort( sortOrder );\n\n\tif ( hasDuplicate ) {\n\t\twhile ( (elem = results[i++]) ) {\n\t\t\tif ( elem === results[ i ] ) {\n\t\t\t\tj = duplicates.push( i );\n\t\t\t}\n\t\t}\n\t\twhile ( j-- ) {\n\t\t\tresults.splice( duplicates[ j ], 1 );\n\t\t}\n\t}\n\n\t// Clear input after sorting to release objects\n\t// See https://github.com/jquery/sizzle/pull/225\n\tsortInput = null;\n\n\treturn results;\n};\n\n/**\n * Utility function for retrieving the text value of an array of DOM nodes\n * @param {Array|Element} elem\n */\ngetText = Sizzle.getText = function( elem ) {\n\tvar node,\n\t\tret = \"\",\n\t\ti = 0,\n\t\tnodeType = elem.nodeType;\n\n\tif ( !nodeType ) {\n\t\t// If no nodeType, this is expected to be an array\n\t\twhile ( (node = elem[i++]) ) {\n\t\t\t// Do not traverse comment nodes\n\t\t\tret += getText( node );\n\t\t}\n\t} else if ( nodeType === 1 || nodeType === 9 || nodeType === 11 ) {\n\t\t// Use textContent for elements\n\t\t// innerText usage removed for consistency of new lines (jQuery #11153)\n\t\tif ( typeof elem.textContent === \"string\" ) {\n\t\t\treturn elem.textContent;\n\t\t} else {\n\t\t\t// Traverse its children\n\t\t\tfor ( elem = elem.firstChild; elem; elem = elem.nextSibling ) {\n\t\t\t\tret += getText( elem );\n\t\t\t}\n\t\t}\n\t} else if ( nodeType === 3 || nodeType === 4 ) {\n\t\treturn elem.nodeValue;\n\t}\n\t// Do not include comment or processing instruction nodes\n\n\treturn ret;\n};\n\nExpr = Sizzle.selectors = {\n\n\t// Can be adjusted by the user\n\tcacheLength: 50,\n\n\tcreatePseudo: markFunction,\n\n\tmatch: matchExpr,\n\n\tattrHandle: {},\n\n\tfind: {},\n\n\trelative: {\n\t\t\">\": { dir: \"parentNode\", first: true },\n\t\t\" \": { dir: \"parentNode\" },\n\t\t\"+\": { dir: \"previousSibling\", first: true },\n\t\t\"~\": { dir: \"previousSibling\" }\n\t},\n\n\tpreFilter: {\n\t\t\"ATTR\": function( match ) {\n\t\t\tmatch[1] = match[1].replace( runescape, funescape );\n\n\t\t\t// Move the given value to match[3] whether quoted or unquoted\n\t\t\tmatch[3] = ( match[3] || match[4] || match[5] || \"\" ).replace( runescape, funescape );\n\n\t\t\tif ( match[2] === \"~=\" ) {\n\t\t\t\tmatch[3] = \" \" + match[3] + \" \";\n\t\t\t}\n\n\t\t\treturn match.slice( 0, 4 );\n\t\t},\n\n\t\t\"CHILD\": function( match ) {\n\t\t\t/* matches from matchExpr[\"CHILD\"]\n\t\t\t\t1 type (only|nth|...)\n\t\t\t\t2 what (child|of-type)\n\t\t\t\t3 argument (even|odd|\\d*|\\d*n([+-]\\d+)?|...)\n\t\t\t\t4 xn-component of xn+y argument ([+-]?\\d*n|)\n\t\t\t\t5 sign of xn-component\n\t\t\t\t6 x of xn-component\n\t\t\t\t7 sign of y-component\n\t\t\t\t8 y of y-component\n\t\t\t*/\n\t\t\tmatch[1] = match[1].toLowerCase();\n\n\t\t\tif ( match[1].slice( 0, 3 ) === \"nth\" ) {\n\t\t\t\t// nth-* requires argument\n\t\t\t\tif ( !match[3] ) {\n\t\t\t\t\tSizzle.error( match[0] );\n\t\t\t\t}\n\n\t\t\t\t// numeric x and y parameters for Expr.filter.CHILD\n\t\t\t\t// remember that false/true cast respectively to 0/1\n\t\t\t\tmatch[4] = +( match[4] ? match[5] + (match[6] || 1) : 2 * ( match[3] === \"even\" || match[3] === \"odd\" ) );\n\t\t\t\tmatch[5] = +( ( match[7] + match[8] ) || match[3] === \"odd\" );\n\n\t\t\t// other types prohibit arguments\n\t\t\t} else if ( match[3] ) {\n\t\t\t\tSizzle.error( match[0] );\n\t\t\t}\n\n\t\t\treturn match;\n\t\t},\n\n\t\t\"PSEUDO\": function( match ) {\n\t\t\tvar excess,\n\t\t\t\tunquoted = !match[6] && match[2];\n\n\t\t\tif ( matchExpr[\"CHILD\"].test( match[0] ) ) {\n\t\t\t\treturn null;\n\t\t\t}\n\n\t\t\t// Accept quoted arguments as-is\n\t\t\tif ( match[3] ) {\n\t\t\t\tmatch[2] = match[4] || match[5] || \"\";\n\n\t\t\t// Strip excess characters from unquoted arguments\n\t\t\t} else if ( unquoted && rpseudo.test( unquoted ) &&\n\t\t\t\t// Get excess from tokenize (recursively)\n\t\t\t\t(excess = tokenize( unquoted, true )) &&\n\t\t\t\t// advance to the next closing parenthesis\n\t\t\t\t(excess = unquoted.indexOf( \")\", unquoted.length - excess ) - unquoted.length) ) {\n\n\t\t\t\t// excess is a negative index\n\t\t\t\tmatch[0] = match[0].slice( 0, excess );\n\t\t\t\tmatch[2] = unquoted.slice( 0, excess );\n\t\t\t}\n\n\t\t\t// Return only captures needed by the pseudo filter method (type and argument)\n\t\t\treturn match.slice( 0, 3 );\n\t\t}\n\t},\n\n\tfilter: {\n\n\t\t\"TAG\": function( nodeNameSelector ) {\n\t\t\tvar nodeName = nodeNameSelector.replace( runescape, funescape ).toLowerCase();\n\t\t\treturn nodeNameSelector === \"*\" ?\n\t\t\t\tfunction() { return true; } :\n\t\t\t\tfunction( elem ) {\n\t\t\t\t\treturn elem.nodeName && elem.nodeName.toLowerCase() === nodeName;\n\t\t\t\t};\n\t\t},\n\n\t\t\"CLASS\": function( className ) {\n\t\t\tvar pattern = classCache[ className + \" \" ];\n\n\t\t\treturn pattern ||\n\t\t\t\t(pattern = new RegExp( \"(^|\" + whitespace + \")\" + className + \"(\" + whitespace + \"|$)\" )) &&\n\t\t\t\tclassCache( className, function( elem ) {\n\t\t\t\t\treturn pattern.test( typeof elem.className === \"string\" && elem.className || typeof elem.getAttribute !== \"undefined\" && elem.getAttribute(\"class\") || \"\" );\n\t\t\t\t});\n\t\t},\n\n\t\t\"ATTR\": function( name, operator, check ) {\n\t\t\treturn function( elem ) {\n\t\t\t\tvar result = Sizzle.attr( elem, name );\n\n\t\t\t\tif ( result == null ) {\n\t\t\t\t\treturn operator === \"!=\";\n\t\t\t\t}\n\t\t\t\tif ( !operator ) {\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\n\t\t\t\tresult += \"\";\n\n\t\t\t\treturn operator === \"=\" ? result === check :\n\t\t\t\t\toperator === \"!=\" ? result !== check :\n\t\t\t\t\toperator === \"^=\" ? check && result.indexOf( check ) === 0 :\n\t\t\t\t\toperator === \"*=\" ? check && result.indexOf( check ) > -1 :\n\t\t\t\t\toperator === \"$=\" ? check && result.slice( -check.length ) === check :\n\t\t\t\t\toperator === \"~=\" ? ( \" \" + result.replace( rwhitespace, \" \" ) + \" \" ).indexOf( check ) > -1 :\n\t\t\t\t\toperator === \"|=\" ? result === check || result.slice( 0, check.length + 1 ) === check + \"-\" :\n\t\t\t\t\tfalse;\n\t\t\t};\n\t\t},\n\n\t\t\"CHILD\": function( type, what, argument, first, last ) {\n\t\t\tvar simple = type.slice( 0, 3 ) !== \"nth\",\n\t\t\t\tforward = type.slice( -4 ) !== \"last\",\n\t\t\t\tofType = what === \"of-type\";\n\n\t\t\treturn first === 1 && last === 0 ?\n\n\t\t\t\t// Shortcut for :nth-*(n)\n\t\t\t\tfunction( elem ) {\n\t\t\t\t\treturn !!elem.parentNode;\n\t\t\t\t} :\n\n\t\t\t\tfunction( elem, context, xml ) {\n\t\t\t\t\tvar cache, uniqueCache, outerCache, node, nodeIndex, start,\n\t\t\t\t\t\tdir = simple !== forward ? \"nextSibling\" : \"previousSibling\",\n\t\t\t\t\t\tparent = elem.parentNode,\n\t\t\t\t\t\tname = ofType && elem.nodeName.toLowerCase(),\n\t\t\t\t\t\tuseCache = !xml && !ofType,\n\t\t\t\t\t\tdiff = false;\n\n\t\t\t\t\tif ( parent ) {\n\n\t\t\t\t\t\t// :(first|last|only)-(child|of-type)\n\t\t\t\t\t\tif ( simple ) {\n\t\t\t\t\t\t\twhile ( dir ) {\n\t\t\t\t\t\t\t\tnode = elem;\n\t\t\t\t\t\t\t\twhile ( (node = node[ dir ]) ) {\n\t\t\t\t\t\t\t\t\tif ( ofType ?\n\t\t\t\t\t\t\t\t\t\tnode.nodeName.toLowerCase() === name :\n\t\t\t\t\t\t\t\t\t\tnode.nodeType === 1 ) {\n\n\t\t\t\t\t\t\t\t\t\treturn false;\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t// Reverse direction for :only-* (if we haven't yet done so)\n\t\t\t\t\t\t\t\tstart = dir = type === \"only\" && !start && \"nextSibling\";\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tstart = [ forward ? parent.firstChild : parent.lastChild ];\n\n\t\t\t\t\t\t// non-xml :nth-child(...) stores cache data on `parent`\n\t\t\t\t\t\tif ( forward && useCache ) {\n\n\t\t\t\t\t\t\t// Seek `elem` from a previously-cached index\n\n\t\t\t\t\t\t\t// ...in a gzip-friendly way\n\t\t\t\t\t\t\tnode = parent;\n\t\t\t\t\t\t\touterCache = node[ expando ] || (node[ expando ] = {});\n\n\t\t\t\t\t\t\t// Support: IE <9 only\n\t\t\t\t\t\t\t// Defend against cloned attroperties (jQuery gh-1709)\n\t\t\t\t\t\t\tuniqueCache = outerCache[ node.uniqueID ] ||\n\t\t\t\t\t\t\t\t(outerCache[ node.uniqueID ] = {});\n\n\t\t\t\t\t\t\tcache = uniqueCache[ type ] || [];\n\t\t\t\t\t\t\tnodeIndex = cache[ 0 ] === dirruns && cache[ 1 ];\n\t\t\t\t\t\t\tdiff = nodeIndex && cache[ 2 ];\n\t\t\t\t\t\t\tnode = nodeIndex && parent.childNodes[ nodeIndex ];\n\n\t\t\t\t\t\t\twhile ( (node = ++nodeIndex && node && node[ dir ] ||\n\n\t\t\t\t\t\t\t\t// Fallback to seeking `elem` from the start\n\t\t\t\t\t\t\t\t(diff = nodeIndex = 0) || start.pop()) ) {\n\n\t\t\t\t\t\t\t\t// When found, cache indexes on `parent` and break\n\t\t\t\t\t\t\t\tif ( node.nodeType === 1 && ++diff && node === elem ) {\n\t\t\t\t\t\t\t\t\tuniqueCache[ type ] = [ dirruns, nodeIndex, diff ];\n\t\t\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t// Use previously-cached element index if available\n\t\t\t\t\t\t\tif ( useCache ) {\n\t\t\t\t\t\t\t\t// ...in a gzip-friendly way\n\t\t\t\t\t\t\t\tnode = elem;\n\t\t\t\t\t\t\t\touterCache = node[ expando ] || (node[ expando ] = {});\n\n\t\t\t\t\t\t\t\t// Support: IE <9 only\n\t\t\t\t\t\t\t\t// Defend against cloned attroperties (jQuery gh-1709)\n\t\t\t\t\t\t\t\tuniqueCache = outerCache[ node.uniqueID ] ||\n\t\t\t\t\t\t\t\t\t(outerCache[ node.uniqueID ] = {});\n\n\t\t\t\t\t\t\t\tcache = uniqueCache[ type ] || [];\n\t\t\t\t\t\t\t\tnodeIndex = cache[ 0 ] === dirruns && cache[ 1 ];\n\t\t\t\t\t\t\t\tdiff = nodeIndex;\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t// xml :nth-child(...)\n\t\t\t\t\t\t\t// or :nth-last-child(...) or :nth(-last)?-of-type(...)\n\t\t\t\t\t\t\tif ( diff === false ) {\n\t\t\t\t\t\t\t\t// Use the same loop as above to seek `elem` from the start\n\t\t\t\t\t\t\t\twhile ( (node = ++nodeIndex && node && node[ dir ] ||\n\t\t\t\t\t\t\t\t\t(diff = nodeIndex = 0) || start.pop()) ) {\n\n\t\t\t\t\t\t\t\t\tif ( ( ofType ?\n\t\t\t\t\t\t\t\t\t\tnode.nodeName.toLowerCase() === name :\n\t\t\t\t\t\t\t\t\t\tnode.nodeType === 1 ) &&\n\t\t\t\t\t\t\t\t\t\t++diff ) {\n\n\t\t\t\t\t\t\t\t\t\t// Cache the index of each encountered element\n\t\t\t\t\t\t\t\t\t\tif ( useCache ) {\n\t\t\t\t\t\t\t\t\t\t\touterCache = node[ expando ] || (node[ expando ] = {});\n\n\t\t\t\t\t\t\t\t\t\t\t// Support: IE <9 only\n\t\t\t\t\t\t\t\t\t\t\t// Defend against cloned attroperties (jQuery gh-1709)\n\t\t\t\t\t\t\t\t\t\t\tuniqueCache = outerCache[ node.uniqueID ] ||\n\t\t\t\t\t\t\t\t\t\t\t\t(outerCache[ node.uniqueID ] = {});\n\n\t\t\t\t\t\t\t\t\t\t\tuniqueCache[ type ] = [ dirruns, diff ];\n\t\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\t\tif ( node === elem ) {\n\t\t\t\t\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t// Incorporate the offset, then check against cycle size\n\t\t\t\t\t\tdiff -= last;\n\t\t\t\t\t\treturn diff === first || ( diff % first === 0 && diff / first >= 0 );\n\t\t\t\t\t}\n\t\t\t\t};\n\t\t},\n\n\t\t\"PSEUDO\": function( pseudo, argument ) {\n\t\t\t// pseudo-class names are case-insensitive\n\t\t\t// http://www.w3.org/TR/selectors/#pseudo-classes\n\t\t\t// Prioritize by case sensitivity in case custom pseudos are added with uppercase letters\n\t\t\t// Remember that setFilters inherits from pseudos\n\t\t\tvar args,\n\t\t\t\tfn = Expr.pseudos[ pseudo ] || Expr.setFilters[ pseudo.toLowerCase() ] ||\n\t\t\t\t\tSizzle.error( \"unsupported pseudo: \" + pseudo );\n\n\t\t\t// The user may use createPseudo to indicate that\n\t\t\t// arguments are needed to create the filter function\n\t\t\t// just as Sizzle does\n\t\t\tif ( fn[ expando ] ) {\n\t\t\t\treturn fn( argument );\n\t\t\t}\n\n\t\t\t// But maintain support for old signatures\n\t\t\tif ( fn.length > 1 ) {\n\t\t\t\targs = [ pseudo, pseudo, \"\", argument ];\n\t\t\t\treturn Expr.setFilters.hasOwnProperty( pseudo.toLowerCase() ) ?\n\t\t\t\t\tmarkFunction(function( seed, matches ) {\n\t\t\t\t\t\tvar idx,\n\t\t\t\t\t\t\tmatched = fn( seed, argument ),\n\t\t\t\t\t\t\ti = matched.length;\n\t\t\t\t\t\twhile ( i-- ) {\n\t\t\t\t\t\t\tidx = indexOf( seed, matched[i] );\n\t\t\t\t\t\t\tseed[ idx ] = !( matches[ idx ] = matched[i] );\n\t\t\t\t\t\t}\n\t\t\t\t\t}) :\n\t\t\t\t\tfunction( elem ) {\n\t\t\t\t\t\treturn fn( elem, 0, args );\n\t\t\t\t\t};\n\t\t\t}\n\n\t\t\treturn fn;\n\t\t}\n\t},\n\n\tpseudos: {\n\t\t// Potentially complex pseudos\n\t\t\"not\": markFunction(function( selector ) {\n\t\t\t// Trim the selector passed to compile\n\t\t\t// to avoid treating leading and trailing\n\t\t\t// spaces as combinators\n\t\t\tvar input = [],\n\t\t\t\tresults = [],\n\t\t\t\tmatcher = compile( selector.replace( rtrim, \"$1\" ) );\n\n\t\t\treturn matcher[ expando ] ?\n\t\t\t\tmarkFunction(function( seed, matches, context, xml ) {\n\t\t\t\t\tvar elem,\n\t\t\t\t\t\tunmatched = matcher( seed, null, xml, [] ),\n\t\t\t\t\t\ti = seed.length;\n\n\t\t\t\t\t// Match elements unmatched by `matcher`\n\t\t\t\t\twhile ( i-- ) {\n\t\t\t\t\t\tif ( (elem = unmatched[i]) ) {\n\t\t\t\t\t\t\tseed[i] = !(matches[i] = elem);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}) :\n\t\t\t\tfunction( elem, context, xml ) {\n\t\t\t\t\tinput[0] = elem;\n\t\t\t\t\tmatcher( input, null, xml, results );\n\t\t\t\t\t// Don't keep the element (issue #299)\n\t\t\t\t\tinput[0] = null;\n\t\t\t\t\treturn !results.pop();\n\t\t\t\t};\n\t\t}),\n\n\t\t\"has\": markFunction(function( selector ) {\n\t\t\treturn function( elem ) {\n\t\t\t\treturn Sizzle( selector, elem ).length > 0;\n\t\t\t};\n\t\t}),\n\n\t\t\"contains\": markFunction(function( text ) {\n\t\t\ttext = text.replace( runescape, funescape );\n\t\t\treturn function( elem ) {\n\t\t\t\treturn ( elem.textContent || elem.innerText || getText( elem ) ).indexOf( text ) > -1;\n\t\t\t};\n\t\t}),\n\n\t\t// \"Whether an element is represented by a :lang() selector\n\t\t// is based solely on the element's language value\n\t\t// being equal to the identifier C,\n\t\t// or beginning with the identifier C immediately followed by \"-\".\n\t\t// The matching of C against the element's language value is performed case-insensitively.\n\t\t// The identifier C does not have to be a valid language name.\"\n\t\t// http://www.w3.org/TR/selectors/#lang-pseudo\n\t\t\"lang\": markFunction( function( lang ) {\n\t\t\t// lang value must be a valid identifier\n\t\t\tif ( !ridentifier.test(lang || \"\") ) {\n\t\t\t\tSizzle.error( \"unsupported lang: \" + lang );\n\t\t\t}\n\t\t\tlang = lang.replace( runescape, funescape ).toLowerCase();\n\t\t\treturn function( elem ) {\n\t\t\t\tvar elemLang;\n\t\t\t\tdo {\n\t\t\t\t\tif ( (elemLang = documentIsHTML ?\n\t\t\t\t\t\telem.lang :\n\t\t\t\t\t\telem.getAttribute(\"xml:lang\") || elem.getAttribute(\"lang\")) ) {\n\n\t\t\t\t\t\telemLang = elemLang.toLowerCase();\n\t\t\t\t\t\treturn elemLang === lang || elemLang.indexOf( lang + \"-\" ) === 0;\n\t\t\t\t\t}\n\t\t\t\t} while ( (elem = elem.parentNode) && elem.nodeType === 1 );\n\t\t\t\treturn false;\n\t\t\t};\n\t\t}),\n\n\t\t// Miscellaneous\n\t\t\"target\": function( elem ) {\n\t\t\tvar hash = window.location && window.location.hash;\n\t\t\treturn hash && hash.slice( 1 ) === elem.id;\n\t\t},\n\n\t\t\"root\": function( elem ) {\n\t\t\treturn elem === docElem;\n\t\t},\n\n\t\t\"focus\": function( elem ) {\n\t\t\treturn elem === document.activeElement && (!document.hasFocus || document.hasFocus()) && !!(elem.type || elem.href || ~elem.tabIndex);\n\t\t},\n\n\t\t// Boolean properties\n\t\t\"enabled\": createDisabledPseudo( false ),\n\t\t\"disabled\": createDisabledPseudo( true ),\n\n\t\t\"checked\": function( elem ) {\n\t\t\t// In CSS3, :checked should return both checked and selected elements\n\t\t\t// http://www.w3.org/TR/2011/REC-css3-selectors-20110929/#checked\n\t\t\tvar nodeName = elem.nodeName.toLowerCase();\n\t\t\treturn (nodeName === \"input\" && !!elem.checked) || (nodeName === \"option\" && !!elem.selected);\n\t\t},\n\n\t\t\"selected\": function( elem ) {\n\t\t\t// Accessing this property makes selected-by-default\n\t\t\t// options in Safari work properly\n\t\t\tif ( elem.parentNode ) {\n\t\t\t\telem.parentNode.selectedIndex;\n\t\t\t}\n\n\t\t\treturn elem.selected === true;\n\t\t},\n\n\t\t// Contents\n\t\t\"empty\": function( elem ) {\n\t\t\t// http://www.w3.org/TR/selectors/#empty-pseudo\n\t\t\t// :empty is negated by element (1) or content nodes (text: 3; cdata: 4; entity ref: 5),\n\t\t\t//   but not by others (comment: 8; processing instruction: 7; etc.)\n\t\t\t// nodeType < 6 works because attributes (2) do not appear as children\n\t\t\tfor ( elem = elem.firstChild; elem; elem = elem.nextSibling ) {\n\t\t\t\tif ( elem.nodeType < 6 ) {\n\t\t\t\t\treturn false;\n\t\t\t\t}\n\t\t\t}\n\t\t\treturn true;\n\t\t},\n\n\t\t\"parent\": function( elem ) {\n\t\t\treturn !Expr.pseudos[\"empty\"]( elem );\n\t\t},\n\n\t\t// Element/input types\n\t\t\"header\": function( elem ) {\n\t\t\treturn rheader.test( elem.nodeName );\n\t\t},\n\n\t\t\"input\": function( elem ) {\n\t\t\treturn rinputs.test( elem.nodeName );\n\t\t},\n\n\t\t\"button\": function( elem ) {\n\t\t\tvar name = elem.nodeName.toLowerCase();\n\t\t\treturn name === \"input\" && elem.type === \"button\" || name === \"button\";\n\t\t},\n\n\t\t\"text\": function( elem ) {\n\t\t\tvar attr;\n\t\t\treturn elem.nodeName.toLowerCase() === \"input\" &&\n\t\t\t\telem.type === \"text\" &&\n\n\t\t\t\t// Support: IE<8\n\t\t\t\t// New HTML5 attribute values (e.g., \"search\") appear with elem.type === \"text\"\n\t\t\t\t( (attr = elem.getAttribute(\"type\")) == null || attr.toLowerCase() === \"text\" );\n\t\t},\n\n\t\t// Position-in-collection\n\t\t\"first\": createPositionalPseudo(function() {\n\t\t\treturn [ 0 ];\n\t\t}),\n\n\t\t\"last\": createPositionalPseudo(function( matchIndexes, length ) {\n\t\t\treturn [ length - 1 ];\n\t\t}),\n\n\t\t\"eq\": createPositionalPseudo(function( matchIndexes, length, argument ) {\n\t\t\treturn [ argument < 0 ? argument + length : argument ];\n\t\t}),\n\n\t\t\"even\": createPositionalPseudo(function( matchIndexes, length ) {\n\t\t\tvar i = 0;\n\t\t\tfor ( ; i < length; i += 2 ) {\n\t\t\t\tmatchIndexes.push( i );\n\t\t\t}\n\t\t\treturn matchIndexes;\n\t\t}),\n\n\t\t\"odd\": createPositionalPseudo(function( matchIndexes, length ) {\n\t\t\tvar i = 1;\n\t\t\tfor ( ; i < length; i += 2 ) {\n\t\t\t\tmatchIndexes.push( i );\n\t\t\t}\n\t\t\treturn matchIndexes;\n\t\t}),\n\n\t\t\"lt\": createPositionalPseudo(function( matchIndexes, length, argument ) {\n\t\t\tvar i = argument < 0 ? argument + length : argument;\n\t\t\tfor ( ; --i >= 0; ) {\n\t\t\t\tmatchIndexes.push( i );\n\t\t\t}\n\t\t\treturn matchIndexes;\n\t\t}),\n\n\t\t\"gt\": createPositionalPseudo(function( matchIndexes, length, argument ) {\n\t\t\tvar i = argument < 0 ? argument + length : argument;\n\t\t\tfor ( ; ++i < length; ) {\n\t\t\t\tmatchIndexes.push( i );\n\t\t\t}\n\t\t\treturn matchIndexes;\n\t\t})\n\t}\n};\n\nExpr.pseudos[\"nth\"] = Expr.pseudos[\"eq\"];\n\n// Add button/input type pseudos\nfor ( i in { radio: true, checkbox: true, file: true, password: true, image: true } ) {\n\tExpr.pseudos[ i ] = createInputPseudo( i );\n}\nfor ( i in { submit: true, reset: true } ) {\n\tExpr.pseudos[ i ] = createButtonPseudo( i );\n}\n\n// Easy API for creating new setFilters\nfunction setFilters() {}\nsetFilters.prototype = Expr.filters = Expr.pseudos;\nExpr.setFilters = new setFilters();\n\ntokenize = Sizzle.tokenize = function( selector, parseOnly ) {\n\tvar matched, match, tokens, type,\n\t\tsoFar, groups, preFilters,\n\t\tcached = tokenCache[ selector + \" \" ];\n\n\tif ( cached ) {\n\t\treturn parseOnly ? 0 : cached.slice( 0 );\n\t}\n\n\tsoFar = selector;\n\tgroups = [];\n\tpreFilters = Expr.preFilter;\n\n\twhile ( soFar ) {\n\n\t\t// Comma and first run\n\t\tif ( !matched || (match = rcomma.exec( soFar )) ) {\n\t\t\tif ( match ) {\n\t\t\t\t// Don't consume trailing commas as valid\n\t\t\t\tsoFar = soFar.slice( match[0].length ) || soFar;\n\t\t\t}\n\t\t\tgroups.push( (tokens = []) );\n\t\t}\n\n\t\tmatched = false;\n\n\t\t// Combinators\n\t\tif ( (match = rcombinators.exec( soFar )) ) {\n\t\t\tmatched = match.shift();\n\t\t\ttokens.push({\n\t\t\t\tvalue: matched,\n\t\t\t\t// Cast descendant combinators to space\n\t\t\t\ttype: match[0].replace( rtrim, \" \" )\n\t\t\t});\n\t\t\tsoFar = soFar.slice( matched.length );\n\t\t}\n\n\t\t// Filters\n\t\tfor ( type in Expr.filter ) {\n\t\t\tif ( (match = matchExpr[ type ].exec( soFar )) && (!preFilters[ type ] ||\n\t\t\t\t(match = preFilters[ type ]( match ))) ) {\n\t\t\t\tmatched = match.shift();\n\t\t\t\ttokens.push({\n\t\t\t\t\tvalue: matched,\n\t\t\t\t\ttype: type,\n\t\t\t\t\tmatches: match\n\t\t\t\t});\n\t\t\t\tsoFar = soFar.slice( matched.length );\n\t\t\t}\n\t\t}\n\n\t\tif ( !matched ) {\n\t\t\tbreak;\n\t\t}\n\t}\n\n\t// Return the length of the invalid excess\n\t// if we're just parsing\n\t// Otherwise, throw an error or return tokens\n\treturn parseOnly ?\n\t\tsoFar.length :\n\t\tsoFar ?\n\t\t\tSizzle.error( selector ) :\n\t\t\t// Cache the tokens\n\t\t\ttokenCache( selector, groups ).slice( 0 );\n};\n\nfunction toSelector( tokens ) {\n\tvar i = 0,\n\t\tlen = tokens.length,\n\t\tselector = \"\";\n\tfor ( ; i < len; i++ ) {\n\t\tselector += tokens[i].value;\n\t}\n\treturn selector;\n}\n\nfunction addCombinator( matcher, combinator, base ) {\n\tvar dir = combinator.dir,\n\t\tskip = combinator.next,\n\t\tkey = skip || dir,\n\t\tcheckNonElements = base && key === \"parentNode\",\n\t\tdoneName = done++;\n\n\treturn combinator.first ?\n\t\t// Check against closest ancestor/preceding element\n\t\tfunction( elem, context, xml ) {\n\t\t\twhile ( (elem = elem[ dir ]) ) {\n\t\t\t\tif ( elem.nodeType === 1 || checkNonElements ) {\n\t\t\t\t\treturn matcher( elem, context, xml );\n\t\t\t\t}\n\t\t\t}\n\t\t\treturn false;\n\t\t} :\n\n\t\t// Check against all ancestor/preceding elements\n\t\tfunction( elem, context, xml ) {\n\t\t\tvar oldCache, uniqueCache, outerCache,\n\t\t\t\tnewCache = [ dirruns, doneName ];\n\n\t\t\t// We can't set arbitrary data on XML nodes, so they don't benefit from combinator caching\n\t\t\tif ( xml ) {\n\t\t\t\twhile ( (elem = elem[ dir ]) ) {\n\t\t\t\t\tif ( elem.nodeType === 1 || checkNonElements ) {\n\t\t\t\t\t\tif ( matcher( elem, context, xml ) ) {\n\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t} else {\n\t\t\t\twhile ( (elem = elem[ dir ]) ) {\n\t\t\t\t\tif ( elem.nodeType === 1 || checkNonElements ) {\n\t\t\t\t\t\touterCache = elem[ expando ] || (elem[ expando ] = {});\n\n\t\t\t\t\t\t// Support: IE <9 only\n\t\t\t\t\t\t// Defend against cloned attroperties (jQuery gh-1709)\n\t\t\t\t\t\tuniqueCache = outerCache[ elem.uniqueID ] || (outerCache[ elem.uniqueID ] = {});\n\n\t\t\t\t\t\tif ( skip && skip === elem.nodeName.toLowerCase() ) {\n\t\t\t\t\t\t\telem = elem[ dir ] || elem;\n\t\t\t\t\t\t} else if ( (oldCache = uniqueCache[ key ]) &&\n\t\t\t\t\t\t\toldCache[ 0 ] === dirruns && oldCache[ 1 ] === doneName ) {\n\n\t\t\t\t\t\t\t// Assign to newCache so results back-propagate to previous elements\n\t\t\t\t\t\t\treturn (newCache[ 2 ] = oldCache[ 2 ]);\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t// Reuse newcache so results back-propagate to previous elements\n\t\t\t\t\t\t\tuniqueCache[ key ] = newCache;\n\n\t\t\t\t\t\t\t// A match means we're done; a fail means we have to keep checking\n\t\t\t\t\t\t\tif ( (newCache[ 2 ] = matcher( elem, context, xml )) ) {\n\t\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\treturn false;\n\t\t};\n}\n\nfunction elementMatcher( matchers ) {\n\treturn matchers.length > 1 ?\n\t\tfunction( elem, context, xml ) {\n\t\t\tvar i = matchers.length;\n\t\t\twhile ( i-- ) {\n\t\t\t\tif ( !matchers[i]( elem, context, xml ) ) {\n\t\t\t\t\treturn false;\n\t\t\t\t}\n\t\t\t}\n\t\t\treturn true;\n\t\t} :\n\t\tmatchers[0];\n}\n\nfunction multipleContexts( selector, contexts, results ) {\n\tvar i = 0,\n\t\tlen = contexts.length;\n\tfor ( ; i < len; i++ ) {\n\t\tSizzle( selector, contexts[i], results );\n\t}\n\treturn results;\n}\n\nfunction condense( unmatched, map, filter, context, xml ) {\n\tvar elem,\n\t\tnewUnmatched = [],\n\t\ti = 0,\n\t\tlen = unmatched.length,\n\t\tmapped = map != null;\n\n\tfor ( ; i < len; i++ ) {\n\t\tif ( (elem = unmatched[i]) ) {\n\t\t\tif ( !filter || filter( elem, context, xml ) ) {\n\t\t\t\tnewUnmatched.push( elem );\n\t\t\t\tif ( mapped ) {\n\t\t\t\t\tmap.push( i );\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\treturn newUnmatched;\n}\n\nfunction setMatcher( preFilter, selector, matcher, postFilter, postFinder, postSelector ) {\n\tif ( postFilter && !postFilter[ expando ] ) {\n\t\tpostFilter = setMatcher( postFilter );\n\t}\n\tif ( postFinder && !postFinder[ expando ] ) {\n\t\tpostFinder = setMatcher( postFinder, postSelector );\n\t}\n\treturn markFunction(function( seed, results, context, xml ) {\n\t\tvar temp, i, elem,\n\t\t\tpreMap = [],\n\t\t\tpostMap = [],\n\t\t\tpreexisting = results.length,\n\n\t\t\t// Get initial elements from seed or context\n\t\t\telems = seed || multipleContexts( selector || \"*\", context.nodeType ? [ context ] : context, [] ),\n\n\t\t\t// Prefilter to get matcher input, preserving a map for seed-results synchronization\n\t\t\tmatcherIn = preFilter && ( seed || !selector ) ?\n\t\t\t\tcondense( elems, preMap, preFilter, context, xml ) :\n\t\t\t\telems,\n\n\t\t\tmatcherOut = matcher ?\n\t\t\t\t// If we have a postFinder, or filtered seed, or non-seed postFilter or preexisting results,\n\t\t\t\tpostFinder || ( seed ? preFilter : preexisting || postFilter ) ?\n\n\t\t\t\t\t// ...intermediate processing is necessary\n\t\t\t\t\t[] :\n\n\t\t\t\t\t// ...otherwise use results directly\n\t\t\t\t\tresults :\n\t\t\t\tmatcherIn;\n\n\t\t// Find primary matches\n\t\tif ( matcher ) {\n\t\t\tmatcher( matcherIn, matcherOut, context, xml );\n\t\t}\n\n\t\t// Apply postFilter\n\t\tif ( postFilter ) {\n\t\t\ttemp = condense( matcherOut, postMap );\n\t\t\tpostFilter( temp, [], context, xml );\n\n\t\t\t// Un-match failing elements by moving them back to matcherIn\n\t\t\ti = temp.length;\n\t\t\twhile ( i-- ) {\n\t\t\t\tif ( (elem = temp[i]) ) {\n\t\t\t\t\tmatcherOut[ postMap[i] ] = !(matcherIn[ postMap[i] ] = elem);\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\tif ( seed ) {\n\t\t\tif ( postFinder || preFilter ) {\n\t\t\t\tif ( postFinder ) {\n\t\t\t\t\t// Get the final matcherOut by condensing this intermediate into postFinder contexts\n\t\t\t\t\ttemp = [];\n\t\t\t\t\ti = matcherOut.length;\n\t\t\t\t\twhile ( i-- ) {\n\t\t\t\t\t\tif ( (elem = matcherOut[i]) ) {\n\t\t\t\t\t\t\t// Restore matcherIn since elem is not yet a final match\n\t\t\t\t\t\t\ttemp.push( (matcherIn[i] = elem) );\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tpostFinder( null, (matcherOut = []), temp, xml );\n\t\t\t\t}\n\n\t\t\t\t// Move matched elements from seed to results to keep them synchronized\n\t\t\t\ti = matcherOut.length;\n\t\t\t\twhile ( i-- ) {\n\t\t\t\t\tif ( (elem = matcherOut[i]) &&\n\t\t\t\t\t\t(temp = postFinder ? indexOf( seed, elem ) : preMap[i]) > -1 ) {\n\n\t\t\t\t\t\tseed[temp] = !(results[temp] = elem);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\n\t\t// Add elements to results, through postFinder if defined\n\t\t} else {\n\t\t\tmatcherOut = condense(\n\t\t\t\tmatcherOut === results ?\n\t\t\t\t\tmatcherOut.splice( preexisting, matcherOut.length ) :\n\t\t\t\t\tmatcherOut\n\t\t\t);\n\t\t\tif ( postFinder ) {\n\t\t\t\tpostFinder( null, results, matcherOut, xml );\n\t\t\t} else {\n\t\t\t\tpush.apply( results, matcherOut );\n\t\t\t}\n\t\t}\n\t});\n}\n\nfunction matcherFromTokens( tokens ) {\n\tvar checkContext, matcher, j,\n\t\tlen = tokens.length,\n\t\tleadingRelative = Expr.relative[ tokens[0].type ],\n\t\timplicitRelative = leadingRelative || Expr.relative[\" \"],\n\t\ti = leadingRelative ? 1 : 0,\n\n\t\t// The foundational matcher ensures that elements are reachable from top-level context(s)\n\t\tmatchContext = addCombinator( function( elem ) {\n\t\t\treturn elem === checkContext;\n\t\t}, implicitRelative, true ),\n\t\tmatchAnyContext = addCombinator( function( elem ) {\n\t\t\treturn indexOf( checkContext, elem ) > -1;\n\t\t}, implicitRelative, true ),\n\t\tmatchers = [ function( elem, context, xml ) {\n\t\t\tvar ret = ( !leadingRelative && ( xml || context !== outermostContext ) ) || (\n\t\t\t\t(checkContext = context).nodeType ?\n\t\t\t\t\tmatchContext( elem, context, xml ) :\n\t\t\t\t\tmatchAnyContext( elem, context, xml ) );\n\t\t\t// Avoid hanging onto element (issue #299)\n\t\t\tcheckContext = null;\n\t\t\treturn ret;\n\t\t} ];\n\n\tfor ( ; i < len; i++ ) {\n\t\tif ( (matcher = Expr.relative[ tokens[i].type ]) ) {\n\t\t\tmatchers = [ addCombinator(elementMatcher( matchers ), matcher) ];\n\t\t} else {\n\t\t\tmatcher = Expr.filter[ tokens[i].type ].apply( null, tokens[i].matches );\n\n\t\t\t// Return special upon seeing a positional matcher\n\t\t\tif ( matcher[ expando ] ) {\n\t\t\t\t// Find the next relative operator (if any) for proper handling\n\t\t\t\tj = ++i;\n\t\t\t\tfor ( ; j < len; j++ ) {\n\t\t\t\t\tif ( Expr.relative[ tokens[j].type ] ) {\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\treturn setMatcher(\n\t\t\t\t\ti > 1 && elementMatcher( matchers ),\n\t\t\t\t\ti > 1 && toSelector(\n\t\t\t\t\t\t// If the preceding token was a descendant combinator, insert an implicit any-element `*`\n\t\t\t\t\t\ttokens.slice( 0, i - 1 ).concat({ value: tokens[ i - 2 ].type === \" \" ? \"*\" : \"\" })\n\t\t\t\t\t).replace( rtrim, \"$1\" ),\n\t\t\t\t\tmatcher,\n\t\t\t\t\ti < j && matcherFromTokens( tokens.slice( i, j ) ),\n\t\t\t\t\tj < len && matcherFromTokens( (tokens = tokens.slice( j )) ),\n\t\t\t\t\tj < len && toSelector( tokens )\n\t\t\t\t);\n\t\t\t}\n\t\t\tmatchers.push( matcher );\n\t\t}\n\t}\n\n\treturn elementMatcher( matchers );\n}\n\nfunction matcherFromGroupMatchers( elementMatchers, setMatchers ) {\n\tvar bySet = setMatchers.length > 0,\n\t\tbyElement = elementMatchers.length > 0,\n\t\tsuperMatcher = function( seed, context, xml, results, outermost ) {\n\t\t\tvar elem, j, matcher,\n\t\t\t\tmatchedCount = 0,\n\t\t\t\ti = \"0\",\n\t\t\t\tunmatched = seed && [],\n\t\t\t\tsetMatched = [],\n\t\t\t\tcontextBackup = outermostContext,\n\t\t\t\t// We must always have either seed elements or outermost context\n\t\t\t\telems = seed || byElement && Expr.find[\"TAG\"]( \"*\", outermost ),\n\t\t\t\t// Use integer dirruns iff this is the outermost matcher\n\t\t\t\tdirrunsUnique = (dirruns += contextBackup == null ? 1 : Math.random() || 0.1),\n\t\t\t\tlen = elems.length;\n\n\t\t\tif ( outermost ) {\n\t\t\t\toutermostContext = context === document || context || outermost;\n\t\t\t}\n\n\t\t\t// Add elements passing elementMatchers directly to results\n\t\t\t// Support: IE<9, Safari\n\t\t\t// Tolerate NodeList properties (IE: \"length\"; Safari: <number>) matching elements by id\n\t\t\tfor ( ; i !== len && (elem = elems[i]) != null; i++ ) {\n\t\t\t\tif ( byElement && elem ) {\n\t\t\t\t\tj = 0;\n\t\t\t\t\tif ( !context && elem.ownerDocument !== document ) {\n\t\t\t\t\t\tsetDocument( elem );\n\t\t\t\t\t\txml = !documentIsHTML;\n\t\t\t\t\t}\n\t\t\t\t\twhile ( (matcher = elementMatchers[j++]) ) {\n\t\t\t\t\t\tif ( matcher( elem, context || document, xml) ) {\n\t\t\t\t\t\t\tresults.push( elem );\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tif ( outermost ) {\n\t\t\t\t\t\tdirruns = dirrunsUnique;\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\t// Track unmatched elements for set filters\n\t\t\t\tif ( bySet ) {\n\t\t\t\t\t// They will have gone through all possible matchers\n\t\t\t\t\tif ( (elem = !matcher && elem) ) {\n\t\t\t\t\t\tmatchedCount--;\n\t\t\t\t\t}\n\n\t\t\t\t\t// Lengthen the array for every element, matched or not\n\t\t\t\t\tif ( seed ) {\n\t\t\t\t\t\tunmatched.push( elem );\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// `i` is now the count of elements visited above, and adding it to `matchedCount`\n\t\t\t// makes the latter nonnegative.\n\t\t\tmatchedCount += i;\n\n\t\t\t// Apply set filters to unmatched elements\n\t\t\t// NOTE: This can be skipped if there are no unmatched elements (i.e., `matchedCount`\n\t\t\t// equals `i`), unless we didn't visit _any_ elements in the above loop because we have\n\t\t\t// no element matchers and no seed.\n\t\t\t// Incrementing an initially-string \"0\" `i` allows `i` to remain a string only in that\n\t\t\t// case, which will result in a \"00\" `matchedCount` that differs from `i` but is also\n\t\t\t// numerically zero.\n\t\t\tif ( bySet && i !== matchedCount ) {\n\t\t\t\tj = 0;\n\t\t\t\twhile ( (matcher = setMatchers[j++]) ) {\n\t\t\t\t\tmatcher( unmatched, setMatched, context, xml );\n\t\t\t\t}\n\n\t\t\t\tif ( seed ) {\n\t\t\t\t\t// Reintegrate element matches to eliminate the need for sorting\n\t\t\t\t\tif ( matchedCount > 0 ) {\n\t\t\t\t\t\twhile ( i-- ) {\n\t\t\t\t\t\t\tif ( !(unmatched[i] || setMatched[i]) ) {\n\t\t\t\t\t\t\t\tsetMatched[i] = pop.call( results );\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t\t// Discard index placeholder values to get only actual matches\n\t\t\t\t\tsetMatched = condense( setMatched );\n\t\t\t\t}\n\n\t\t\t\t// Add matches to results\n\t\t\t\tpush.apply( results, setMatched );\n\n\t\t\t\t// Seedless set matches succeeding multiple successful matchers stipulate sorting\n\t\t\t\tif ( outermost && !seed && setMatched.length > 0 &&\n\t\t\t\t\t( matchedCount + setMatchers.length ) > 1 ) {\n\n\t\t\t\t\tSizzle.uniqueSort( results );\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// Override manipulation of globals by nested matchers\n\t\t\tif ( outermost ) {\n\t\t\t\tdirruns = dirrunsUnique;\n\t\t\t\toutermostContext = contextBackup;\n\t\t\t}\n\n\t\t\treturn unmatched;\n\t\t};\n\n\treturn bySet ?\n\t\tmarkFunction( superMatcher ) :\n\t\tsuperMatcher;\n}\n\ncompile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {\n\tvar i,\n\t\tsetMatchers = [],\n\t\telementMatchers = [],\n\t\tcached = compilerCache[ selector + \" \" ];\n\n\tif ( !cached ) {\n\t\t// Generate a function of recursive functions that can be used to check each element\n\t\tif ( !match ) {\n\t\t\tmatch = tokenize( selector );\n\t\t}\n\t\ti = match.length;\n\t\twhile ( i-- ) {\n\t\t\tcached = matcherFromTokens( match[i] );\n\t\t\tif ( cached[ expando ] ) {\n\t\t\t\tsetMatchers.push( cached );\n\t\t\t} else {\n\t\t\t\telementMatchers.push( cached );\n\t\t\t}\n\t\t}\n\n\t\t// Cache the compiled function\n\t\tcached = compilerCache( selector, matcherFromGroupMatchers( elementMatchers, setMatchers ) );\n\n\t\t// Save selector and tokenization\n\t\tcached.selector = selector;\n\t}\n\treturn cached;\n};\n\n/**\n * A low-level selection function that works with Sizzle's compiled\n *  selector functions\n * @param {String|Function} selector A selector or a pre-compiled\n *  selector function built with Sizzle.compile\n * @param {Element} context\n * @param {Array} [results]\n * @param {Array} [seed] A set of elements to match against\n */\nselect = Sizzle.select = function( selector, context, results, seed ) {\n\tvar i, tokens, token, type, find,\n\t\tcompiled = typeof selector === \"function\" && selector,\n\t\tmatch = !seed && tokenize( (selector = compiled.selector || selector) );\n\n\tresults = results || [];\n\n\t// Try to minimize operations if there is only one selector in the list and no seed\n\t// (the latter of which guarantees us context)\n\tif ( match.length === 1 ) {\n\n\t\t// Reduce context if the leading compound selector is an ID\n\t\ttokens = match[0] = match[0].slice( 0 );\n\t\tif ( tokens.length > 2 && (token = tokens[0]).type === \"ID\" &&\n\t\t\t\tcontext.nodeType === 9 && documentIsHTML && Expr.relative[ tokens[1].type ] ) {\n\n\t\t\tcontext = ( Expr.find[\"ID\"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];\n\t\t\tif ( !context ) {\n\t\t\t\treturn results;\n\n\t\t\t// Precompiled matchers will still verify ancestry, so step up a level\n\t\t\t} else if ( compiled ) {\n\t\t\t\tcontext = context.parentNode;\n\t\t\t}\n\n\t\t\tselector = selector.slice( tokens.shift().value.length );\n\t\t}\n\n\t\t// Fetch a seed set for right-to-left matching\n\t\ti = matchExpr[\"needsContext\"].test( selector ) ? 0 : tokens.length;\n\t\twhile ( i-- ) {\n\t\t\ttoken = tokens[i];\n\n\t\t\t// Abort if we hit a combinator\n\t\t\tif ( Expr.relative[ (type = token.type) ] ) {\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tif ( (find = Expr.find[ type ]) ) {\n\t\t\t\t// Search, expanding context for leading sibling combinators\n\t\t\t\tif ( (seed = find(\n\t\t\t\t\ttoken.matches[0].replace( runescape, funescape ),\n\t\t\t\t\trsibling.test( tokens[0].type ) && testContext( context.parentNode ) || context\n\t\t\t\t)) ) {\n\n\t\t\t\t\t// If seed is empty or no tokens remain, we can return early\n\t\t\t\t\ttokens.splice( i, 1 );\n\t\t\t\t\tselector = seed.length && toSelector( tokens );\n\t\t\t\t\tif ( !selector ) {\n\t\t\t\t\t\tpush.apply( results, seed );\n\t\t\t\t\t\treturn results;\n\t\t\t\t\t}\n\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\t// Compile and execute a filtering function if one is not provided\n\t// Provide `match` to avoid retokenization if we modified the selector above\n\t( compiled || compile( selector, match ) )(\n\t\tseed,\n\t\tcontext,\n\t\t!documentIsHTML,\n\t\tresults,\n\t\t!context || rsibling.test( selector ) && testContext( context.parentNode ) || context\n\t);\n\treturn results;\n};\n\n// One-time assignments\n\n// Sort stability\nsupport.sortStable = expando.split(\"\").sort( sortOrder ).join(\"\") === expando;\n\n// Support: Chrome 14-35+\n// Always assume duplicates if they aren't passed to the comparison function\nsupport.detectDuplicates = !!hasDuplicate;\n\n// Initialize against the default document\nsetDocument();\n\n// Support: Webkit<537.32 - Safari 6.0.3/Chrome 25 (fixed in Chrome 27)\n// Detached nodes confoundingly follow *each other*\nsupport.sortDetached = assert(function( el ) {\n\t// Should return 1, but returns 4 (following)\n\treturn el.compareDocumentPosition( document.createElement(\"fieldset\") ) & 1;\n});\n\n// Support: IE<8\n// Prevent attribute/property \"interpolation\"\n// https://msdn.microsoft.com/en-us/library/ms536429%28VS.85%29.aspx\nif ( !assert(function( el ) {\n\tel.innerHTML = \"<a href='#'></a>\";\n\treturn el.firstChild.getAttribute(\"href\") === \"#\" ;\n}) ) {\n\taddHandle( \"type|href|height|width\", function( elem, name, isXML ) {\n\t\tif ( !isXML ) {\n\t\t\treturn elem.getAttribute( name, name.toLowerCase() === \"type\" ? 1 : 2 );\n\t\t}\n\t});\n}\n\n// Support: IE<9\n// Use defaultValue in place of getAttribute(\"value\")\nif ( !support.attributes || !assert(function( el ) {\n\tel.innerHTML = \"<input/>\";\n\tel.firstChild.setAttribute( \"value\", \"\" );\n\treturn el.firstChild.getAttribute( \"value\" ) === \"\";\n}) ) {\n\taddHandle( \"value\", function( elem, name, isXML ) {\n\t\tif ( !isXML && elem.nodeName.toLowerCase() === \"input\" ) {\n\t\t\treturn elem.defaultValue;\n\t\t}\n\t});\n}\n\n// Support: IE<9\n// Use getAttributeNode to fetch booleans when getAttribute lies\nif ( !assert(function( el ) {\n\treturn el.getAttribute(\"disabled\") == null;\n}) ) {\n\taddHandle( booleans, function( elem, name, isXML ) {\n\t\tvar val;\n\t\tif ( !isXML ) {\n\t\t\treturn elem[ name ] === true ? name.toLowerCase() :\n\t\t\t\t\t(val = elem.getAttributeNode( name )) && val.specified ?\n\t\t\t\t\tval.value :\n\t\t\t\tnull;\n\t\t}\n\t});\n}\n\nreturn Sizzle;\n\n})( window );\n\n\n\njQuery.find = Sizzle;\njQuery.expr = Sizzle.selectors;\n\n// Deprecated\njQuery.expr[ \":\" ] = jQuery.expr.pseudos;\njQuery.uniqueSort = jQuery.unique = Sizzle.uniqueSort;\njQuery.text = Sizzle.getText;\njQuery.isXMLDoc = Sizzle.isXML;\njQuery.contains = Sizzle.contains;\njQuery.escapeSelector = Sizzle.escape;\n\n\n\n\nvar dir = function( elem, dir, until ) {\n\tvar matched = [],\n\t\ttruncate = until !== undefined;\n\n\twhile ( ( elem = elem[ dir ] ) && elem.nodeType !== 9 ) {\n\t\tif ( elem.nodeType === 1 ) {\n\t\t\tif ( truncate && jQuery( elem ).is( until ) ) {\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tmatched.push( elem );\n\t\t}\n\t}\n\treturn matched;\n};\n\n\nvar siblings = function( n, elem ) {\n\tvar matched = [];\n\n\tfor ( ; n; n = n.nextSibling ) {\n\t\tif ( n.nodeType === 1 && n !== elem ) {\n\t\t\tmatched.push( n );\n\t\t}\n\t}\n\n\treturn matched;\n};\n\n\nvar rneedsContext = jQuery.expr.match.needsContext;\n\n\n\nfunction nodeName( elem, name ) {\n\n  return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();\n\n};\nvar rsingleTag = ( /^<([a-z][^\\/\\0>:\\x20\\t\\r\\n\\f]*)[\\x20\\t\\r\\n\\f]*\\/?>(?:<\\/\\1>|)$/i );\n\n\n\n// Implement the identical functionality for filter and not\nfunction winnow( elements, qualifier, not ) {\n\tif ( isFunction( qualifier ) ) {\n\t\treturn jQuery.grep( elements, function( elem, i ) {\n\t\t\treturn !!qualifier.call( elem, i, elem ) !== not;\n\t\t} );\n\t}\n\n\t// Single element\n\tif ( qualifier.nodeType ) {\n\t\treturn jQuery.grep( elements, function( elem ) {\n\t\t\treturn ( elem === qualifier ) !== not;\n\t\t} );\n\t}\n\n\t// Arraylike of elements (jQuery, arguments, Array)\n\tif ( typeof qualifier !== \"string\" ) {\n\t\treturn jQuery.grep( elements, function( elem ) {\n\t\t\treturn ( indexOf.call( qualifier, elem ) > -1 ) !== not;\n\t\t} );\n\t}\n\n\t// Filtered directly for both simple and complex selectors\n\treturn jQuery.filter( qualifier, elements, not );\n}\n\njQuery.filter = function( expr, elems, not ) {\n\tvar elem = elems[ 0 ];\n\n\tif ( not ) {\n\t\texpr = \":not(\" + expr + \")\";\n\t}\n\n\tif ( elems.length === 1 && elem.nodeType === 1 ) {\n\t\treturn jQuery.find.matchesSelector( elem, expr ) ? [ elem ] : [];\n\t}\n\n\treturn jQuery.find.matches( expr, jQuery.grep( elems, function( elem ) {\n\t\treturn elem.nodeType === 1;\n\t} ) );\n};\n\njQuery.fn.extend( {\n\tfind: function( selector ) {\n\t\tvar i, ret,\n\t\t\tlen = this.length,\n\t\t\tself = this;\n\n\t\tif ( typeof selector !== \"string\" ) {\n\t\t\treturn this.pushStack( jQuery( selector ).filter( function() {\n\t\t\t\tfor ( i = 0; i < len; i++ ) {\n\t\t\t\t\tif ( jQuery.contains( self[ i ], this ) ) {\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t} ) );\n\t\t}\n\n\t\tret = this.pushStack( [] );\n\n\t\tfor ( i = 0; i < len; i++ ) {\n\t\t\tjQuery.find( selector, self[ i ], ret );\n\t\t}\n\n\t\treturn len > 1 ? jQuery.uniqueSort( ret ) : ret;\n\t},\n\tfilter: function( selector ) {\n\t\treturn this.pushStack( winnow( this, selector || [], false ) );\n\t},\n\tnot: function( selector ) {\n\t\treturn this.pushStack( winnow( this, selector || [], true ) );\n\t},\n\tis: function( selector ) {\n\t\treturn !!winnow(\n\t\t\tthis,\n\n\t\t\t// If this is a positional/relative selector, check membership in the returned set\n\t\t\t// so $(\"p:first\").is(\"p:last\") won't return true for a doc with two \"p\".\n\t\t\ttypeof selector === \"string\" && rneedsContext.test( selector ) ?\n\t\t\t\tjQuery( selector ) :\n\t\t\t\tselector || [],\n\t\t\tfalse\n\t\t).length;\n\t}\n} );\n\n\n// Initialize a jQuery object\n\n\n// A central reference to the root jQuery(document)\nvar rootjQuery,\n\n\t// A simple way to check for HTML strings\n\t// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)\n\t// Strict HTML recognition (#11290: must start with <)\n\t// Shortcut simple #id case for speed\n\trquickExpr = /^(?:\\s*(<[\\w\\W]+>)[^>]*|#([\\w-]+))$/,\n\n\tinit = jQuery.fn.init = function( selector, context, root ) {\n\t\tvar match, elem;\n\n\t\t// HANDLE: $(\"\"), $(null), $(undefined), $(false)\n\t\tif ( !selector ) {\n\t\t\treturn this;\n\t\t}\n\n\t\t// Method init() accepts an alternate rootjQuery\n\t\t// so migrate can support jQuery.sub (gh-2101)\n\t\troot = root || rootjQuery;\n\n\t\t// Handle HTML strings\n\t\tif ( typeof selector === \"string\" ) {\n\t\t\tif ( selector[ 0 ] === \"<\" &&\n\t\t\t\tselector[ selector.length - 1 ] === \">\" &&\n\t\t\t\tselector.length >= 3 ) {\n\n\t\t\t\t// Assume that strings that start and end with <> are HTML and skip the regex check\n\t\t\t\tmatch = [ null, selector, null ];\n\n\t\t\t} else {\n\t\t\t\tmatch = rquickExpr.exec( selector );\n\t\t\t}\n\n\t\t\t// Match html or make sure no context is specified for #id\n\t\t\tif ( match && ( match[ 1 ] || !context ) ) {\n\n\t\t\t\t// HANDLE: $(html) -> $(array)\n\t\t\t\tif ( match[ 1 ] ) {\n\t\t\t\t\tcontext = context instanceof jQuery ? context[ 0 ] : context;\n\n\t\t\t\t\t// Option to run scripts is true for back-compat\n\t\t\t\t\t// Intentionally let the error be thrown if parseHTML is not present\n\t\t\t\t\tjQuery.merge( this, jQuery.parseHTML(\n\t\t\t\t\t\tmatch[ 1 ],\n\t\t\t\t\t\tcontext && context.nodeType ? context.ownerDocument || context : document,\n\t\t\t\t\t\ttrue\n\t\t\t\t\t) );\n\n\t\t\t\t\t// HANDLE: $(html, props)\n\t\t\t\t\tif ( rsingleTag.test( match[ 1 ] ) && jQuery.isPlainObject( context ) ) {\n\t\t\t\t\t\tfor ( match in context ) {\n\n\t\t\t\t\t\t\t// Properties of context are called as methods if possible\n\t\t\t\t\t\t\tif ( isFunction( this[ match ] ) ) {\n\t\t\t\t\t\t\t\tthis[ match ]( context[ match ] );\n\n\t\t\t\t\t\t\t// ...and otherwise set as attributes\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\tthis.attr( match, context[ match ] );\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t\treturn this;\n\n\t\t\t\t// HANDLE: $(#id)\n\t\t\t\t} else {\n\t\t\t\t\telem = document.getElementById( match[ 2 ] );\n\n\t\t\t\t\tif ( elem ) {\n\n\t\t\t\t\t\t// Inject the element directly into the jQuery object\n\t\t\t\t\t\tthis[ 0 ] = elem;\n\t\t\t\t\t\tthis.length = 1;\n\t\t\t\t\t}\n\t\t\t\t\treturn this;\n\t\t\t\t}\n\n\t\t\t// HANDLE: $(expr, $(...))\n\t\t\t} else if ( !context || context.jquery ) {\n\t\t\t\treturn ( context || root ).find( selector );\n\n\t\t\t// HANDLE: $(expr, context)\n\t\t\t// (which is just equivalent to: $(context).find(expr)\n\t\t\t} else {\n\t\t\t\treturn this.constructor( context ).find( selector );\n\t\t\t}\n\n\t\t// HANDLE: $(DOMElement)\n\t\t} else if ( selector.nodeType ) {\n\t\t\tthis[ 0 ] = selector;\n\t\t\tthis.length = 1;\n\t\t\treturn this;\n\n\t\t// HANDLE: $(function)\n\t\t// Shortcut for document ready\n\t\t} else if ( isFunction( selector ) ) {\n\t\t\treturn root.ready !== undefined ?\n\t\t\t\troot.ready( selector ) :\n\n\t\t\t\t// Execute immediately if ready is not present\n\t\t\t\tselector( jQuery );\n\t\t}\n\n\t\treturn jQuery.makeArray( selector, this );\n\t};\n\n// Give the init function the jQuery prototype for later instantiation\ninit.prototype = jQuery.fn;\n\n// Initialize central reference\nrootjQuery = jQuery( document );\n\n\nvar rparentsprev = /^(?:parents|prev(?:Until|All))/,\n\n\t// Methods guaranteed to produce a unique set when starting from a unique set\n\tguaranteedUnique = {\n\t\tchildren: true,\n\t\tcontents: true,\n\t\tnext: true,\n\t\tprev: true\n\t};\n\njQuery.fn.extend( {\n\thas: function( target ) {\n\t\tvar targets = jQuery( target, this ),\n\t\t\tl = targets.length;\n\n\t\treturn this.filter( function() {\n\t\t\tvar i = 0;\n\t\t\tfor ( ; i < l; i++ ) {\n\t\t\t\tif ( jQuery.contains( this, targets[ i ] ) ) {\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\t\t} );\n\t},\n\n\tclosest: function( selectors, context ) {\n\t\tvar cur,\n\t\t\ti = 0,\n\t\t\tl = this.length,\n\t\t\tmatched = [],\n\t\t\ttargets = typeof selectors !== \"string\" && jQuery( selectors );\n\n\t\t// Positional selectors never match, since there's no _selection_ context\n\t\tif ( !rneedsContext.test( selectors ) ) {\n\t\t\tfor ( ; i < l; i++ ) {\n\t\t\t\tfor ( cur = this[ i ]; cur && cur !== context; cur = cur.parentNode ) {\n\n\t\t\t\t\t// Always skip document fragments\n\t\t\t\t\tif ( cur.nodeType < 11 && ( targets ?\n\t\t\t\t\t\ttargets.index( cur ) > -1 :\n\n\t\t\t\t\t\t// Don't pass non-elements to Sizzle\n\t\t\t\t\t\tcur.nodeType === 1 &&\n\t\t\t\t\t\t\tjQuery.find.matchesSelector( cur, selectors ) ) ) {\n\n\t\t\t\t\t\tmatched.push( cur );\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn this.pushStack( matched.length > 1 ? jQuery.uniqueSort( matched ) : matched );\n\t},\n\n\t// Determine the position of an element within the set\n\tindex: function( elem ) {\n\n\t\t// No argument, return index in parent\n\t\tif ( !elem ) {\n\t\t\treturn ( this[ 0 ] && this[ 0 ].parentNode ) ? this.first().prevAll().length : -1;\n\t\t}\n\n\t\t// Index in selector\n\t\tif ( typeof elem === \"string\" ) {\n\t\t\treturn indexOf.call( jQuery( elem ), this[ 0 ] );\n\t\t}\n\n\t\t// Locate the position of the desired element\n\t\treturn indexOf.call( this,\n\n\t\t\t// If it receives a jQuery object, the first element is used\n\t\t\telem.jquery ? elem[ 0 ] : elem\n\t\t);\n\t},\n\n\tadd: function( selector, context ) {\n\t\treturn this.pushStack(\n\t\t\tjQuery.uniqueSort(\n\t\t\t\tjQuery.merge( this.get(), jQuery( selector, context ) )\n\t\t\t)\n\t\t);\n\t},\n\n\taddBack: function( selector ) {\n\t\treturn this.add( selector == null ?\n\t\t\tthis.prevObject : this.prevObject.filter( selector )\n\t\t);\n\t}\n} );\n\nfunction sibling( cur, dir ) {\n\twhile ( ( cur = cur[ dir ] ) && cur.nodeType !== 1 ) {}\n\treturn cur;\n}\n\njQuery.each( {\n\tparent: function( elem ) {\n\t\tvar parent = elem.parentNode;\n\t\treturn parent && parent.nodeType !== 11 ? parent : null;\n\t},\n\tparents: function( elem ) {\n\t\treturn dir( elem, \"parentNode\" );\n\t},\n\tparentsUntil: function( elem, i, until ) {\n\t\treturn dir( elem, \"parentNode\", until );\n\t},\n\tnext: function( elem ) {\n\t\treturn sibling( elem, \"nextSibling\" );\n\t},\n\tprev: function( elem ) {\n\t\treturn sibling( elem, \"previousSibling\" );\n\t},\n\tnextAll: function( elem ) {\n\t\treturn dir( elem, \"nextSibling\" );\n\t},\n\tprevAll: function( elem ) {\n\t\treturn dir( elem, \"previousSibling\" );\n\t},\n\tnextUntil: function( elem, i, until ) {\n\t\treturn dir( elem, \"nextSibling\", until );\n\t},\n\tprevUntil: function( elem, i, until ) {\n\t\treturn dir( elem, \"previousSibling\", until );\n\t},\n\tsiblings: function( elem ) {\n\t\treturn siblings( ( elem.parentNode || {} ).firstChild, elem );\n\t},\n\tchildren: function( elem ) {\n\t\treturn siblings( elem.firstChild );\n\t},\n\tcontents: function( elem ) {\n        if ( nodeName( elem, \"iframe\" ) ) {\n            return elem.contentDocument;\n        }\n\n        // Support: IE 9 - 11 only, iOS 7 only, Android Browser <=4.3 only\n        // Treat the template element as a regular one in browsers that\n        // don't support it.\n        if ( nodeName( elem, \"template\" ) ) {\n            elem = elem.content || elem;\n        }\n\n        return jQuery.merge( [], elem.childNodes );\n\t}\n}, function( name, fn ) {\n\tjQuery.fn[ name ] = function( until, selector ) {\n\t\tvar matched = jQuery.map( this, fn, until );\n\n\t\tif ( name.slice( -5 ) !== \"Until\" ) {\n\t\t\tselector = until;\n\t\t}\n\n\t\tif ( selector && typeof selector === \"string\" ) {\n\t\t\tmatched = jQuery.filter( selector, matched );\n\t\t}\n\n\t\tif ( this.length > 1 ) {\n\n\t\t\t// Remove duplicates\n\t\t\tif ( !guaranteedUnique[ name ] ) {\n\t\t\t\tjQuery.uniqueSort( matched );\n\t\t\t}\n\n\t\t\t// Reverse order for parents* and prev-derivatives\n\t\t\tif ( rparentsprev.test( name ) ) {\n\t\t\t\tmatched.reverse();\n\t\t\t}\n\t\t}\n\n\t\treturn this.pushStack( matched );\n\t};\n} );\nvar rnothtmlwhite = ( /[^\\x20\\t\\r\\n\\f]+/g );\n\n\n\n// Convert String-formatted options into Object-formatted ones\nfunction createOptions( options ) {\n\tvar object = {};\n\tjQuery.each( options.match( rnothtmlwhite ) || [], function( _, flag ) {\n\t\tobject[ flag ] = true;\n\t} );\n\treturn object;\n}\n\n/*\n * Create a callback list using the following parameters:\n *\n *\toptions: an optional list of space-separated options that will change how\n *\t\t\tthe callback list behaves or a more traditional option object\n *\n * By default a callback list will act like an event callback list and can be\n * \"fired\" multiple times.\n *\n * Possible options:\n *\n *\tonce:\t\t\twill ensure the callback list can only be fired once (like a Deferred)\n *\n *\tmemory:\t\t\twill keep track of previous values and will call any callback added\n *\t\t\t\t\tafter the list has been fired right away with the latest \"memorized\"\n *\t\t\t\t\tvalues (like a Deferred)\n *\n *\tunique:\t\t\twill ensure a callback can only be added once (no duplicate in the list)\n *\n *\tstopOnFalse:\tinterrupt callings when a callback returns false\n *\n */\njQuery.Callbacks = function( options ) {\n\n\t// Convert options from String-formatted to Object-formatted if needed\n\t// (we check in cache first)\n\toptions = typeof options === \"string\" ?\n\t\tcreateOptions( options ) :\n\t\tjQuery.extend( {}, options );\n\n\tvar // Flag to know if list is currently firing\n\t\tfiring,\n\n\t\t// Last fire value for non-forgettable lists\n\t\tmemory,\n\n\t\t// Flag to know if list was already fired\n\t\tfired,\n\n\t\t// Flag to prevent firing\n\t\tlocked,\n\n\t\t// Actual callback list\n\t\tlist = [],\n\n\t\t// Queue of execution data for repeatable lists\n\t\tqueue = [],\n\n\t\t// Index of currently firing callback (modified by add/remove as needed)\n\t\tfiringIndex = -1,\n\n\t\t// Fire callbacks\n\t\tfire = function() {\n\n\t\t\t// Enforce single-firing\n\t\t\tlocked = locked || options.once;\n\n\t\t\t// Execute callbacks for all pending executions,\n\t\t\t// respecting firingIndex overrides and runtime changes\n\t\t\tfired = firing = true;\n\t\t\tfor ( ; queue.length; firingIndex = -1 ) {\n\t\t\t\tmemory = queue.shift();\n\t\t\t\twhile ( ++firingIndex < list.length ) {\n\n\t\t\t\t\t// Run callback and check for early termination\n\t\t\t\t\tif ( list[ firingIndex ].apply( memory[ 0 ], memory[ 1 ] ) === false &&\n\t\t\t\t\t\toptions.stopOnFalse ) {\n\n\t\t\t\t\t\t// Jump to end and forget the data so .add doesn't re-fire\n\t\t\t\t\t\tfiringIndex = list.length;\n\t\t\t\t\t\tmemory = false;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// Forget the data if we're done with it\n\t\t\tif ( !options.memory ) {\n\t\t\t\tmemory = false;\n\t\t\t}\n\n\t\t\tfiring = false;\n\n\t\t\t// Clean up if we're done firing for good\n\t\t\tif ( locked ) {\n\n\t\t\t\t// Keep an empty list if we have data for future add calls\n\t\t\t\tif ( memory ) {\n\t\t\t\t\tlist = [];\n\n\t\t\t\t// Otherwise, this object is spent\n\t\t\t\t} else {\n\t\t\t\t\tlist = \"\";\n\t\t\t\t}\n\t\t\t}\n\t\t},\n\n\t\t// Actual Callbacks object\n\t\tself = {\n\n\t\t\t// Add a callback or a collection of callbacks to the list\n\t\t\tadd: function() {\n\t\t\t\tif ( list ) {\n\n\t\t\t\t\t// If we have memory from a past run, we should fire after adding\n\t\t\t\t\tif ( memory && !firing ) {\n\t\t\t\t\t\tfiringIndex = list.length - 1;\n\t\t\t\t\t\tqueue.push( memory );\n\t\t\t\t\t}\n\n\t\t\t\t\t( function add( args ) {\n\t\t\t\t\t\tjQuery.each( args, function( _, arg ) {\n\t\t\t\t\t\t\tif ( isFunction( arg ) ) {\n\t\t\t\t\t\t\t\tif ( !options.unique || !self.has( arg ) ) {\n\t\t\t\t\t\t\t\t\tlist.push( arg );\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t} else if ( arg && arg.length && toType( arg ) !== \"string\" ) {\n\n\t\t\t\t\t\t\t\t// Inspect recursively\n\t\t\t\t\t\t\t\tadd( arg );\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t} );\n\t\t\t\t\t} )( arguments );\n\n\t\t\t\t\tif ( memory && !firing ) {\n\t\t\t\t\t\tfire();\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\treturn this;\n\t\t\t},\n\n\t\t\t// Remove a callback from the list\n\t\t\tremove: function() {\n\t\t\t\tjQuery.each( arguments, function( _, arg ) {\n\t\t\t\t\tvar index;\n\t\t\t\t\twhile ( ( index = jQuery.inArray( arg, list, index ) ) > -1 ) {\n\t\t\t\t\t\tlist.splice( index, 1 );\n\n\t\t\t\t\t\t// Handle firing indexes\n\t\t\t\t\t\tif ( index <= firingIndex ) {\n\t\t\t\t\t\t\tfiringIndex--;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t} );\n\t\t\t\treturn this;\n\t\t\t},\n\n\t\t\t// Check if a given callback is in the list.\n\t\t\t// If no argument is given, return whether or not list has callbacks attached.\n\t\t\thas: function( fn ) {\n\t\t\t\treturn fn ?\n\t\t\t\t\tjQuery.inArray( fn, list ) > -1 :\n\t\t\t\t\tlist.length > 0;\n\t\t\t},\n\n\t\t\t// Remove all callbacks from the list\n\t\t\tempty: function() {\n\t\t\t\tif ( list ) {\n\t\t\t\t\tlist = [];\n\t\t\t\t}\n\t\t\t\treturn this;\n\t\t\t},\n\n\t\t\t// Disable .fire and .add\n\t\t\t// Abort any current/pending executions\n\t\t\t// Clear all callbacks and values\n\t\t\tdisable: function() {\n\t\t\t\tlocked = queue = [];\n\t\t\t\tlist = memory = \"\";\n\t\t\t\treturn this;\n\t\t\t},\n\t\t\tdisabled: function() {\n\t\t\t\treturn !list;\n\t\t\t},\n\n\t\t\t// Disable .fire\n\t\t\t// Also disable .add unless we have memory (since it would have no effect)\n\t\t\t// Abort any pending executions\n\t\t\tlock: function() {\n\t\t\t\tlocked = queue = [];\n\t\t\t\tif ( !memory && !firing ) {\n\t\t\t\t\tlist = memory = \"\";\n\t\t\t\t}\n\t\t\t\treturn this;\n\t\t\t},\n\t\t\tlocked: function() {\n\t\t\t\treturn !!locked;\n\t\t\t},\n\n\t\t\t// Call all callbacks with the given context and arguments\n\t\t\tfireWith: function( context, args ) {\n\t\t\t\tif ( !locked ) {\n\t\t\t\t\targs = args || [];\n\t\t\t\t\targs = [ context, args.slice ? args.slice() : args ];\n\t\t\t\t\tqueue.push( args );\n\t\t\t\t\tif ( !firing ) {\n\t\t\t\t\t\tfire();\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\treturn this;\n\t\t\t},\n\n\t\t\t// Call all the callbacks with the given arguments\n\t\t\tfire: function() {\n\t\t\t\tself.fireWith( this, arguments );\n\t\t\t\treturn this;\n\t\t\t},\n\n\t\t\t// To know if the callbacks have already been called at least once\n\t\t\tfired: function() {\n\t\t\t\treturn !!fired;\n\t\t\t}\n\t\t};\n\n\treturn self;\n};\n\n\nfunction Identity( v ) {\n\treturn v;\n}\nfunction Thrower( ex ) {\n\tthrow ex;\n}\n\nfunction adoptValue( value, resolve, reject, noValue ) {\n\tvar method;\n\n\ttry {\n\n\t\t// Check for promise aspect first to privilege synchronous behavior\n\t\tif ( value && isFunction( ( method = value.promise ) ) ) {\n\t\t\tmethod.call( value ).done( resolve ).fail( reject );\n\n\t\t// Other thenables\n\t\t} else if ( value && isFunction( ( method = value.then ) ) ) {\n\t\t\tmethod.call( value, resolve, reject );\n\n\t\t// Other non-thenables\n\t\t} else {\n\n\t\t\t// Control `resolve` arguments by letting Array#slice cast boolean `noValue` to integer:\n\t\t\t// * false: [ value ].slice( 0 ) => resolve( value )\n\t\t\t// * true: [ value ].slice( 1 ) => resolve()\n\t\t\tresolve.apply( undefined, [ value ].slice( noValue ) );\n\t\t}\n\n\t// For Promises/A+, convert exceptions into rejections\n\t// Since jQuery.when doesn't unwrap thenables, we can skip the extra checks appearing in\n\t// Deferred#then to conditionally suppress rejection.\n\t} catch ( value ) {\n\n\t\t// Support: Android 4.0 only\n\t\t// Strict mode functions invoked without .call/.apply get global-object context\n\t\treject.apply( undefined, [ value ] );\n\t}\n}\n\njQuery.extend( {\n\n\tDeferred: function( func ) {\n\t\tvar tuples = [\n\n\t\t\t\t// action, add listener, callbacks,\n\t\t\t\t// ... .then handlers, argument index, [final state]\n\t\t\t\t[ \"notify\", \"progress\", jQuery.Callbacks( \"memory\" ),\n\t\t\t\t\tjQuery.Callbacks( \"memory\" ), 2 ],\n\t\t\t\t[ \"resolve\", \"done\", jQuery.Callbacks( \"once memory\" ),\n\t\t\t\t\tjQuery.Callbacks( \"once memory\" ), 0, \"resolved\" ],\n\t\t\t\t[ \"reject\", \"fail\", jQuery.Callbacks( \"once memory\" ),\n\t\t\t\t\tjQuery.Callbacks( \"once memory\" ), 1, \"rejected\" ]\n\t\t\t],\n\t\t\tstate = \"pending\",\n\t\t\tpromise = {\n\t\t\t\tstate: function() {\n\t\t\t\t\treturn state;\n\t\t\t\t},\n\t\t\t\talways: function() {\n\t\t\t\t\tdeferred.done( arguments ).fail( arguments );\n\t\t\t\t\treturn this;\n\t\t\t\t},\n\t\t\t\t\"catch\": function( fn ) {\n\t\t\t\t\treturn promise.then( null, fn );\n\t\t\t\t},\n\n\t\t\t\t// Keep pipe for back-compat\n\t\t\t\tpipe: function( /* fnDone, fnFail, fnProgress */ ) {\n\t\t\t\t\tvar fns = arguments;\n\n\t\t\t\t\treturn jQuery.Deferred( function( newDefer ) {\n\t\t\t\t\t\tjQuery.each( tuples, function( i, tuple ) {\n\n\t\t\t\t\t\t\t// Map tuples (progress, done, fail) to arguments (done, fail, progress)\n\t\t\t\t\t\t\tvar fn = isFunction( fns[ tuple[ 4 ] ] ) && fns[ tuple[ 4 ] ];\n\n\t\t\t\t\t\t\t// deferred.progress(function() { bind to newDefer or newDefer.notify })\n\t\t\t\t\t\t\t// deferred.done(function() { bind to newDefer or newDefer.resolve })\n\t\t\t\t\t\t\t// deferred.fail(function() { bind to newDefer or newDefer.reject })\n\t\t\t\t\t\t\tdeferred[ tuple[ 1 ] ]( function() {\n\t\t\t\t\t\t\t\tvar returned = fn && fn.apply( this, arguments );\n\t\t\t\t\t\t\t\tif ( returned && isFunction( returned.promise ) ) {\n\t\t\t\t\t\t\t\t\treturned.promise()\n\t\t\t\t\t\t\t\t\t\t.progress( newDefer.notify )\n\t\t\t\t\t\t\t\t\t\t.done( newDefer.resolve )\n\t\t\t\t\t\t\t\t\t\t.fail( newDefer.reject );\n\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\tnewDefer[ tuple[ 0 ] + \"With\" ](\n\t\t\t\t\t\t\t\t\t\tthis,\n\t\t\t\t\t\t\t\t\t\tfn ? [ returned ] : arguments\n\t\t\t\t\t\t\t\t\t);\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t} );\n\t\t\t\t\t\t} );\n\t\t\t\t\t\tfns = null;\n\t\t\t\t\t} ).promise();\n\t\t\t\t},\n\t\t\t\tthen: function( onFulfilled, onRejected, onProgress ) {\n\t\t\t\t\tvar maxDepth = 0;\n\t\t\t\t\tfunction resolve( depth, deferred, handler, special ) {\n\t\t\t\t\t\treturn function() {\n\t\t\t\t\t\t\tvar that = this,\n\t\t\t\t\t\t\t\targs = arguments,\n\t\t\t\t\t\t\t\tmightThrow = function() {\n\t\t\t\t\t\t\t\t\tvar returned, then;\n\n\t\t\t\t\t\t\t\t\t// Support: Promises/A+ section 2.3.3.3.3\n\t\t\t\t\t\t\t\t\t// https://promisesaplus.com/#point-59\n\t\t\t\t\t\t\t\t\t// Ignore double-resolution attempts\n\t\t\t\t\t\t\t\t\tif ( depth < maxDepth ) {\n\t\t\t\t\t\t\t\t\t\treturn;\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\treturned = handler.apply( that, args );\n\n\t\t\t\t\t\t\t\t\t// Support: Promises/A+ section 2.3.1\n\t\t\t\t\t\t\t\t\t// https://promisesaplus.com/#point-48\n\t\t\t\t\t\t\t\t\tif ( returned === deferred.promise() ) {\n\t\t\t\t\t\t\t\t\t\tthrow new TypeError( \"Thenable self-resolution\" );\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\t// Support: Promises/A+ sections 2.3.3.1, 3.5\n\t\t\t\t\t\t\t\t\t// https://promisesaplus.com/#point-54\n\t\t\t\t\t\t\t\t\t// https://promisesaplus.com/#point-75\n\t\t\t\t\t\t\t\t\t// Retrieve `then` only once\n\t\t\t\t\t\t\t\t\tthen = returned &&\n\n\t\t\t\t\t\t\t\t\t\t// Support: Promises/A+ section 2.3.4\n\t\t\t\t\t\t\t\t\t\t// https://promisesaplus.com/#point-64\n\t\t\t\t\t\t\t\t\t\t// Only check objects and functions for thenability\n\t\t\t\t\t\t\t\t\t\t( typeof returned === \"object\" ||\n\t\t\t\t\t\t\t\t\t\t\ttypeof returned === \"function\" ) &&\n\t\t\t\t\t\t\t\t\t\treturned.then;\n\n\t\t\t\t\t\t\t\t\t// Handle a returned thenable\n\t\t\t\t\t\t\t\t\tif ( isFunction( then ) ) {\n\n\t\t\t\t\t\t\t\t\t\t// Special processors (notify) just wait for resolution\n\t\t\t\t\t\t\t\t\t\tif ( special ) {\n\t\t\t\t\t\t\t\t\t\t\tthen.call(\n\t\t\t\t\t\t\t\t\t\t\t\treturned,\n\t\t\t\t\t\t\t\t\t\t\t\tresolve( maxDepth, deferred, Identity, special ),\n\t\t\t\t\t\t\t\t\t\t\t\tresolve( maxDepth, deferred, Thrower, special )\n\t\t\t\t\t\t\t\t\t\t\t);\n\n\t\t\t\t\t\t\t\t\t\t// Normal processors (resolve) also hook into progress\n\t\t\t\t\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\t\t\t\t\t// ...and disregard older resolution values\n\t\t\t\t\t\t\t\t\t\t\tmaxDepth++;\n\n\t\t\t\t\t\t\t\t\t\t\tthen.call(\n\t\t\t\t\t\t\t\t\t\t\t\treturned,\n\t\t\t\t\t\t\t\t\t\t\t\tresolve( maxDepth, deferred, Identity, special ),\n\t\t\t\t\t\t\t\t\t\t\t\tresolve( maxDepth, deferred, Thrower, special ),\n\t\t\t\t\t\t\t\t\t\t\t\tresolve( maxDepth, deferred, Identity,\n\t\t\t\t\t\t\t\t\t\t\t\t\tdeferred.notifyWith )\n\t\t\t\t\t\t\t\t\t\t\t);\n\t\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\t// Handle all other returned values\n\t\t\t\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\t\t\t\t// Only substitute handlers pass on context\n\t\t\t\t\t\t\t\t\t\t// and multiple values (non-spec behavior)\n\t\t\t\t\t\t\t\t\t\tif ( handler !== Identity ) {\n\t\t\t\t\t\t\t\t\t\t\tthat = undefined;\n\t\t\t\t\t\t\t\t\t\t\targs = [ returned ];\n\t\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\t\t// Process the value(s)\n\t\t\t\t\t\t\t\t\t\t// Default process is resolve\n\t\t\t\t\t\t\t\t\t\t( special || deferred.resolveWith )( that, args );\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t},\n\n\t\t\t\t\t\t\t\t// Only normal processors (resolve) catch and reject exceptions\n\t\t\t\t\t\t\t\tprocess = special ?\n\t\t\t\t\t\t\t\t\tmightThrow :\n\t\t\t\t\t\t\t\t\tfunction() {\n\t\t\t\t\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\t\t\t\t\tmightThrow();\n\t\t\t\t\t\t\t\t\t\t} catch ( e ) {\n\n\t\t\t\t\t\t\t\t\t\t\tif ( jQuery.Deferred.exceptionHook ) {\n\t\t\t\t\t\t\t\t\t\t\t\tjQuery.Deferred.exceptionHook( e,\n\t\t\t\t\t\t\t\t\t\t\t\t\tprocess.stackTrace );\n\t\t\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\t\t\t// Support: Promises/A+ section 2.3.3.3.4.1\n\t\t\t\t\t\t\t\t\t\t\t// https://promisesaplus.com/#point-61\n\t\t\t\t\t\t\t\t\t\t\t// Ignore post-resolution exceptions\n\t\t\t\t\t\t\t\t\t\t\tif ( depth + 1 >= maxDepth ) {\n\n\t\t\t\t\t\t\t\t\t\t\t\t// Only substitute handlers pass on context\n\t\t\t\t\t\t\t\t\t\t\t\t// and multiple values (non-spec behavior)\n\t\t\t\t\t\t\t\t\t\t\t\tif ( handler !== Thrower ) {\n\t\t\t\t\t\t\t\t\t\t\t\t\tthat = undefined;\n\t\t\t\t\t\t\t\t\t\t\t\t\targs = [ e ];\n\t\t\t\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\t\t\t\tdeferred.rejectWith( that, args );\n\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t};\n\n\t\t\t\t\t\t\t// Support: Promises/A+ section 2.3.3.3.1\n\t\t\t\t\t\t\t// https://promisesaplus.com/#point-57\n\t\t\t\t\t\t\t// Re-resolve promises immediately to dodge false rejection from\n\t\t\t\t\t\t\t// subsequent errors\n\t\t\t\t\t\t\tif ( depth ) {\n\t\t\t\t\t\t\t\tprocess();\n\t\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\t\t// Call an optional hook to record the stack, in case of exception\n\t\t\t\t\t\t\t\t// since it's otherwise lost when execution goes async\n\t\t\t\t\t\t\t\tif ( jQuery.Deferred.getStackHook ) {\n\t\t\t\t\t\t\t\t\tprocess.stackTrace = jQuery.Deferred.getStackHook();\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\twindow.setTimeout( process );\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t};\n\t\t\t\t\t}\n\n\t\t\t\t\treturn jQuery.Deferred( function( newDefer ) {\n\n\t\t\t\t\t\t// progress_handlers.add( ... )\n\t\t\t\t\t\ttuples[ 0 ][ 3 ].add(\n\t\t\t\t\t\t\tresolve(\n\t\t\t\t\t\t\t\t0,\n\t\t\t\t\t\t\t\tnewDefer,\n\t\t\t\t\t\t\t\tisFunction( onProgress ) ?\n\t\t\t\t\t\t\t\t\tonProgress :\n\t\t\t\t\t\t\t\t\tIdentity,\n\t\t\t\t\t\t\t\tnewDefer.notifyWith\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t);\n\n\t\t\t\t\t\t// fulfilled_handlers.add( ... )\n\t\t\t\t\t\ttuples[ 1 ][ 3 ].add(\n\t\t\t\t\t\t\tresolve(\n\t\t\t\t\t\t\t\t0,\n\t\t\t\t\t\t\t\tnewDefer,\n\t\t\t\t\t\t\t\tisFunction( onFulfilled ) ?\n\t\t\t\t\t\t\t\t\tonFulfilled :\n\t\t\t\t\t\t\t\t\tIdentity\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t);\n\n\t\t\t\t\t\t// rejected_handlers.add( ... )\n\t\t\t\t\t\ttuples[ 2 ][ 3 ].add(\n\t\t\t\t\t\t\tresolve(\n\t\t\t\t\t\t\t\t0,\n\t\t\t\t\t\t\t\tnewDefer,\n\t\t\t\t\t\t\t\tisFunction( onRejected ) ?\n\t\t\t\t\t\t\t\t\tonRejected :\n\t\t\t\t\t\t\t\t\tThrower\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t);\n\t\t\t\t\t} ).promise();\n\t\t\t\t},\n\n\t\t\t\t// Get a promise for this deferred\n\t\t\t\t// If obj is provided, the promise aspect is added to the object\n\t\t\t\tpromise: function( obj ) {\n\t\t\t\t\treturn obj != null ? jQuery.extend( obj, promise ) : promise;\n\t\t\t\t}\n\t\t\t},\n\t\t\tdeferred = {};\n\n\t\t// Add list-specific methods\n\t\tjQuery.each( tuples, function( i, tuple ) {\n\t\t\tvar list = tuple[ 2 ],\n\t\t\t\tstateString = tuple[ 5 ];\n\n\t\t\t// promise.progress = list.add\n\t\t\t// promise.done = list.add\n\t\t\t// promise.fail = list.add\n\t\t\tpromise[ tuple[ 1 ] ] = list.add;\n\n\t\t\t// Handle state\n\t\t\tif ( stateString ) {\n\t\t\t\tlist.add(\n\t\t\t\t\tfunction() {\n\n\t\t\t\t\t\t// state = \"resolved\" (i.e., fulfilled)\n\t\t\t\t\t\t// state = \"rejected\"\n\t\t\t\t\t\tstate = stateString;\n\t\t\t\t\t},\n\n\t\t\t\t\t// rejected_callbacks.disable\n\t\t\t\t\t// fulfilled_callbacks.disable\n\t\t\t\t\ttuples[ 3 - i ][ 2 ].disable,\n\n\t\t\t\t\t// rejected_handlers.disable\n\t\t\t\t\t// fulfilled_handlers.disable\n\t\t\t\t\ttuples[ 3 - i ][ 3 ].disable,\n\n\t\t\t\t\t// progress_callbacks.lock\n\t\t\t\t\ttuples[ 0 ][ 2 ].lock,\n\n\t\t\t\t\t// progress_handlers.lock\n\t\t\t\t\ttuples[ 0 ][ 3 ].lock\n\t\t\t\t);\n\t\t\t}\n\n\t\t\t// progress_handlers.fire\n\t\t\t// fulfilled_handlers.fire\n\t\t\t// rejected_handlers.fire\n\t\t\tlist.add( tuple[ 3 ].fire );\n\n\t\t\t// deferred.notify = function() { deferred.notifyWith(...) }\n\t\t\t// deferred.resolve = function() { deferred.resolveWith(...) }\n\t\t\t// deferred.reject = function() { deferred.rejectWith(...) }\n\t\t\tdeferred[ tuple[ 0 ] ] = function() {\n\t\t\t\tdeferred[ tuple[ 0 ] + \"With\" ]( this === deferred ? undefined : this, arguments );\n\t\t\t\treturn this;\n\t\t\t};\n\n\t\t\t// deferred.notifyWith = list.fireWith\n\t\t\t// deferred.resolveWith = list.fireWith\n\t\t\t// deferred.rejectWith = list.fireWith\n\t\t\tdeferred[ tuple[ 0 ] + \"With\" ] = list.fireWith;\n\t\t} );\n\n\t\t// Make the deferred a promise\n\t\tpromise.promise( deferred );\n\n\t\t// Call given func if any\n\t\tif ( func ) {\n\t\t\tfunc.call( deferred, deferred );\n\t\t}\n\n\t\t// All done!\n\t\treturn deferred;\n\t},\n\n\t// Deferred helper\n\twhen: function( singleValue ) {\n\t\tvar\n\n\t\t\t// count of uncompleted subordinates\n\t\t\tremaining = arguments.length,\n\n\t\t\t// count of unprocessed arguments\n\t\t\ti = remaining,\n\n\t\t\t// subordinate fulfillment data\n\t\t\tresolveContexts = Array( i ),\n\t\t\tresolveValues = slice.call( arguments ),\n\n\t\t\t// the master Deferred\n\t\t\tmaster = jQuery.Deferred(),\n\n\t\t\t// subordinate callback factory\n\t\t\tupdateFunc = function( i ) {\n\t\t\t\treturn function( value ) {\n\t\t\t\t\tresolveContexts[ i ] = this;\n\t\t\t\t\tresolveValues[ i ] = arguments.length > 1 ? slice.call( arguments ) : value;\n\t\t\t\t\tif ( !( --remaining ) ) {\n\t\t\t\t\t\tmaster.resolveWith( resolveContexts, resolveValues );\n\t\t\t\t\t}\n\t\t\t\t};\n\t\t\t};\n\n\t\t// Single- and empty arguments are adopted like Promise.resolve\n\t\tif ( remaining <= 1 ) {\n\t\t\tadoptValue( singleValue, master.done( updateFunc( i ) ).resolve, master.reject,\n\t\t\t\t!remaining );\n\n\t\t\t// Use .then() to unwrap secondary thenables (cf. gh-3000)\n\t\t\tif ( master.state() === \"pending\" ||\n\t\t\t\tisFunction( resolveValues[ i ] && resolveValues[ i ].then ) ) {\n\n\t\t\t\treturn master.then();\n\t\t\t}\n\t\t}\n\n\t\t// Multiple arguments are aggregated like Promise.all array elements\n\t\twhile ( i-- ) {\n\t\t\tadoptValue( resolveValues[ i ], updateFunc( i ), master.reject );\n\t\t}\n\n\t\treturn master.promise();\n\t}\n} );\n\n\n// These usually indicate a programmer mistake during development,\n// warn about them ASAP rather than swallowing them by default.\nvar rerrorNames = /^(Eval|Internal|Range|Reference|Syntax|Type|URI)Error$/;\n\njQuery.Deferred.exceptionHook = function( error, stack ) {\n\n\t// Support: IE 8 - 9 only\n\t// Console exists when dev tools are open, which can happen at any time\n\tif ( window.console && window.console.warn && error && rerrorNames.test( error.name ) ) {\n\t\twindow.console.warn( \"jQuery.Deferred exception: \" + error.message, error.stack, stack );\n\t}\n};\n\n\n\n\njQuery.readyException = function( error ) {\n\twindow.setTimeout( function() {\n\t\tthrow error;\n\t} );\n};\n\n\n\n\n// The deferred used on DOM ready\nvar readyList = jQuery.Deferred();\n\njQuery.fn.ready = function( fn ) {\n\n\treadyList\n\t\t.then( fn )\n\n\t\t// Wrap jQuery.readyException in a function so that the lookup\n\t\t// happens at the time of error handling instead of callback\n\t\t// registration.\n\t\t.catch( function( error ) {\n\t\t\tjQuery.readyException( error );\n\t\t} );\n\n\treturn this;\n};\n\njQuery.extend( {\n\n\t// Is the DOM ready to be used? Set to true once it occurs.\n\tisReady: false,\n\n\t// A counter to track how many items to wait for before\n\t// the ready event fires. See #6781\n\treadyWait: 1,\n\n\t// Handle when the DOM is ready\n\tready: function( wait ) {\n\n\t\t// Abort if there are pending holds or we're already ready\n\t\tif ( wait === true ? --jQuery.readyWait : jQuery.isReady ) {\n\t\t\treturn;\n\t\t}\n\n\t\t// Remember that the DOM is ready\n\t\tjQuery.isReady = true;\n\n\t\t// If a normal DOM Ready event fired, decrement, and wait if need be\n\t\tif ( wait !== true && --jQuery.readyWait > 0 ) {\n\t\t\treturn;\n\t\t}\n\n\t\t// If there are functions bound, to execute\n\t\treadyList.resolveWith( document, [ jQuery ] );\n\t}\n} );\n\njQuery.ready.then = readyList.then;\n\n// The ready event handler and self cleanup method\nfunction completed() {\n\tdocument.removeEventListener( \"DOMContentLoaded\", completed );\n\twindow.removeEventListener( \"load\", completed );\n\tjQuery.ready();\n}\n\n// Catch cases where $(document).ready() is called\n// after the browser event has already occurred.\n// Support: IE <=9 - 10 only\n// Older IE sometimes signals \"interactive\" too soon\nif ( document.readyState === \"complete\" ||\n\t( document.readyState !== \"loading\" && !document.documentElement.doScroll ) ) {\n\n\t// Handle it asynchronously to allow scripts the opportunity to delay ready\n\twindow.setTimeout( jQuery.ready );\n\n} else {\n\n\t// Use the handy event callback\n\tdocument.addEventListener( \"DOMContentLoaded\", completed );\n\n\t// A fallback to window.onload, that will always work\n\twindow.addEventListener( \"load\", completed );\n}\n\n\n\n\n// Multifunctional method to get and set values of a collection\n// The value/s can optionally be executed if it's a function\nvar access = function( elems, fn, key, value, chainable, emptyGet, raw ) {\n\tvar i = 0,\n\t\tlen = elems.length,\n\t\tbulk = key == null;\n\n\t// Sets many values\n\tif ( toType( key ) === \"object\" ) {\n\t\tchainable = true;\n\t\tfor ( i in key ) {\n\t\t\taccess( elems, fn, i, key[ i ], true, emptyGet, raw );\n\t\t}\n\n\t// Sets one value\n\t} else if ( value !== undefined ) {\n\t\tchainable = true;\n\n\t\tif ( !isFunction( value ) ) {\n\t\t\traw = true;\n\t\t}\n\n\t\tif ( bulk ) {\n\n\t\t\t// Bulk operations run against the entire set\n\t\t\tif ( raw ) {\n\t\t\t\tfn.call( elems, value );\n\t\t\t\tfn = null;\n\n\t\t\t// ...except when executing function values\n\t\t\t} else {\n\t\t\t\tbulk = fn;\n\t\t\t\tfn = function( elem, key, value ) {\n\t\t\t\t\treturn bulk.call( jQuery( elem ), value );\n\t\t\t\t};\n\t\t\t}\n\t\t}\n\n\t\tif ( fn ) {\n\t\t\tfor ( ; i < len; i++ ) {\n\t\t\t\tfn(\n\t\t\t\t\telems[ i ], key, raw ?\n\t\t\t\t\tvalue :\n\t\t\t\t\tvalue.call( elems[ i ], i, fn( elems[ i ], key ) )\n\t\t\t\t);\n\t\t\t}\n\t\t}\n\t}\n\n\tif ( chainable ) {\n\t\treturn elems;\n\t}\n\n\t// Gets\n\tif ( bulk ) {\n\t\treturn fn.call( elems );\n\t}\n\n\treturn len ? fn( elems[ 0 ], key ) : emptyGet;\n};\n\n\n// Matches dashed string for camelizing\nvar rmsPrefix = /^-ms-/,\n\trdashAlpha = /-([a-z])/g;\n\n// Used by camelCase as callback to replace()\nfunction fcamelCase( all, letter ) {\n\treturn letter.toUpperCase();\n}\n\n// Convert dashed to camelCase; used by the css and data modules\n// Support: IE <=9 - 11, Edge 12 - 15\n// Microsoft forgot to hump their vendor prefix (#9572)\nfunction camelCase( string ) {\n\treturn string.replace( rmsPrefix, \"ms-\" ).replace( rdashAlpha, fcamelCase );\n}\nvar acceptData = function( owner ) {\n\n\t// Accepts only:\n\t//  - Node\n\t//    - Node.ELEMENT_NODE\n\t//    - Node.DOCUMENT_NODE\n\t//  - Object\n\t//    - Any\n\treturn owner.nodeType === 1 || owner.nodeType === 9 || !( +owner.nodeType );\n};\n\n\n\n\nfunction Data() {\n\tthis.expando = jQuery.expando + Data.uid++;\n}\n\nData.uid = 1;\n\nData.prototype = {\n\n\tcache: function( owner ) {\n\n\t\t// Check if the owner object already has a cache\n\t\tvar value = owner[ this.expando ];\n\n\t\t// If not, create one\n\t\tif ( !value ) {\n\t\t\tvalue = {};\n\n\t\t\t// We can accept data for non-element nodes in modern browsers,\n\t\t\t// but we should not, see #8335.\n\t\t\t// Always return an empty object.\n\t\t\tif ( acceptData( owner ) ) {\n\n\t\t\t\t// If it is a node unlikely to be stringify-ed or looped over\n\t\t\t\t// use plain assignment\n\t\t\t\tif ( owner.nodeType ) {\n\t\t\t\t\towner[ this.expando ] = value;\n\n\t\t\t\t// Otherwise secure it in a non-enumerable property\n\t\t\t\t// configurable must be true to allow the property to be\n\t\t\t\t// deleted when data is removed\n\t\t\t\t} else {\n\t\t\t\t\tObject.defineProperty( owner, this.expando, {\n\t\t\t\t\t\tvalue: value,\n\t\t\t\t\t\tconfigurable: true\n\t\t\t\t\t} );\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn value;\n\t},\n\tset: function( owner, data, value ) {\n\t\tvar prop,\n\t\t\tcache = this.cache( owner );\n\n\t\t// Handle: [ owner, key, value ] args\n\t\t// Always use camelCase key (gh-2257)\n\t\tif ( typeof data === \"string\" ) {\n\t\t\tcache[ camelCase( data ) ] = value;\n\n\t\t// Handle: [ owner, { properties } ] args\n\t\t} else {\n\n\t\t\t// Copy the properties one-by-one to the cache object\n\t\t\tfor ( prop in data ) {\n\t\t\t\tcache[ camelCase( prop ) ] = data[ prop ];\n\t\t\t}\n\t\t}\n\t\treturn cache;\n\t},\n\tget: function( owner, key ) {\n\t\treturn key === undefined ?\n\t\t\tthis.cache( owner ) :\n\n\t\t\t// Always use camelCase key (gh-2257)\n\t\t\towner[ this.expando ] && owner[ this.expando ][ camelCase( key ) ];\n\t},\n\taccess: function( owner, key, value ) {\n\n\t\t// In cases where either:\n\t\t//\n\t\t//   1. No key was specified\n\t\t//   2. A string key was specified, but no value provided\n\t\t//\n\t\t// Take the \"read\" path and allow the get method to determine\n\t\t// which value to return, respectively either:\n\t\t//\n\t\t//   1. The entire cache object\n\t\t//   2. The data stored at the key\n\t\t//\n\t\tif ( key === undefined ||\n\t\t\t\t( ( key && typeof key === \"string\" ) && value === undefined ) ) {\n\n\t\t\treturn this.get( owner, key );\n\t\t}\n\n\t\t// When the key is not a string, or both a key and value\n\t\t// are specified, set or extend (existing objects) with either:\n\t\t//\n\t\t//   1. An object of properties\n\t\t//   2. A key and value\n\t\t//\n\t\tthis.set( owner, key, value );\n\n\t\t// Since the \"set\" path can have two possible entry points\n\t\t// return the expected data based on which path was taken[*]\n\t\treturn value !== undefined ? value : key;\n\t},\n\tremove: function( owner, key ) {\n\t\tvar i,\n\t\t\tcache = owner[ this.expando ];\n\n\t\tif ( cache === undefined ) {\n\t\t\treturn;\n\t\t}\n\n\t\tif ( key !== undefined ) {\n\n\t\t\t// Support array or space separated string of keys\n\t\t\tif ( Array.isArray( key ) ) {\n\n\t\t\t\t// If key is an array of keys...\n\t\t\t\t// We always set camelCase keys, so remove that.\n\t\t\t\tkey = key.map( camelCase );\n\t\t\t} else {\n\t\t\t\tkey = camelCase( key );\n\n\t\t\t\t// If a key with the spaces exists, use it.\n\t\t\t\t// Otherwise, create an array by matching non-whitespace\n\t\t\t\tkey = key in cache ?\n\t\t\t\t\t[ key ] :\n\t\t\t\t\t( key.match( rnothtmlwhite ) || [] );\n\t\t\t}\n\n\t\t\ti = key.length;\n\n\t\t\twhile ( i-- ) {\n\t\t\t\tdelete cache[ key[ i ] ];\n\t\t\t}\n\t\t}\n\n\t\t// Remove the expando if there's no more data\n\t\tif ( key === undefined || jQuery.isEmptyObject( cache ) ) {\n\n\t\t\t// Support: Chrome <=35 - 45\n\t\t\t// Webkit & Blink performance suffers when deleting properties\n\t\t\t// from DOM nodes, so set to undefined instead\n\t\t\t// https://bugs.chromium.org/p/chromium/issues/detail?id=378607 (bug restricted)\n\t\t\tif ( owner.nodeType ) {\n\t\t\t\towner[ this.expando ] = undefined;\n\t\t\t} else {\n\t\t\t\tdelete owner[ this.expando ];\n\t\t\t}\n\t\t}\n\t},\n\thasData: function( owner ) {\n\t\tvar cache = owner[ this.expando ];\n\t\treturn cache !== undefined && !jQuery.isEmptyObject( cache );\n\t}\n};\nvar dataPriv = new Data();\n\nvar dataUser = new Data();\n\n\n\n//\tImplementation Summary\n//\n//\t1. Enforce API surface and semantic compatibility with 1.9.x branch\n//\t2. Improve the module's maintainability by reducing the storage\n//\t\tpaths to a single mechanism.\n//\t3. Use the same single mechanism to support \"private\" and \"user\" data.\n//\t4. _Never_ expose \"private\" data to user code (TODO: Drop _data, _removeData)\n//\t5. Avoid exposing implementation details on user objects (eg. expando properties)\n//\t6. Provide a clear path for implementation upgrade to WeakMap in 2014\n\nvar rbrace = /^(?:\\{[\\w\\W]*\\}|\\[[\\w\\W]*\\])$/,\n\trmultiDash = /[A-Z]/g;\n\nfunction getData( data ) {\n\tif ( data === \"true\" ) {\n\t\treturn true;\n\t}\n\n\tif ( data === \"false\" ) {\n\t\treturn false;\n\t}\n\n\tif ( data === \"null\" ) {\n\t\treturn null;\n\t}\n\n\t// Only convert to a number if it doesn't change the string\n\tif ( data === +data + \"\" ) {\n\t\treturn +data;\n\t}\n\n\tif ( rbrace.test( data ) ) {\n\t\treturn JSON.parse( data );\n\t}\n\n\treturn data;\n}\n\nfunction dataAttr( elem, key, data ) {\n\tvar name;\n\n\t// If nothing was found internally, try to fetch any\n\t// data from the HTML5 data-* attribute\n\tif ( data === undefined && elem.nodeType === 1 ) {\n\t\tname = \"data-\" + key.replace( rmultiDash, \"-$&\" ).toLowerCase();\n\t\tdata = elem.getAttribute( name );\n\n\t\tif ( typeof data === \"string\" ) {\n\t\t\ttry {\n\t\t\t\tdata = getData( data );\n\t\t\t} catch ( e ) {}\n\n\t\t\t// Make sure we set the data so it isn't changed later\n\t\t\tdataUser.set( elem, key, data );\n\t\t} else {\n\t\t\tdata = undefined;\n\t\t}\n\t}\n\treturn data;\n}\n\njQuery.extend( {\n\thasData: function( elem ) {\n\t\treturn dataUser.hasData( elem ) || dataPriv.hasData( elem );\n\t},\n\n\tdata: function( elem, name, data ) {\n\t\treturn dataUser.access( elem, name, data );\n\t},\n\n\tremoveData: function( elem, name ) {\n\t\tdataUser.remove( elem, name );\n\t},\n\n\t// TODO: Now that all calls to _data and _removeData have been replaced\n\t// with direct calls to dataPriv methods, these can be deprecated.\n\t_data: function( elem, name, data ) {\n\t\treturn dataPriv.access( elem, name, data );\n\t},\n\n\t_removeData: function( elem, name ) {\n\t\tdataPriv.remove( elem, name );\n\t}\n} );\n\njQuery.fn.extend( {\n\tdata: function( key, value ) {\n\t\tvar i, name, data,\n\t\t\telem = this[ 0 ],\n\t\t\tattrs = elem && elem.attributes;\n\n\t\t// Gets all values\n\t\tif ( key === undefined ) {\n\t\t\tif ( this.length ) {\n\t\t\t\tdata = dataUser.get( elem );\n\n\t\t\t\tif ( elem.nodeType === 1 && !dataPriv.get( elem, \"hasDataAttrs\" ) ) {\n\t\t\t\t\ti = attrs.length;\n\t\t\t\t\twhile ( i-- ) {\n\n\t\t\t\t\t\t// Support: IE 11 only\n\t\t\t\t\t\t// The attrs elements can be null (#14894)\n\t\t\t\t\t\tif ( attrs[ i ] ) {\n\t\t\t\t\t\t\tname = attrs[ i ].name;\n\t\t\t\t\t\t\tif ( name.indexOf( \"data-\" ) === 0 ) {\n\t\t\t\t\t\t\t\tname = camelCase( name.slice( 5 ) );\n\t\t\t\t\t\t\t\tdataAttr( elem, name, data[ name ] );\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tdataPriv.set( elem, \"hasDataAttrs\", true );\n\t\t\t\t}\n\t\t\t}\n\n\t\t\treturn data;\n\t\t}\n\n\t\t// Sets multiple values\n\t\tif ( typeof key === \"object\" ) {\n\t\t\treturn this.each( function() {\n\t\t\t\tdataUser.set( this, key );\n\t\t\t} );\n\t\t}\n\n\t\treturn access( this, function( value ) {\n\t\t\tvar data;\n\n\t\t\t// The calling jQuery object (element matches) is not empty\n\t\t\t// (and therefore has an element appears at this[ 0 ]) and the\n\t\t\t// `value` parameter was not undefined. An empty jQuery object\n\t\t\t// will result in `undefined` for elem = this[ 0 ] which will\n\t\t\t// throw an exception if an attempt to read a data cache is made.\n\t\t\tif ( elem && value === undefined ) {\n\n\t\t\t\t// Attempt to get data from the cache\n\t\t\t\t// The key will always be camelCased in Data\n\t\t\t\tdata = dataUser.get( elem, key );\n\t\t\t\tif ( data !== undefined ) {\n\t\t\t\t\treturn data;\n\t\t\t\t}\n\n\t\t\t\t// Attempt to \"discover\" the data in\n\t\t\t\t// HTML5 custom data-* attrs\n\t\t\t\tdata = dataAttr( elem, key );\n\t\t\t\tif ( data !== undefined ) {\n\t\t\t\t\treturn data;\n\t\t\t\t}\n\n\t\t\t\t// We tried really hard, but the data doesn't exist.\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\t// Set the data...\n\t\t\tthis.each( function() {\n\n\t\t\t\t// We always store the camelCased key\n\t\t\t\tdataUser.set( this, key, value );\n\t\t\t} );\n\t\t}, null, value, arguments.length > 1, null, true );\n\t},\n\n\tremoveData: function( key ) {\n\t\treturn this.each( function() {\n\t\t\tdataUser.remove( this, key );\n\t\t} );\n\t}\n} );\n\n\njQuery.extend( {\n\tqueue: function( elem, type, data ) {\n\t\tvar queue;\n\n\t\tif ( elem ) {\n\t\t\ttype = ( type || \"fx\" ) + \"queue\";\n\t\t\tqueue = dataPriv.get( elem, type );\n\n\t\t\t// Speed up dequeue by getting out quickly if this is just a lookup\n\t\t\tif ( data ) {\n\t\t\t\tif ( !queue || Array.isArray( data ) ) {\n\t\t\t\t\tqueue = dataPriv.access( elem, type, jQuery.makeArray( data ) );\n\t\t\t\t} else {\n\t\t\t\t\tqueue.push( data );\n\t\t\t\t}\n\t\t\t}\n\t\t\treturn queue || [];\n\t\t}\n\t},\n\n\tdequeue: function( elem, type ) {\n\t\ttype = type || \"fx\";\n\n\t\tvar queue = jQuery.queue( elem, type ),\n\t\t\tstartLength = queue.length,\n\t\t\tfn = queue.shift(),\n\t\t\thooks = jQuery._queueHooks( elem, type ),\n\t\t\tnext = function() {\n\t\t\t\tjQuery.dequeue( elem, type );\n\t\t\t};\n\n\t\t// If the fx queue is dequeued, always remove the progress sentinel\n\t\tif ( fn === \"inprogress\" ) {\n\t\t\tfn = queue.shift();\n\t\t\tstartLength--;\n\t\t}\n\n\t\tif ( fn ) {\n\n\t\t\t// Add a progress sentinel to prevent the fx queue from being\n\t\t\t// automatically dequeued\n\t\t\tif ( type === \"fx\" ) {\n\t\t\t\tqueue.unshift( \"inprogress\" );\n\t\t\t}\n\n\t\t\t// Clear up the last queue stop function\n\t\t\tdelete hooks.stop;\n\t\t\tfn.call( elem, next, hooks );\n\t\t}\n\n\t\tif ( !startLength && hooks ) {\n\t\t\thooks.empty.fire();\n\t\t}\n\t},\n\n\t// Not public - generate a queueHooks object, or return the current one\n\t_queueHooks: function( elem, type ) {\n\t\tvar key = type + \"queueHooks\";\n\t\treturn dataPriv.get( elem, key ) || dataPriv.access( elem, key, {\n\t\t\tempty: jQuery.Callbacks( \"once memory\" ).add( function() {\n\t\t\t\tdataPriv.remove( elem, [ type + \"queue\", key ] );\n\t\t\t} )\n\t\t} );\n\t}\n} );\n\njQuery.fn.extend( {\n\tqueue: function( type, data ) {\n\t\tvar setter = 2;\n\n\t\tif ( typeof type !== \"string\" ) {\n\t\t\tdata = type;\n\t\t\ttype = \"fx\";\n\t\t\tsetter--;\n\t\t}\n\n\t\tif ( arguments.length < setter ) {\n\t\t\treturn jQuery.queue( this[ 0 ], type );\n\t\t}\n\n\t\treturn data === undefined ?\n\t\t\tthis :\n\t\t\tthis.each( function() {\n\t\t\t\tvar queue = jQuery.queue( this, type, data );\n\n\t\t\t\t// Ensure a hooks for this queue\n\t\t\t\tjQuery._queueHooks( this, type );\n\n\t\t\t\tif ( type === \"fx\" && queue[ 0 ] !== \"inprogress\" ) {\n\t\t\t\t\tjQuery.dequeue( this, type );\n\t\t\t\t}\n\t\t\t} );\n\t},\n\tdequeue: function( type ) {\n\t\treturn this.each( function() {\n\t\t\tjQuery.dequeue( this, type );\n\t\t} );\n\t},\n\tclearQueue: function( type ) {\n\t\treturn this.queue( type || \"fx\", [] );\n\t},\n\n\t// Get a promise resolved when queues of a certain type\n\t// are emptied (fx is the type by default)\n\tpromise: function( type, obj ) {\n\t\tvar tmp,\n\t\t\tcount = 1,\n\t\t\tdefer = jQuery.Deferred(),\n\t\t\telements = this,\n\t\t\ti = this.length,\n\t\t\tresolve = function() {\n\t\t\t\tif ( !( --count ) ) {\n\t\t\t\t\tdefer.resolveWith( elements, [ elements ] );\n\t\t\t\t}\n\t\t\t};\n\n\t\tif ( typeof type !== \"string\" ) {\n\t\t\tobj = type;\n\t\t\ttype = undefined;\n\t\t}\n\t\ttype = type || \"fx\";\n\n\t\twhile ( i-- ) {\n\t\t\ttmp = dataPriv.get( elements[ i ], type + \"queueHooks\" );\n\t\t\tif ( tmp && tmp.empty ) {\n\t\t\t\tcount++;\n\t\t\t\ttmp.empty.add( resolve );\n\t\t\t}\n\t\t}\n\t\tresolve();\n\t\treturn defer.promise( obj );\n\t}\n} );\nvar pnum = ( /[+-]?(?:\\d*\\.|)\\d+(?:[eE][+-]?\\d+|)/ ).source;\n\nvar rcssNum = new RegExp( \"^(?:([+-])=|)(\" + pnum + \")([a-z%]*)$\", \"i\" );\n\n\nvar cssExpand = [ \"Top\", \"Right\", \"Bottom\", \"Left\" ];\n\nvar isHiddenWithinTree = function( elem, el ) {\n\n\t\t// isHiddenWithinTree might be called from jQuery#filter function;\n\t\t// in that case, element will be second argument\n\t\telem = el || elem;\n\n\t\t// Inline style trumps all\n\t\treturn elem.style.display === \"none\" ||\n\t\t\telem.style.display === \"\" &&\n\n\t\t\t// Otherwise, check computed style\n\t\t\t// Support: Firefox <=43 - 45\n\t\t\t// Disconnected elements can have computed display: none, so first confirm that elem is\n\t\t\t// in the document.\n\t\t\tjQuery.contains( elem.ownerDocument, elem ) &&\n\n\t\t\tjQuery.css( elem, \"display\" ) === \"none\";\n\t};\n\nvar swap = function( elem, options, callback, args ) {\n\tvar ret, name,\n\t\told = {};\n\n\t// Remember the old values, and insert the new ones\n\tfor ( name in options ) {\n\t\told[ name ] = elem.style[ name ];\n\t\telem.style[ name ] = options[ name ];\n\t}\n\n\tret = callback.apply( elem, args || [] );\n\n\t// Revert the old values\n\tfor ( name in options ) {\n\t\telem.style[ name ] = old[ name ];\n\t}\n\n\treturn ret;\n};\n\n\n\n\nfunction adjustCSS( elem, prop, valueParts, tween ) {\n\tvar adjusted, scale,\n\t\tmaxIterations = 20,\n\t\tcurrentValue = tween ?\n\t\t\tfunction() {\n\t\t\t\treturn tween.cur();\n\t\t\t} :\n\t\t\tfunction() {\n\t\t\t\treturn jQuery.css( elem, prop, \"\" );\n\t\t\t},\n\t\tinitial = currentValue(),\n\t\tunit = valueParts && valueParts[ 3 ] || ( jQuery.cssNumber[ prop ] ? \"\" : \"px\" ),\n\n\t\t// Starting value computation is required for potential unit mismatches\n\t\tinitialInUnit = ( jQuery.cssNumber[ prop ] || unit !== \"px\" && +initial ) &&\n\t\t\trcssNum.exec( jQuery.css( elem, prop ) );\n\n\tif ( initialInUnit && initialInUnit[ 3 ] !== unit ) {\n\n\t\t// Support: Firefox <=54\n\t\t// Halve the iteration target value to prevent interference from CSS upper bounds (gh-2144)\n\t\tinitial = initial / 2;\n\n\t\t// Trust units reported by jQuery.css\n\t\tunit = unit || initialInUnit[ 3 ];\n\n\t\t// Iteratively approximate from a nonzero starting point\n\t\tinitialInUnit = +initial || 1;\n\n\t\twhile ( maxIterations-- ) {\n\n\t\t\t// Evaluate and update our best guess (doubling guesses that zero out).\n\t\t\t// Finish if the scale equals or crosses 1 (making the old*new product non-positive).\n\t\t\tjQuery.style( elem, prop, initialInUnit + unit );\n\t\t\tif ( ( 1 - scale ) * ( 1 - ( scale = currentValue() / initial || 0.5 ) ) <= 0 ) {\n\t\t\t\tmaxIterations = 0;\n\t\t\t}\n\t\t\tinitialInUnit = initialInUnit / scale;\n\n\t\t}\n\n\t\tinitialInUnit = initialInUnit * 2;\n\t\tjQuery.style( elem, prop, initialInUnit + unit );\n\n\t\t// Make sure we update the tween properties later on\n\t\tvalueParts = valueParts || [];\n\t}\n\n\tif ( valueParts ) {\n\t\tinitialInUnit = +initialInUnit || +initial || 0;\n\n\t\t// Apply relative offset (+=/-=) if specified\n\t\tadjusted = valueParts[ 1 ] ?\n\t\t\tinitialInUnit + ( valueParts[ 1 ] + 1 ) * valueParts[ 2 ] :\n\t\t\t+valueParts[ 2 ];\n\t\tif ( tween ) {\n\t\t\ttween.unit = unit;\n\t\t\ttween.start = initialInUnit;\n\t\t\ttween.end = adjusted;\n\t\t}\n\t}\n\treturn adjusted;\n}\n\n\nvar defaultDisplayMap = {};\n\nfunction getDefaultDisplay( elem ) {\n\tvar temp,\n\t\tdoc = elem.ownerDocument,\n\t\tnodeName = elem.nodeName,\n\t\tdisplay = defaultDisplayMap[ nodeName ];\n\n\tif ( display ) {\n\t\treturn display;\n\t}\n\n\ttemp = doc.body.appendChild( doc.createElement( nodeName ) );\n\tdisplay = jQuery.css( temp, \"display\" );\n\n\ttemp.parentNode.removeChild( temp );\n\n\tif ( display === \"none\" ) {\n\t\tdisplay = \"block\";\n\t}\n\tdefaultDisplayMap[ nodeName ] = display;\n\n\treturn display;\n}\n\nfunction showHide( elements, show ) {\n\tvar display, elem,\n\t\tvalues = [],\n\t\tindex = 0,\n\t\tlength = elements.length;\n\n\t// Determine new display value for elements that need to change\n\tfor ( ; index < length; index++ ) {\n\t\telem = elements[ index ];\n\t\tif ( !elem.style ) {\n\t\t\tcontinue;\n\t\t}\n\n\t\tdisplay = elem.style.display;\n\t\tif ( show ) {\n\n\t\t\t// Since we force visibility upon cascade-hidden elements, an immediate (and slow)\n\t\t\t// check is required in this first loop unless we have a nonempty display value (either\n\t\t\t// inline or about-to-be-restored)\n\t\t\tif ( display === \"none\" ) {\n\t\t\t\tvalues[ index ] = dataPriv.get( elem, \"display\" ) || null;\n\t\t\t\tif ( !values[ index ] ) {\n\t\t\t\t\telem.style.display = \"\";\n\t\t\t\t}\n\t\t\t}\n\t\t\tif ( elem.style.display === \"\" && isHiddenWithinTree( elem ) ) {\n\t\t\t\tvalues[ index ] = getDefaultDisplay( elem );\n\t\t\t}\n\t\t} else {\n\t\t\tif ( display !== \"none\" ) {\n\t\t\t\tvalues[ index ] = \"none\";\n\n\t\t\t\t// Remember what we're overwriting\n\t\t\t\tdataPriv.set( elem, \"display\", display );\n\t\t\t}\n\t\t}\n\t}\n\n\t// Set the display of the elements in a second loop to avoid constant reflow\n\tfor ( index = 0; index < length; index++ ) {\n\t\tif ( values[ index ] != null ) {\n\t\t\telements[ index ].style.display = values[ index ];\n\t\t}\n\t}\n\n\treturn elements;\n}\n\njQuery.fn.extend( {\n\tshow: function() {\n\t\treturn showHide( this, true );\n\t},\n\thide: function() {\n\t\treturn showHide( this );\n\t},\n\ttoggle: function( state ) {\n\t\tif ( typeof state === \"boolean\" ) {\n\t\t\treturn state ? this.show() : this.hide();\n\t\t}\n\n\t\treturn this.each( function() {\n\t\t\tif ( isHiddenWithinTree( this ) ) {\n\t\t\t\tjQuery( this ).show();\n\t\t\t} else {\n\t\t\t\tjQuery( this ).hide();\n\t\t\t}\n\t\t} );\n\t}\n} );\nvar rcheckableType = ( /^(?:checkbox|radio)$/i );\n\nvar rtagName = ( /<([a-z][^\\/\\0>\\x20\\t\\r\\n\\f]+)/i );\n\nvar rscriptType = ( /^$|^module$|\\/(?:java|ecma)script/i );\n\n\n\n// We have to close these tags to support XHTML (#13200)\nvar wrapMap = {\n\n\t// Support: IE <=9 only\n\toption: [ 1, \"<select multiple='multiple'>\", \"</select>\" ],\n\n\t// XHTML parsers do not magically insert elements in the\n\t// same way that tag soup parsers do. So we cannot shorten\n\t// this by omitting <tbody> or other required elements.\n\tthead: [ 1, \"<table>\", \"</table>\" ],\n\tcol: [ 2, \"<table><colgroup>\", \"</colgroup></table>\" ],\n\ttr: [ 2, \"<table><tbody>\", \"</tbody></table>\" ],\n\ttd: [ 3, \"<table><tbody><tr>\", \"</tr></tbody></table>\" ],\n\n\t_default: [ 0, \"\", \"\" ]\n};\n\n// Support: IE <=9 only\nwrapMap.optgroup = wrapMap.option;\n\nwrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead;\nwrapMap.th = wrapMap.td;\n\n\nfunction getAll( context, tag ) {\n\n\t// Support: IE <=9 - 11 only\n\t// Use typeof to avoid zero-argument method invocation on host objects (#15151)\n\tvar ret;\n\n\tif ( typeof context.getElementsByTagName !== \"undefined\" ) {\n\t\tret = context.getElementsByTagName( tag || \"*\" );\n\n\t} else if ( typeof context.querySelectorAll !== \"undefined\" ) {\n\t\tret = context.querySelectorAll( tag || \"*\" );\n\n\t} else {\n\t\tret = [];\n\t}\n\n\tif ( tag === undefined || tag && nodeName( context, tag ) ) {\n\t\treturn jQuery.merge( [ context ], ret );\n\t}\n\n\treturn ret;\n}\n\n\n// Mark scripts as having already been evaluated\nfunction setGlobalEval( elems, refElements ) {\n\tvar i = 0,\n\t\tl = elems.length;\n\n\tfor ( ; i < l; i++ ) {\n\t\tdataPriv.set(\n\t\t\telems[ i ],\n\t\t\t\"globalEval\",\n\t\t\t!refElements || dataPriv.get( refElements[ i ], \"globalEval\" )\n\t\t);\n\t}\n}\n\n\nvar rhtml = /<|&#?\\w+;/;\n\nfunction buildFragment( elems, context, scripts, selection, ignored ) {\n\tvar elem, tmp, tag, wrap, contains, j,\n\t\tfragment = context.createDocumentFragment(),\n\t\tnodes = [],\n\t\ti = 0,\n\t\tl = elems.length;\n\n\tfor ( ; i < l; i++ ) {\n\t\telem = elems[ i ];\n\n\t\tif ( elem || elem === 0 ) {\n\n\t\t\t// Add nodes directly\n\t\t\tif ( toType( elem ) === \"object\" ) {\n\n\t\t\t\t// Support: Android <=4.0 only, PhantomJS 1 only\n\t\t\t\t// push.apply(_, arraylike) throws on ancient WebKit\n\t\t\t\tjQuery.merge( nodes, elem.nodeType ? [ elem ] : elem );\n\n\t\t\t// Convert non-html into a text node\n\t\t\t} else if ( !rhtml.test( elem ) ) {\n\t\t\t\tnodes.push( context.createTextNode( elem ) );\n\n\t\t\t// Convert html into DOM nodes\n\t\t\t} else {\n\t\t\t\ttmp = tmp || fragment.appendChild( context.createElement( \"div\" ) );\n\n\t\t\t\t// Deserialize a standard representation\n\t\t\t\ttag = ( rtagName.exec( elem ) || [ \"\", \"\" ] )[ 1 ].toLowerCase();\n\t\t\t\twrap = wrapMap[ tag ] || wrapMap._default;\n\t\t\t\ttmp.innerHTML = wrap[ 1 ] + jQuery.htmlPrefilter( elem ) + wrap[ 2 ];\n\n\t\t\t\t// Descend through wrappers to the right content\n\t\t\t\tj = wrap[ 0 ];\n\t\t\t\twhile ( j-- ) {\n\t\t\t\t\ttmp = tmp.lastChild;\n\t\t\t\t}\n\n\t\t\t\t// Support: Android <=4.0 only, PhantomJS 1 only\n\t\t\t\t// push.apply(_, arraylike) throws on ancient WebKit\n\t\t\t\tjQuery.merge( nodes, tmp.childNodes );\n\n\t\t\t\t// Remember the top-level container\n\t\t\t\ttmp = fragment.firstChild;\n\n\t\t\t\t// Ensure the created nodes are orphaned (#12392)\n\t\t\t\ttmp.textContent = \"\";\n\t\t\t}\n\t\t}\n\t}\n\n\t// Remove wrapper from fragment\n\tfragment.textContent = \"\";\n\n\ti = 0;\n\twhile ( ( elem = nodes[ i++ ] ) ) {\n\n\t\t// Skip elements already in the context collection (trac-4087)\n\t\tif ( selection && jQuery.inArray( elem, selection ) > -1 ) {\n\t\t\tif ( ignored ) {\n\t\t\t\tignored.push( elem );\n\t\t\t}\n\t\t\tcontinue;\n\t\t}\n\n\t\tcontains = jQuery.contains( elem.ownerDocument, elem );\n\n\t\t// Append to fragment\n\t\ttmp = getAll( fragment.appendChild( elem ), \"script\" );\n\n\t\t// Preserve script evaluation history\n\t\tif ( contains ) {\n\t\t\tsetGlobalEval( tmp );\n\t\t}\n\n\t\t// Capture executables\n\t\tif ( scripts ) {\n\t\t\tj = 0;\n\t\t\twhile ( ( elem = tmp[ j++ ] ) ) {\n\t\t\t\tif ( rscriptType.test( elem.type || \"\" ) ) {\n\t\t\t\t\tscripts.push( elem );\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\treturn fragment;\n}\n\n\n( function() {\n\tvar fragment = document.createDocumentFragment(),\n\t\tdiv = fragment.appendChild( document.createElement( \"div\" ) ),\n\t\tinput = document.createElement( \"input\" );\n\n\t// Support: Android 4.0 - 4.3 only\n\t// Check state lost if the name is set (#11217)\n\t// Support: Windows Web Apps (WWA)\n\t// `name` and `type` must use .setAttribute for WWA (#14901)\n\tinput.setAttribute( \"type\", \"radio\" );\n\tinput.setAttribute( \"checked\", \"checked\" );\n\tinput.setAttribute( \"name\", \"t\" );\n\n\tdiv.appendChild( input );\n\n\t// Support: Android <=4.1 only\n\t// Older WebKit doesn't clone checked state correctly in fragments\n\tsupport.checkClone = div.cloneNode( true ).cloneNode( true ).lastChild.checked;\n\n\t// Support: IE <=11 only\n\t// Make sure textarea (and checkbox) defaultValue is properly cloned\n\tdiv.innerHTML = \"<textarea>x</textarea>\";\n\tsupport.noCloneChecked = !!div.cloneNode( true ).lastChild.defaultValue;\n} )();\nvar documentElement = document.documentElement;\n\n\n\nvar\n\trkeyEvent = /^key/,\n\trmouseEvent = /^(?:mouse|pointer|contextmenu|drag|drop)|click/,\n\trtypenamespace = /^([^.]*)(?:\\.(.+)|)/;\n\nfunction returnTrue() {\n\treturn true;\n}\n\nfunction returnFalse() {\n\treturn false;\n}\n\n// Support: IE <=9 only\n// See #13393 for more info\nfunction safeActiveElement() {\n\ttry {\n\t\treturn document.activeElement;\n\t} catch ( err ) { }\n}\n\nfunction on( elem, types, selector, data, fn, one ) {\n\tvar origFn, type;\n\n\t// Types can be a map of types/handlers\n\tif ( typeof types === \"object\" ) {\n\n\t\t// ( types-Object, selector, data )\n\t\tif ( typeof selector !== \"string\" ) {\n\n\t\t\t// ( types-Object, data )\n\t\t\tdata = data || selector;\n\t\t\tselector = undefined;\n\t\t}\n\t\tfor ( type in types ) {\n\t\t\ton( elem, type, selector, data, types[ type ], one );\n\t\t}\n\t\treturn elem;\n\t}\n\n\tif ( data == null && fn == null ) {\n\n\t\t// ( types, fn )\n\t\tfn = selector;\n\t\tdata = selector = undefined;\n\t} else if ( fn == null ) {\n\t\tif ( typeof selector === \"string\" ) {\n\n\t\t\t// ( types, selector, fn )\n\t\t\tfn = data;\n\t\t\tdata = undefined;\n\t\t} else {\n\n\t\t\t// ( types, data, fn )\n\t\t\tfn = data;\n\t\t\tdata = selector;\n\t\t\tselector = undefined;\n\t\t}\n\t}\n\tif ( fn === false ) {\n\t\tfn = returnFalse;\n\t} else if ( !fn ) {\n\t\treturn elem;\n\t}\n\n\tif ( one === 1 ) {\n\t\torigFn = fn;\n\t\tfn = function( event ) {\n\n\t\t\t// Can use an empty set, since event contains the info\n\t\t\tjQuery().off( event );\n\t\t\treturn origFn.apply( this, arguments );\n\t\t};\n\n\t\t// Use same guid so caller can remove using origFn\n\t\tfn.guid = origFn.guid || ( origFn.guid = jQuery.guid++ );\n\t}\n\treturn elem.each( function() {\n\t\tjQuery.event.add( this, types, fn, data, selector );\n\t} );\n}\n\n/*\n * Helper functions for managing events -- not part of the public interface.\n * Props to Dean Edwards' addEvent library for many of the ideas.\n */\njQuery.event = {\n\n\tglobal: {},\n\n\tadd: function( elem, types, handler, data, selector ) {\n\n\t\tvar handleObjIn, eventHandle, tmp,\n\t\t\tevents, t, handleObj,\n\t\t\tspecial, handlers, type, namespaces, origType,\n\t\t\telemData = dataPriv.get( elem );\n\n\t\t// Don't attach events to noData or text/comment nodes (but allow plain objects)\n\t\tif ( !elemData ) {\n\t\t\treturn;\n\t\t}\n\n\t\t// Caller can pass in an object of custom data in lieu of the handler\n\t\tif ( handler.handler ) {\n\t\t\thandleObjIn = handler;\n\t\t\thandler = handleObjIn.handler;\n\t\t\tselector = handleObjIn.selector;\n\t\t}\n\n\t\t// Ensure that invalid selectors throw exceptions at attach time\n\t\t// Evaluate against documentElement in case elem is a non-element node (e.g., document)\n\t\tif ( selector ) {\n\t\t\tjQuery.find.matchesSelector( documentElement, selector );\n\t\t}\n\n\t\t// Make sure that the handler has a unique ID, used to find/remove it later\n\t\tif ( !handler.guid ) {\n\t\t\thandler.guid = jQuery.guid++;\n\t\t}\n\n\t\t// Init the element's event structure and main handler, if this is the first\n\t\tif ( !( events = elemData.events ) ) {\n\t\t\tevents = elemData.events = {};\n\t\t}\n\t\tif ( !( eventHandle = elemData.handle ) ) {\n\t\t\teventHandle = elemData.handle = function( e ) {\n\n\t\t\t\t// Discard the second event of a jQuery.event.trigger() and\n\t\t\t\t// when an event is called after a page has unloaded\n\t\t\t\treturn typeof jQuery !== \"undefined\" && jQuery.event.triggered !== e.type ?\n\t\t\t\t\tjQuery.event.dispatch.apply( elem, arguments ) : undefined;\n\t\t\t};\n\t\t}\n\n\t\t// Handle multiple events separated by a space\n\t\ttypes = ( types || \"\" ).match( rnothtmlwhite ) || [ \"\" ];\n\t\tt = types.length;\n\t\twhile ( t-- ) {\n\t\t\ttmp = rtypenamespace.exec( types[ t ] ) || [];\n\t\t\ttype = origType = tmp[ 1 ];\n\t\t\tnamespaces = ( tmp[ 2 ] || \"\" ).split( \".\" ).sort();\n\n\t\t\t// There *must* be a type, no attaching namespace-only handlers\n\t\t\tif ( !type ) {\n\t\t\t\tcontinue;\n\t\t\t}\n\n\t\t\t// If event changes its type, use the special event handlers for the changed type\n\t\t\tspecial = jQuery.event.special[ type ] || {};\n\n\t\t\t// If selector defined, determine special event api type, otherwise given type\n\t\t\ttype = ( selector ? special.delegateType : special.bindType ) || type;\n\n\t\t\t// Update special based on newly reset type\n\t\t\tspecial = jQuery.event.special[ type ] || {};\n\n\t\t\t// handleObj is passed to all event handlers\n\t\t\thandleObj = jQuery.extend( {\n\t\t\t\ttype: type,\n\t\t\t\torigType: origType,\n\t\t\t\tdata: data,\n\t\t\t\thandler: handler,\n\t\t\t\tguid: handler.guid,\n\t\t\t\tselector: selector,\n\t\t\t\tneedsContext: selector && jQuery.expr.match.needsContext.test( selector ),\n\t\t\t\tnamespace: namespaces.join( \".\" )\n\t\t\t}, handleObjIn );\n\n\t\t\t// Init the event handler queue if we're the first\n\t\t\tif ( !( handlers = events[ type ] ) ) {\n\t\t\t\thandlers = events[ type ] = [];\n\t\t\t\thandlers.delegateCount = 0;\n\n\t\t\t\t// Only use addEventListener if the special events handler returns false\n\t\t\t\tif ( !special.setup ||\n\t\t\t\t\tspecial.setup.call( elem, data, namespaces, eventHandle ) === false ) {\n\n\t\t\t\t\tif ( elem.addEventListener ) {\n\t\t\t\t\t\telem.addEventListener( type, eventHandle );\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tif ( special.add ) {\n\t\t\t\tspecial.add.call( elem, handleObj );\n\n\t\t\t\tif ( !handleObj.handler.guid ) {\n\t\t\t\t\thandleObj.handler.guid = handler.guid;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// Add to the element's handler list, delegates in front\n\t\t\tif ( selector ) {\n\t\t\t\thandlers.splice( handlers.delegateCount++, 0, handleObj );\n\t\t\t} else {\n\t\t\t\thandlers.push( handleObj );\n\t\t\t}\n\n\t\t\t// Keep track of which events have ever been used, for event optimization\n\t\t\tjQuery.event.global[ type ] = true;\n\t\t}\n\n\t},\n\n\t// Detach an event or set of events from an element\n\tremove: function( elem, types, handler, selector, mappedTypes ) {\n\n\t\tvar j, origCount, tmp,\n\t\t\tevents, t, handleObj,\n\t\t\tspecial, handlers, type, namespaces, origType,\n\t\t\telemData = dataPriv.hasData( elem ) && dataPriv.get( elem );\n\n\t\tif ( !elemData || !( events = elemData.events ) ) {\n\t\t\treturn;\n\t\t}\n\n\t\t// Once for each type.namespace in types; type may be omitted\n\t\ttypes = ( types || \"\" ).match( rnothtmlwhite ) || [ \"\" ];\n\t\tt = types.length;\n\t\twhile ( t-- ) {\n\t\t\ttmp = rtypenamespace.exec( types[ t ] ) || [];\n\t\t\ttype = origType = tmp[ 1 ];\n\t\t\tnamespaces = ( tmp[ 2 ] || \"\" ).split( \".\" ).sort();\n\n\t\t\t// Unbind all events (on this namespace, if provided) for the element\n\t\t\tif ( !type ) {\n\t\t\t\tfor ( type in events ) {\n\t\t\t\t\tjQuery.event.remove( elem, type + types[ t ], handler, selector, true );\n\t\t\t\t}\n\t\t\t\tcontinue;\n\t\t\t}\n\n\t\t\tspecial = jQuery.event.special[ type ] || {};\n\t\t\ttype = ( selector ? special.delegateType : special.bindType ) || type;\n\t\t\thandlers = events[ type ] || [];\n\t\t\ttmp = tmp[ 2 ] &&\n\t\t\t\tnew RegExp( \"(^|\\\\.)\" + namespaces.join( \"\\\\.(?:.*\\\\.|)\" ) + \"(\\\\.|$)\" );\n\n\t\t\t// Remove matching events\n\t\t\torigCount = j = handlers.length;\n\t\t\twhile ( j-- ) {\n\t\t\t\thandleObj = handlers[ j ];\n\n\t\t\t\tif ( ( mappedTypes || origType === handleObj.origType ) &&\n\t\t\t\t\t( !handler || handler.guid === handleObj.guid ) &&\n\t\t\t\t\t( !tmp || tmp.test( handleObj.namespace ) ) &&\n\t\t\t\t\t( !selector || selector === handleObj.selector ||\n\t\t\t\t\t\tselector === \"**\" && handleObj.selector ) ) {\n\t\t\t\t\thandlers.splice( j, 1 );\n\n\t\t\t\t\tif ( handleObj.selector ) {\n\t\t\t\t\t\thandlers.delegateCount--;\n\t\t\t\t\t}\n\t\t\t\t\tif ( special.remove ) {\n\t\t\t\t\t\tspecial.remove.call( elem, handleObj );\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// Remove generic event handler if we removed something and no more handlers exist\n\t\t\t// (avoids potential for endless recursion during removal of special event handlers)\n\t\t\tif ( origCount && !handlers.length ) {\n\t\t\t\tif ( !special.teardown ||\n\t\t\t\t\tspecial.teardown.call( elem, namespaces, elemData.handle ) === false ) {\n\n\t\t\t\t\tjQuery.removeEvent( elem, type, elemData.handle );\n\t\t\t\t}\n\n\t\t\t\tdelete events[ type ];\n\t\t\t}\n\t\t}\n\n\t\t// Remove data and the expando if it's no longer used\n\t\tif ( jQuery.isEmptyObject( events ) ) {\n\t\t\tdataPriv.remove( elem, \"handle events\" );\n\t\t}\n\t},\n\n\tdispatch: function( nativeEvent ) {\n\n\t\t// Make a writable jQuery.Event from the native event object\n\t\tvar event = jQuery.event.fix( nativeEvent );\n\n\t\tvar i, j, ret, matched, handleObj, handlerQueue,\n\t\t\targs = new Array( arguments.length ),\n\t\t\thandlers = ( dataPriv.get( this, \"events\" ) || {} )[ event.type ] || [],\n\t\t\tspecial = jQuery.event.special[ event.type ] || {};\n\n\t\t// Use the fix-ed jQuery.Event rather than the (read-only) native event\n\t\targs[ 0 ] = event;\n\n\t\tfor ( i = 1; i < arguments.length; i++ ) {\n\t\t\targs[ i ] = arguments[ i ];\n\t\t}\n\n\t\tevent.delegateTarget = this;\n\n\t\t// Call the preDispatch hook for the mapped type, and let it bail if desired\n\t\tif ( special.preDispatch && special.preDispatch.call( this, event ) === false ) {\n\t\t\treturn;\n\t\t}\n\n\t\t// Determine handlers\n\t\thandlerQueue = jQuery.event.handlers.call( this, event, handlers );\n\n\t\t// Run delegates first; they may want to stop propagation beneath us\n\t\ti = 0;\n\t\twhile ( ( matched = handlerQueue[ i++ ] ) && !event.isPropagationStopped() ) {\n\t\t\tevent.currentTarget = matched.elem;\n\n\t\t\tj = 0;\n\t\t\twhile ( ( handleObj = matched.handlers[ j++ ] ) &&\n\t\t\t\t!event.isImmediatePropagationStopped() ) {\n\n\t\t\t\t// Triggered event must either 1) have no namespace, or 2) have namespace(s)\n\t\t\t\t// a subset or equal to those in the bound event (both can have no namespace).\n\t\t\t\tif ( !event.rnamespace || event.rnamespace.test( handleObj.namespace ) ) {\n\n\t\t\t\t\tevent.handleObj = handleObj;\n\t\t\t\t\tevent.data = handleObj.data;\n\n\t\t\t\t\tret = ( ( jQuery.event.special[ handleObj.origType ] || {} ).handle ||\n\t\t\t\t\t\thandleObj.handler ).apply( matched.elem, args );\n\n\t\t\t\t\tif ( ret !== undefined ) {\n\t\t\t\t\t\tif ( ( event.result = ret ) === false ) {\n\t\t\t\t\t\t\tevent.preventDefault();\n\t\t\t\t\t\t\tevent.stopPropagation();\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\t// Call the postDispatch hook for the mapped type\n\t\tif ( special.postDispatch ) {\n\t\t\tspecial.postDispatch.call( this, event );\n\t\t}\n\n\t\treturn event.result;\n\t},\n\n\thandlers: function( event, handlers ) {\n\t\tvar i, handleObj, sel, matchedHandlers, matchedSelectors,\n\t\t\thandlerQueue = [],\n\t\t\tdelegateCount = handlers.delegateCount,\n\t\t\tcur = event.target;\n\n\t\t// Find delegate handlers\n\t\tif ( delegateCount &&\n\n\t\t\t// Support: IE <=9\n\t\t\t// Black-hole SVG <use> instance trees (trac-13180)\n\t\t\tcur.nodeType &&\n\n\t\t\t// Support: Firefox <=42\n\t\t\t// Suppress spec-violating clicks indicating a non-primary pointer button (trac-3861)\n\t\t\t// https://www.w3.org/TR/DOM-Level-3-Events/#event-type-click\n\t\t\t// Support: IE 11 only\n\t\t\t// ...but not arrow key \"clicks\" of radio inputs, which can have `button` -1 (gh-2343)\n\t\t\t!( event.type === \"click\" && event.button >= 1 ) ) {\n\n\t\t\tfor ( ; cur !== this; cur = cur.parentNode || this ) {\n\n\t\t\t\t// Don't check non-elements (#13208)\n\t\t\t\t// Don't process clicks on disabled elements (#6911, #8165, #11382, #11764)\n\t\t\t\tif ( cur.nodeType === 1 && !( event.type === \"click\" && cur.disabled === true ) ) {\n\t\t\t\t\tmatchedHandlers = [];\n\t\t\t\t\tmatchedSelectors = {};\n\t\t\t\t\tfor ( i = 0; i < delegateCount; i++ ) {\n\t\t\t\t\t\thandleObj = handlers[ i ];\n\n\t\t\t\t\t\t// Don't conflict with Object.prototype properties (#13203)\n\t\t\t\t\t\tsel = handleObj.selector + \" \";\n\n\t\t\t\t\t\tif ( matchedSelectors[ sel ] === undefined ) {\n\t\t\t\t\t\t\tmatchedSelectors[ sel ] = handleObj.needsContext ?\n\t\t\t\t\t\t\t\tjQuery( sel, this ).index( cur ) > -1 :\n\t\t\t\t\t\t\t\tjQuery.find( sel, this, null, [ cur ] ).length;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif ( matchedSelectors[ sel ] ) {\n\t\t\t\t\t\t\tmatchedHandlers.push( handleObj );\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tif ( matchedHandlers.length ) {\n\t\t\t\t\t\thandlerQueue.push( { elem: cur, handlers: matchedHandlers } );\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\t// Add the remaining (directly-bound) handlers\n\t\tcur = this;\n\t\tif ( delegateCount < handlers.length ) {\n\t\t\thandlerQueue.push( { elem: cur, handlers: handlers.slice( delegateCount ) } );\n\t\t}\n\n\t\treturn handlerQueue;\n\t},\n\n\taddProp: function( name, hook ) {\n\t\tObject.defineProperty( jQuery.Event.prototype, name, {\n\t\t\tenumerable: true,\n\t\t\tconfigurable: true,\n\n\t\t\tget: isFunction( hook ) ?\n\t\t\t\tfunction() {\n\t\t\t\t\tif ( this.originalEvent ) {\n\t\t\t\t\t\t\treturn hook( this.originalEvent );\n\t\t\t\t\t}\n\t\t\t\t} :\n\t\t\t\tfunction() {\n\t\t\t\t\tif ( this.originalEvent ) {\n\t\t\t\t\t\t\treturn this.originalEvent[ name ];\n\t\t\t\t\t}\n\t\t\t\t},\n\n\t\t\tset: function( value ) {\n\t\t\t\tObject.defineProperty( this, name, {\n\t\t\t\t\tenumerable: true,\n\t\t\t\t\tconfigurable: true,\n\t\t\t\t\twritable: true,\n\t\t\t\t\tvalue: value\n\t\t\t\t} );\n\t\t\t}\n\t\t} );\n\t},\n\n\tfix: function( originalEvent ) {\n\t\treturn originalEvent[ jQuery.expando ] ?\n\t\t\toriginalEvent :\n\t\t\tnew jQuery.Event( originalEvent );\n\t},\n\n\tspecial: {\n\t\tload: {\n\n\t\t\t// Prevent triggered image.load events from bubbling to window.load\n\t\t\tnoBubble: true\n\t\t},\n\t\tfocus: {\n\n\t\t\t// Fire native event if possible so blur/focus sequence is correct\n\t\t\ttrigger: function() {\n\t\t\t\tif ( this !== safeActiveElement() && this.focus ) {\n\t\t\t\t\tthis.focus();\n\t\t\t\t\treturn false;\n\t\t\t\t}\n\t\t\t},\n\t\t\tdelegateType: \"focusin\"\n\t\t},\n\t\tblur: {\n\t\t\ttrigger: function() {\n\t\t\t\tif ( this === safeActiveElement() && this.blur ) {\n\t\t\t\t\tthis.blur();\n\t\t\t\t\treturn false;\n\t\t\t\t}\n\t\t\t},\n\t\t\tdelegateType: \"focusout\"\n\t\t},\n\t\tclick: {\n\n\t\t\t// For checkbox, fire native event so checked state will be right\n\t\t\ttrigger: function() {\n\t\t\t\tif ( this.type === \"checkbox\" && this.click && nodeName( this, \"input\" ) ) {\n\t\t\t\t\tthis.click();\n\t\t\t\t\treturn false;\n\t\t\t\t}\n\t\t\t},\n\n\t\t\t// For cross-browser consistency, don't fire native .click() on links\n\t\t\t_default: function( event ) {\n\t\t\t\treturn nodeName( event.target, \"a\" );\n\t\t\t}\n\t\t},\n\n\t\tbeforeunload: {\n\t\t\tpostDispatch: function( event ) {\n\n\t\t\t\t// Support: Firefox 20+\n\t\t\t\t// Firefox doesn't alert if the returnValue field is not set.\n\t\t\t\tif ( event.result !== undefined && event.originalEvent ) {\n\t\t\t\t\tevent.originalEvent.returnValue = event.result;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n};\n\njQuery.removeEvent = function( elem, type, handle ) {\n\n\t// This \"if\" is needed for plain objects\n\tif ( elem.removeEventListener ) {\n\t\telem.removeEventListener( type, handle );\n\t}\n};\n\njQuery.Event = function( src, props ) {\n\n\t// Allow instantiation without the 'new' keyword\n\tif ( !( this instanceof jQuery.Event ) ) {\n\t\treturn new jQuery.Event( src, props );\n\t}\n\n\t// Event object\n\tif ( src && src.type ) {\n\t\tthis.originalEvent = src;\n\t\tthis.type = src.type;\n\n\t\t// Events bubbling up the document may have been marked as prevented\n\t\t// by a handler lower down the tree; reflect the correct value.\n\t\tthis.isDefaultPrevented = src.defaultPrevented ||\n\t\t\t\tsrc.defaultPrevented === undefined &&\n\n\t\t\t\t// Support: Android <=2.3 only\n\t\t\t\tsrc.returnValue === false ?\n\t\t\treturnTrue :\n\t\t\treturnFalse;\n\n\t\t// Create target properties\n\t\t// Support: Safari <=6 - 7 only\n\t\t// Target should not be a text node (#504, #13143)\n\t\tthis.target = ( src.target && src.target.nodeType === 3 ) ?\n\t\t\tsrc.target.parentNode :\n\t\t\tsrc.target;\n\n\t\tthis.currentTarget = src.currentTarget;\n\t\tthis.relatedTarget = src.relatedTarget;\n\n\t// Event type\n\t} else {\n\t\tthis.type = src;\n\t}\n\n\t// Put explicitly provided properties onto the event object\n\tif ( props ) {\n\t\tjQuery.extend( this, props );\n\t}\n\n\t// Create a timestamp if incoming event doesn't have one\n\tthis.timeStamp = src && src.timeStamp || Date.now();\n\n\t// Mark it as fixed\n\tthis[ jQuery.expando ] = true;\n};\n\n// jQuery.Event is based on DOM3 Events as specified by the ECMAScript Language Binding\n// https://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030331/ecma-script-binding.html\njQuery.Event.prototype = {\n\tconstructor: jQuery.Event,\n\tisDefaultPrevented: returnFalse,\n\tisPropagationStopped: returnFalse,\n\tisImmediatePropagationStopped: returnFalse,\n\tisSimulated: false,\n\n\tpreventDefault: function() {\n\t\tvar e = this.originalEvent;\n\n\t\tthis.isDefaultPrevented = returnTrue;\n\n\t\tif ( e && !this.isSimulated ) {\n\t\t\te.preventDefault();\n\t\t}\n\t},\n\tstopPropagation: function() {\n\t\tvar e = this.originalEvent;\n\n\t\tthis.isPropagationStopped = returnTrue;\n\n\t\tif ( e && !this.isSimulated ) {\n\t\t\te.stopPropagation();\n\t\t}\n\t},\n\tstopImmediatePropagation: function() {\n\t\tvar e = this.originalEvent;\n\n\t\tthis.isImmediatePropagationStopped = returnTrue;\n\n\t\tif ( e && !this.isSimulated ) {\n\t\t\te.stopImmediatePropagation();\n\t\t}\n\n\t\tthis.stopPropagation();\n\t}\n};\n\n// Includes all common event props including KeyEvent and MouseEvent specific props\njQuery.each( {\n\taltKey: true,\n\tbubbles: true,\n\tcancelable: true,\n\tchangedTouches: true,\n\tctrlKey: true,\n\tdetail: true,\n\teventPhase: true,\n\tmetaKey: true,\n\tpageX: true,\n\tpageY: true,\n\tshiftKey: true,\n\tview: true,\n\t\"char\": true,\n\tcharCode: true,\n\tkey: true,\n\tkeyCode: true,\n\tbutton: true,\n\tbuttons: true,\n\tclientX: true,\n\tclientY: true,\n\toffsetX: true,\n\toffsetY: true,\n\tpointerId: true,\n\tpointerType: true,\n\tscreenX: true,\n\tscreenY: true,\n\ttargetTouches: true,\n\ttoElement: true,\n\ttouches: true,\n\n\twhich: function( event ) {\n\t\tvar button = event.button;\n\n\t\t// Add which for key events\n\t\tif ( event.which == null && rkeyEvent.test( event.type ) ) {\n\t\t\treturn event.charCode != null ? event.charCode : event.keyCode;\n\t\t}\n\n\t\t// Add which for click: 1 === left; 2 === middle; 3 === right\n\t\tif ( !event.which && button !== undefined && rmouseEvent.test( event.type ) ) {\n\t\t\tif ( button & 1 ) {\n\t\t\t\treturn 1;\n\t\t\t}\n\n\t\t\tif ( button & 2 ) {\n\t\t\t\treturn 3;\n\t\t\t}\n\n\t\t\tif ( button & 4 ) {\n\t\t\t\treturn 2;\n\t\t\t}\n\n\t\t\treturn 0;\n\t\t}\n\n\t\treturn event.which;\n\t}\n}, jQuery.event.addProp );\n\n// Create mouseenter/leave events using mouseover/out and event-time checks\n// so that event delegation works in jQuery.\n// Do the same for pointerenter/pointerleave and pointerover/pointerout\n//\n// Support: Safari 7 only\n// Safari sends mouseenter too often; see:\n// https://bugs.chromium.org/p/chromium/issues/detail?id=470258\n// for the description of the bug (it existed in older Chrome versions as well).\njQuery.each( {\n\tmouseenter: \"mouseover\",\n\tmouseleave: \"mouseout\",\n\tpointerenter: \"pointerover\",\n\tpointerleave: \"pointerout\"\n}, function( orig, fix ) {\n\tjQuery.event.special[ orig ] = {\n\t\tdelegateType: fix,\n\t\tbindType: fix,\n\n\t\thandle: function( event ) {\n\t\t\tvar ret,\n\t\t\t\ttarget = this,\n\t\t\t\trelated = event.relatedTarget,\n\t\t\t\thandleObj = event.handleObj;\n\n\t\t\t// For mouseenter/leave call the handler if related is outside the target.\n\t\t\t// NB: No relatedTarget if the mouse left/entered the browser window\n\t\t\tif ( !related || ( related !== target && !jQuery.contains( target, related ) ) ) {\n\t\t\t\tevent.type = handleObj.origType;\n\t\t\t\tret = handleObj.handler.apply( this, arguments );\n\t\t\t\tevent.type = fix;\n\t\t\t}\n\t\t\treturn ret;\n\t\t}\n\t};\n} );\n\njQuery.fn.extend( {\n\n\ton: function( types, selector, data, fn ) {\n\t\treturn on( this, types, selector, data, fn );\n\t},\n\tone: function( types, selector, data, fn ) {\n\t\treturn on( this, types, selector, data, fn, 1 );\n\t},\n\toff: function( types, selector, fn ) {\n\t\tvar handleObj, type;\n\t\tif ( types && types.preventDefault && types.handleObj ) {\n\n\t\t\t// ( event )  dispatched jQuery.Event\n\t\t\thandleObj = types.handleObj;\n\t\t\tjQuery( types.delegateTarget ).off(\n\t\t\t\thandleObj.namespace ?\n\t\t\t\t\thandleObj.origType + \".\" + handleObj.namespace :\n\t\t\t\t\thandleObj.origType,\n\t\t\t\thandleObj.selector,\n\t\t\t\thandleObj.handler\n\t\t\t);\n\t\t\treturn this;\n\t\t}\n\t\tif ( typeof types === \"object\" ) {\n\n\t\t\t// ( types-object [, selector] )\n\t\t\tfor ( type in types ) {\n\t\t\t\tthis.off( type, selector, types[ type ] );\n\t\t\t}\n\t\t\treturn this;\n\t\t}\n\t\tif ( selector === false || typeof selector === \"function\" ) {\n\n\t\t\t// ( types [, fn] )\n\t\t\tfn = selector;\n\t\t\tselector = undefined;\n\t\t}\n\t\tif ( fn === false ) {\n\t\t\tfn = returnFalse;\n\t\t}\n\t\treturn this.each( function() {\n\t\t\tjQuery.event.remove( this, types, fn, selector );\n\t\t} );\n\t}\n} );\n\n\nvar\n\n\t/* eslint-disable max-len */\n\n\t// See https://github.com/eslint/eslint/issues/3229\n\trxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([a-z][^\\/\\0>\\x20\\t\\r\\n\\f]*)[^>]*)\\/>/gi,\n\n\t/* eslint-enable */\n\n\t// Support: IE <=10 - 11, Edge 12 - 13 only\n\t// In IE/Edge using regex groups here causes severe slowdowns.\n\t// See https://connect.microsoft.com/IE/feedback/details/1736512/\n\trnoInnerhtml = /<script|<style|<link/i,\n\n\t// checked=\"checked\" or checked\n\trchecked = /checked\\s*(?:[^=]|=\\s*.checked.)/i,\n\trcleanScript = /^\\s*<!(?:\\[CDATA\\[|--)|(?:\\]\\]|--)>\\s*$/g;\n\n// Prefer a tbody over its parent table for containing new rows\nfunction manipulationTarget( elem, content ) {\n\tif ( nodeName( elem, \"table\" ) &&\n\t\tnodeName( content.nodeType !== 11 ? content : content.firstChild, \"tr\" ) ) {\n\n\t\treturn jQuery( elem ).children( \"tbody\" )[ 0 ] || elem;\n\t}\n\n\treturn elem;\n}\n\n// Replace/restore the type attribute of script elements for safe DOM manipulation\nfunction disableScript( elem ) {\n\telem.type = ( elem.getAttribute( \"type\" ) !== null ) + \"/\" + elem.type;\n\treturn elem;\n}\nfunction restoreScript( elem ) {\n\tif ( ( elem.type || \"\" ).slice( 0, 5 ) === \"true/\" ) {\n\t\telem.type = elem.type.slice( 5 );\n\t} else {\n\t\telem.removeAttribute( \"type\" );\n\t}\n\n\treturn elem;\n}\n\nfunction cloneCopyEvent( src, dest ) {\n\tvar i, l, type, pdataOld, pdataCur, udataOld, udataCur, events;\n\n\tif ( dest.nodeType !== 1 ) {\n\t\treturn;\n\t}\n\n\t// 1. Copy private data: events, handlers, etc.\n\tif ( dataPriv.hasData( src ) ) {\n\t\tpdataOld = dataPriv.access( src );\n\t\tpdataCur = dataPriv.set( dest, pdataOld );\n\t\tevents = pdataOld.events;\n\n\t\tif ( events ) {\n\t\t\tdelete pdataCur.handle;\n\t\t\tpdataCur.events = {};\n\n\t\t\tfor ( type in events ) {\n\t\t\t\tfor ( i = 0, l = events[ type ].length; i < l; i++ ) {\n\t\t\t\t\tjQuery.event.add( dest, type, events[ type ][ i ] );\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\t// 2. Copy user data\n\tif ( dataUser.hasData( src ) ) {\n\t\tudataOld = dataUser.access( src );\n\t\tudataCur = jQuery.extend( {}, udataOld );\n\n\t\tdataUser.set( dest, udataCur );\n\t}\n}\n\n// Fix IE bugs, see support tests\nfunction fixInput( src, dest ) {\n\tvar nodeName = dest.nodeName.toLowerCase();\n\n\t// Fails to persist the checked state of a cloned checkbox or radio button.\n\tif ( nodeName === \"input\" && rcheckableType.test( src.type ) ) {\n\t\tdest.checked = src.checked;\n\n\t// Fails to return the selected option to the default selected state when cloning options\n\t} else if ( nodeName === \"input\" || nodeName === \"textarea\" ) {\n\t\tdest.defaultValue = src.defaultValue;\n\t}\n}\n\nfunction domManip( collection, args, callback, ignored ) {\n\n\t// Flatten any nested arrays\n\targs = concat.apply( [], args );\n\n\tvar fragment, first, scripts, hasScripts, node, doc,\n\t\ti = 0,\n\t\tl = collection.length,\n\t\tiNoClone = l - 1,\n\t\tvalue = args[ 0 ],\n\t\tvalueIsFunction = isFunction( value );\n\n\t// We can't cloneNode fragments that contain checked, in WebKit\n\tif ( valueIsFunction ||\n\t\t\t( l > 1 && typeof value === \"string\" &&\n\t\t\t\t!support.checkClone && rchecked.test( value ) ) ) {\n\t\treturn collection.each( function( index ) {\n\t\t\tvar self = collection.eq( index );\n\t\t\tif ( valueIsFunction ) {\n\t\t\t\targs[ 0 ] = value.call( this, index, self.html() );\n\t\t\t}\n\t\t\tdomManip( self, args, callback, ignored );\n\t\t} );\n\t}\n\n\tif ( l ) {\n\t\tfragment = buildFragment( args, collection[ 0 ].ownerDocument, false, collection, ignored );\n\t\tfirst = fragment.firstChild;\n\n\t\tif ( fragment.childNodes.length === 1 ) {\n\t\t\tfragment = first;\n\t\t}\n\n\t\t// Require either new content or an interest in ignored elements to invoke the callback\n\t\tif ( first || ignored ) {\n\t\t\tscripts = jQuery.map( getAll( fragment, \"script\" ), disableScript );\n\t\t\thasScripts = scripts.length;\n\n\t\t\t// Use the original fragment for the last item\n\t\t\t// instead of the first because it can end up\n\t\t\t// being emptied incorrectly in certain situations (#8070).\n\t\t\tfor ( ; i < l; i++ ) {\n\t\t\t\tnode = fragment;\n\n\t\t\t\tif ( i !== iNoClone ) {\n\t\t\t\t\tnode = jQuery.clone( node, true, true );\n\n\t\t\t\t\t// Keep references to cloned scripts for later restoration\n\t\t\t\t\tif ( hasScripts ) {\n\n\t\t\t\t\t\t// Support: Android <=4.0 only, PhantomJS 1 only\n\t\t\t\t\t\t// push.apply(_, arraylike) throws on ancient WebKit\n\t\t\t\t\t\tjQuery.merge( scripts, getAll( node, \"script\" ) );\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\tcallback.call( collection[ i ], node, i );\n\t\t\t}\n\n\t\t\tif ( hasScripts ) {\n\t\t\t\tdoc = scripts[ scripts.length - 1 ].ownerDocument;\n\n\t\t\t\t// Reenable scripts\n\t\t\t\tjQuery.map( scripts, restoreScript );\n\n\t\t\t\t// Evaluate executable scripts on first document insertion\n\t\t\t\tfor ( i = 0; i < hasScripts; i++ ) {\n\t\t\t\t\tnode = scripts[ i ];\n\t\t\t\t\tif ( rscriptType.test( node.type || \"\" ) &&\n\t\t\t\t\t\t!dataPriv.access( node, \"globalEval\" ) &&\n\t\t\t\t\t\tjQuery.contains( doc, node ) ) {\n\n\t\t\t\t\t\tif ( node.src && ( node.type || \"\" ).toLowerCase()  !== \"module\" ) {\n\n\t\t\t\t\t\t\t// Optional AJAX dependency, but won't run scripts if not present\n\t\t\t\t\t\t\tif ( jQuery._evalUrl ) {\n\t\t\t\t\t\t\t\tjQuery._evalUrl( node.src );\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\tDOMEval( node.textContent.replace( rcleanScript, \"\" ), doc, node );\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\treturn collection;\n}\n\nfunction remove( elem, selector, keepData ) {\n\tvar node,\n\t\tnodes = selector ? jQuery.filter( selector, elem ) : elem,\n\t\ti = 0;\n\n\tfor ( ; ( node = nodes[ i ] ) != null; i++ ) {\n\t\tif ( !keepData && node.nodeType === 1 ) {\n\t\t\tjQuery.cleanData( getAll( node ) );\n\t\t}\n\n\t\tif ( node.parentNode ) {\n\t\t\tif ( keepData && jQuery.contains( node.ownerDocument, node ) ) {\n\t\t\t\tsetGlobalEval( getAll( node, \"script\" ) );\n\t\t\t}\n\t\t\tnode.parentNode.removeChild( node );\n\t\t}\n\t}\n\n\treturn elem;\n}\n\njQuery.extend( {\n\thtmlPrefilter: function( html ) {\n\t\treturn html.replace( rxhtmlTag, \"<$1></$2>\" );\n\t},\n\n\tclone: function( elem, dataAndEvents, deepDataAndEvents ) {\n\t\tvar i, l, srcElements, destElements,\n\t\t\tclone = elem.cloneNode( true ),\n\t\t\tinPage = jQuery.contains( elem.ownerDocument, elem );\n\n\t\t// Fix IE cloning issues\n\t\tif ( !support.noCloneChecked && ( elem.nodeType === 1 || elem.nodeType === 11 ) &&\n\t\t\t\t!jQuery.isXMLDoc( elem ) ) {\n\n\t\t\t// We eschew Sizzle here for performance reasons: https://jsperf.com/getall-vs-sizzle/2\n\t\t\tdestElements = getAll( clone );\n\t\t\tsrcElements = getAll( elem );\n\n\t\t\tfor ( i = 0, l = srcElements.length; i < l; i++ ) {\n\t\t\t\tfixInput( srcElements[ i ], destElements[ i ] );\n\t\t\t}\n\t\t}\n\n\t\t// Copy the events from the original to the clone\n\t\tif ( dataAndEvents ) {\n\t\t\tif ( deepDataAndEvents ) {\n\t\t\t\tsrcElements = srcElements || getAll( elem );\n\t\t\t\tdestElements = destElements || getAll( clone );\n\n\t\t\t\tfor ( i = 0, l = srcElements.length; i < l; i++ ) {\n\t\t\t\t\tcloneCopyEvent( srcElements[ i ], destElements[ i ] );\n\t\t\t\t}\n\t\t\t} else {\n\t\t\t\tcloneCopyEvent( elem, clone );\n\t\t\t}\n\t\t}\n\n\t\t// Preserve script evaluation history\n\t\tdestElements = getAll( clone, \"script\" );\n\t\tif ( destElements.length > 0 ) {\n\t\t\tsetGlobalEval( destElements, !inPage && getAll( elem, \"script\" ) );\n\t\t}\n\n\t\t// Return the cloned set\n\t\treturn clone;\n\t},\n\n\tcleanData: function( elems ) {\n\t\tvar data, elem, type,\n\t\t\tspecial = jQuery.event.special,\n\t\t\ti = 0;\n\n\t\tfor ( ; ( elem = elems[ i ] ) !== undefined; i++ ) {\n\t\t\tif ( acceptData( elem ) ) {\n\t\t\t\tif ( ( data = elem[ dataPriv.expando ] ) ) {\n\t\t\t\t\tif ( data.events ) {\n\t\t\t\t\t\tfor ( type in data.events ) {\n\t\t\t\t\t\t\tif ( special[ type ] ) {\n\t\t\t\t\t\t\t\tjQuery.event.remove( elem, type );\n\n\t\t\t\t\t\t\t// This is a shortcut to avoid jQuery.event.remove's overhead\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\tjQuery.removeEvent( elem, type, data.handle );\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t\t// Support: Chrome <=35 - 45+\n\t\t\t\t\t// Assign undefined instead of using delete, see Data#remove\n\t\t\t\t\telem[ dataPriv.expando ] = undefined;\n\t\t\t\t}\n\t\t\t\tif ( elem[ dataUser.expando ] ) {\n\n\t\t\t\t\t// Support: Chrome <=35 - 45+\n\t\t\t\t\t// Assign undefined instead of using delete, see Data#remove\n\t\t\t\t\telem[ dataUser.expando ] = undefined;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n} );\n\njQuery.fn.extend( {\n\tdetach: function( selector ) {\n\t\treturn remove( this, selector, true );\n\t},\n\n\tremove: function( selector ) {\n\t\treturn remove( this, selector );\n\t},\n\n\ttext: function( value ) {\n\t\treturn access( this, function( value ) {\n\t\t\treturn value === undefined ?\n\t\t\t\tjQuery.text( this ) :\n\t\t\t\tthis.empty().each( function() {\n\t\t\t\t\tif ( this.nodeType === 1 || this.nodeType === 11 || this.nodeType === 9 ) {\n\t\t\t\t\t\tthis.textContent = value;\n\t\t\t\t\t}\n\t\t\t\t} );\n\t\t}, null, value, arguments.length );\n\t},\n\n\tappend: function() {\n\t\treturn domManip( this, arguments, function( elem ) {\n\t\t\tif ( this.nodeType === 1 || this.nodeType === 11 || this.nodeType === 9 ) {\n\t\t\t\tvar target = manipulationTarget( this, elem );\n\t\t\t\ttarget.appendChild( elem );\n\t\t\t}\n\t\t} );\n\t},\n\n\tprepend: function() {\n\t\treturn domManip( this, arguments, function( elem ) {\n\t\t\tif ( this.nodeType === 1 || this.nodeType === 11 || this.nodeType === 9 ) {\n\t\t\t\tvar target = manipulationTarget( this, elem );\n\t\t\t\ttarget.insertBefore( elem, target.firstChild );\n\t\t\t}\n\t\t} );\n\t},\n\n\tbefore: function() {\n\t\treturn domManip( this, arguments, function( elem ) {\n\t\t\tif ( this.parentNode ) {\n\t\t\t\tthis.parentNode.insertBefore( elem, this );\n\t\t\t}\n\t\t} );\n\t},\n\n\tafter: function() {\n\t\treturn domManip( this, arguments, function( elem ) {\n\t\t\tif ( this.parentNode ) {\n\t\t\t\tthis.parentNode.insertBefore( elem, this.nextSibling );\n\t\t\t}\n\t\t} );\n\t},\n\n\tempty: function() {\n\t\tvar elem,\n\t\t\ti = 0;\n\n\t\tfor ( ; ( elem = this[ i ] ) != null; i++ ) {\n\t\t\tif ( elem.nodeType === 1 ) {\n\n\t\t\t\t// Prevent memory leaks\n\t\t\t\tjQuery.cleanData( getAll( elem, false ) );\n\n\t\t\t\t// Remove any remaining nodes\n\t\t\t\telem.textContent = \"\";\n\t\t\t}\n\t\t}\n\n\t\treturn this;\n\t},\n\n\tclone: function( dataAndEvents, deepDataAndEvents ) {\n\t\tdataAndEvents = dataAndEvents == null ? false : dataAndEvents;\n\t\tdeepDataAndEvents = deepDataAndEvents == null ? dataAndEvents : deepDataAndEvents;\n\n\t\treturn this.map( function() {\n\t\t\treturn jQuery.clone( this, dataAndEvents, deepDataAndEvents );\n\t\t} );\n\t},\n\n\thtml: function( value ) {\n\t\treturn access( this, function( value ) {\n\t\t\tvar elem = this[ 0 ] || {},\n\t\t\t\ti = 0,\n\t\t\t\tl = this.length;\n\n\t\t\tif ( value === undefined && elem.nodeType === 1 ) {\n\t\t\t\treturn elem.innerHTML;\n\t\t\t}\n\n\t\t\t// See if we can take a shortcut and just use innerHTML\n\t\t\tif ( typeof value === \"string\" && !rnoInnerhtml.test( value ) &&\n\t\t\t\t!wrapMap[ ( rtagName.exec( value ) || [ \"\", \"\" ] )[ 1 ].toLowerCase() ] ) {\n\n\t\t\t\tvalue = jQuery.htmlPrefilter( value );\n\n\t\t\t\ttry {\n\t\t\t\t\tfor ( ; i < l; i++ ) {\n\t\t\t\t\t\telem = this[ i ] || {};\n\n\t\t\t\t\t\t// Remove element nodes and prevent memory leaks\n\t\t\t\t\t\tif ( elem.nodeType === 1 ) {\n\t\t\t\t\t\t\tjQuery.cleanData( getAll( elem, false ) );\n\t\t\t\t\t\t\telem.innerHTML = value;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t\telem = 0;\n\n\t\t\t\t// If using innerHTML throws an exception, use the fallback method\n\t\t\t\t} catch ( e ) {}\n\t\t\t}\n\n\t\t\tif ( elem ) {\n\t\t\t\tthis.empty().append( value );\n\t\t\t}\n\t\t}, null, value, arguments.length );\n\t},\n\n\treplaceWith: function() {\n\t\tvar ignored = [];\n\n\t\t// Make the changes, replacing each non-ignored context element with the new content\n\t\treturn domManip( this, arguments, function( elem ) {\n\t\t\tvar parent = this.parentNode;\n\n\t\t\tif ( jQuery.inArray( this, ignored ) < 0 ) {\n\t\t\t\tjQuery.cleanData( getAll( this ) );\n\t\t\t\tif ( parent ) {\n\t\t\t\t\tparent.replaceChild( elem, this );\n\t\t\t\t}\n\t\t\t}\n\n\t\t// Force callback invocation\n\t\t}, ignored );\n\t}\n} );\n\njQuery.each( {\n\tappendTo: \"append\",\n\tprependTo: \"prepend\",\n\tinsertBefore: \"before\",\n\tinsertAfter: \"after\",\n\treplaceAll: \"replaceWith\"\n}, function( name, original ) {\n\tjQuery.fn[ name ] = function( selector ) {\n\t\tvar elems,\n\t\t\tret = [],\n\t\t\tinsert = jQuery( selector ),\n\t\t\tlast = insert.length - 1,\n\t\t\ti = 0;\n\n\t\tfor ( ; i <= last; i++ ) {\n\t\t\telems = i === last ? this : this.clone( true );\n\t\t\tjQuery( insert[ i ] )[ original ]( elems );\n\n\t\t\t// Support: Android <=4.0 only, PhantomJS 1 only\n\t\t\t// .get() because push.apply(_, arraylike) throws on ancient WebKit\n\t\t\tpush.apply( ret, elems.get() );\n\t\t}\n\n\t\treturn this.pushStack( ret );\n\t};\n} );\nvar rnumnonpx = new RegExp( \"^(\" + pnum + \")(?!px)[a-z%]+$\", \"i\" );\n\nvar getStyles = function( elem ) {\n\n\t\t// Support: IE <=11 only, Firefox <=30 (#15098, #14150)\n\t\t// IE throws on elements created in popups\n\t\t// FF meanwhile throws on frame elements through \"defaultView.getComputedStyle\"\n\t\tvar view = elem.ownerDocument.defaultView;\n\n\t\tif ( !view || !view.opener ) {\n\t\t\tview = window;\n\t\t}\n\n\t\treturn view.getComputedStyle( elem );\n\t};\n\nvar rboxStyle = new RegExp( cssExpand.join( \"|\" ), \"i\" );\n\n\n\n( function() {\n\n\t// Executing both pixelPosition & boxSizingReliable tests require only one layout\n\t// so they're executed at the same time to save the second computation.\n\tfunction computeStyleTests() {\n\n\t\t// This is a singleton, we need to execute it only once\n\t\tif ( !div ) {\n\t\t\treturn;\n\t\t}\n\n\t\tcontainer.style.cssText = \"position:absolute;left:-11111px;width:60px;\" +\n\t\t\t\"margin-top:1px;padding:0;border:0\";\n\t\tdiv.style.cssText =\n\t\t\t\"position:relative;display:block;box-sizing:border-box;overflow:scroll;\" +\n\t\t\t\"margin:auto;border:1px;padding:1px;\" +\n\t\t\t\"width:60%;top:1%\";\n\t\tdocumentElement.appendChild( container ).appendChild( div );\n\n\t\tvar divStyle = window.getComputedStyle( div );\n\t\tpixelPositionVal = divStyle.top !== \"1%\";\n\n\t\t// Support: Android 4.0 - 4.3 only, Firefox <=3 - 44\n\t\treliableMarginLeftVal = roundPixelMeasures( divStyle.marginLeft ) === 12;\n\n\t\t// Support: Android 4.0 - 4.3 only, Safari <=9.1 - 10.1, iOS <=7.0 - 9.3\n\t\t// Some styles come back with percentage values, even though they shouldn't\n\t\tdiv.style.right = \"60%\";\n\t\tpixelBoxStylesVal = roundPixelMeasures( divStyle.right ) === 36;\n\n\t\t// Support: IE 9 - 11 only\n\t\t// Detect misreporting of content dimensions for box-sizing:border-box elements\n\t\tboxSizingReliableVal = roundPixelMeasures( divStyle.width ) === 36;\n\n\t\t// Support: IE 9 only\n\t\t// Detect overflow:scroll screwiness (gh-3699)\n\t\tdiv.style.position = \"absolute\";\n\t\tscrollboxSizeVal = div.offsetWidth === 36 || \"absolute\";\n\n\t\tdocumentElement.removeChild( container );\n\n\t\t// Nullify the div so it wouldn't be stored in the memory and\n\t\t// it will also be a sign that checks already performed\n\t\tdiv = null;\n\t}\n\n\tfunction roundPixelMeasures( measure ) {\n\t\treturn Math.round( parseFloat( measure ) );\n\t}\n\n\tvar pixelPositionVal, boxSizingReliableVal, scrollboxSizeVal, pixelBoxStylesVal,\n\t\treliableMarginLeftVal,\n\t\tcontainer = document.createElement( \"div\" ),\n\t\tdiv = document.createElement( \"div\" );\n\n\t// Finish early in limited (non-browser) environments\n\tif ( !div.style ) {\n\t\treturn;\n\t}\n\n\t// Support: IE <=9 - 11 only\n\t// Style of cloned element affects source element cloned (#8908)\n\tdiv.style.backgroundClip = \"content-box\";\n\tdiv.cloneNode( true ).style.backgroundClip = \"\";\n\tsupport.clearCloneStyle = div.style.backgroundClip === \"content-box\";\n\n\tjQuery.extend( support, {\n\t\tboxSizingReliable: function() {\n\t\t\tcomputeStyleTests();\n\t\t\treturn boxSizingReliableVal;\n\t\t},\n\t\tpixelBoxStyles: function() {\n\t\t\tcomputeStyleTests();\n\t\t\treturn pixelBoxStylesVal;\n\t\t},\n\t\tpixelPosition: function() {\n\t\t\tcomputeStyleTests();\n\t\t\treturn pixelPositionVal;\n\t\t},\n\t\treliableMarginLeft: function() {\n\t\t\tcomputeStyleTests();\n\t\t\treturn reliableMarginLeftVal;\n\t\t},\n\t\tscrollboxSize: function() {\n\t\t\tcomputeStyleTests();\n\t\t\treturn scrollboxSizeVal;\n\t\t}\n\t} );\n} )();\n\n\nfunction curCSS( elem, name, computed ) {\n\tvar width, minWidth, maxWidth, ret,\n\n\t\t// Support: Firefox 51+\n\t\t// Retrieving style before computed somehow\n\t\t// fixes an issue with getting wrong values\n\t\t// on detached elements\n\t\tstyle = elem.style;\n\n\tcomputed = computed || getStyles( elem );\n\n\t// getPropertyValue is needed for:\n\t//   .css('filter') (IE 9 only, #12537)\n\t//   .css('--customProperty) (#3144)\n\tif ( computed ) {\n\t\tret = computed.getPropertyValue( name ) || computed[ name ];\n\n\t\tif ( ret === \"\" && !jQuery.contains( elem.ownerDocument, elem ) ) {\n\t\t\tret = jQuery.style( elem, name );\n\t\t}\n\n\t\t// A tribute to the \"awesome hack by Dean Edwards\"\n\t\t// Android Browser returns percentage for some values,\n\t\t// but width seems to be reliably pixels.\n\t\t// This is against the CSSOM draft spec:\n\t\t// https://drafts.csswg.org/cssom/#resolved-values\n\t\tif ( !support.pixelBoxStyles() && rnumnonpx.test( ret ) && rboxStyle.test( name ) ) {\n\n\t\t\t// Remember the original values\n\t\t\twidth = style.width;\n\t\t\tminWidth = style.minWidth;\n\t\t\tmaxWidth = style.maxWidth;\n\n\t\t\t// Put in the new values to get a computed value out\n\t\t\tstyle.minWidth = style.maxWidth = style.width = ret;\n\t\t\tret = computed.width;\n\n\t\t\t// Revert the changed values\n\t\t\tstyle.width = width;\n\t\t\tstyle.minWidth = minWidth;\n\t\t\tstyle.maxWidth = maxWidth;\n\t\t}\n\t}\n\n\treturn ret !== undefined ?\n\n\t\t// Support: IE <=9 - 11 only\n\t\t// IE returns zIndex value as an integer.\n\t\tret + \"\" :\n\t\tret;\n}\n\n\nfunction addGetHookIf( conditionFn, hookFn ) {\n\n\t// Define the hook, we'll check on the first run if it's really needed.\n\treturn {\n\t\tget: function() {\n\t\t\tif ( conditionFn() ) {\n\n\t\t\t\t// Hook not needed (or it's not possible to use it due\n\t\t\t\t// to missing dependency), remove it.\n\t\t\t\tdelete this.get;\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\t// Hook needed; redefine it so that the support test is not executed again.\n\t\t\treturn ( this.get = hookFn ).apply( this, arguments );\n\t\t}\n\t};\n}\n\n\nvar\n\n\t// Swappable if display is none or starts with table\n\t// except \"table\", \"table-cell\", or \"table-caption\"\n\t// See here for display values: https://developer.mozilla.org/en-US/docs/CSS/display\n\trdisplayswap = /^(none|table(?!-c[ea]).+)/,\n\trcustomProp = /^--/,\n\tcssShow = { position: \"absolute\", visibility: \"hidden\", display: \"block\" },\n\tcssNormalTransform = {\n\t\tletterSpacing: \"0\",\n\t\tfontWeight: \"400\"\n\t},\n\n\tcssPrefixes = [ \"Webkit\", \"Moz\", \"ms\" ],\n\temptyStyle = document.createElement( \"div\" ).style;\n\n// Return a css property mapped to a potentially vendor prefixed property\nfunction vendorPropName( name ) {\n\n\t// Shortcut for names that are not vendor prefixed\n\tif ( name in emptyStyle ) {\n\t\treturn name;\n\t}\n\n\t// Check for vendor prefixed names\n\tvar capName = name[ 0 ].toUpperCase() + name.slice( 1 ),\n\t\ti = cssPrefixes.length;\n\n\twhile ( i-- ) {\n\t\tname = cssPrefixes[ i ] + capName;\n\t\tif ( name in emptyStyle ) {\n\t\t\treturn name;\n\t\t}\n\t}\n}\n\n// Return a property mapped along what jQuery.cssProps suggests or to\n// a vendor prefixed property.\nfunction finalPropName( name ) {\n\tvar ret = jQuery.cssProps[ name ];\n\tif ( !ret ) {\n\t\tret = jQuery.cssProps[ name ] = vendorPropName( name ) || name;\n\t}\n\treturn ret;\n}\n\nfunction setPositiveNumber( elem, value, subtract ) {\n\n\t// Any relative (+/-) values have already been\n\t// normalized at this point\n\tvar matches = rcssNum.exec( value );\n\treturn matches ?\n\n\t\t// Guard against undefined \"subtract\", e.g., when used as in cssHooks\n\t\tMath.max( 0, matches[ 2 ] - ( subtract || 0 ) ) + ( matches[ 3 ] || \"px\" ) :\n\t\tvalue;\n}\n\nfunction boxModelAdjustment( elem, dimension, box, isBorderBox, styles, computedVal ) {\n\tvar i = dimension === \"width\" ? 1 : 0,\n\t\textra = 0,\n\t\tdelta = 0;\n\n\t// Adjustment may not be necessary\n\tif ( box === ( isBorderBox ? \"border\" : \"content\" ) ) {\n\t\treturn 0;\n\t}\n\n\tfor ( ; i < 4; i += 2 ) {\n\n\t\t// Both box models exclude margin\n\t\tif ( box === \"margin\" ) {\n\t\t\tdelta += jQuery.css( elem, box + cssExpand[ i ], true, styles );\n\t\t}\n\n\t\t// If we get here with a content-box, we're seeking \"padding\" or \"border\" or \"margin\"\n\t\tif ( !isBorderBox ) {\n\n\t\t\t// Add padding\n\t\t\tdelta += jQuery.css( elem, \"padding\" + cssExpand[ i ], true, styles );\n\n\t\t\t// For \"border\" or \"margin\", add border\n\t\t\tif ( box !== \"padding\" ) {\n\t\t\t\tdelta += jQuery.css( elem, \"border\" + cssExpand[ i ] + \"Width\", true, styles );\n\n\t\t\t// But still keep track of it otherwise\n\t\t\t} else {\n\t\t\t\textra += jQuery.css( elem, \"border\" + cssExpand[ i ] + \"Width\", true, styles );\n\t\t\t}\n\n\t\t// If we get here with a border-box (content + padding + border), we're seeking \"content\" or\n\t\t// \"padding\" or \"margin\"\n\t\t} else {\n\n\t\t\t// For \"content\", subtract padding\n\t\t\tif ( box === \"content\" ) {\n\t\t\t\tdelta -= jQuery.css( elem, \"padding\" + cssExpand[ i ], true, styles );\n\t\t\t}\n\n\t\t\t// For \"content\" or \"padding\", subtract border\n\t\t\tif ( box !== \"margin\" ) {\n\t\t\t\tdelta -= jQuery.css( elem, \"border\" + cssExpand[ i ] + \"Width\", true, styles );\n\t\t\t}\n\t\t}\n\t}\n\n\t// Account for positive content-box scroll gutter when requested by providing computedVal\n\tif ( !isBorderBox && computedVal >= 0 ) {\n\n\t\t// offsetWidth/offsetHeight is a rounded sum of content, padding, scroll gutter, and border\n\t\t// Assuming integer scroll gutter, subtract the rest and round down\n\t\tdelta += Math.max( 0, Math.ceil(\n\t\t\telem[ \"offset\" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ] -\n\t\t\tcomputedVal -\n\t\t\tdelta -\n\t\t\textra -\n\t\t\t0.5\n\t\t) );\n\t}\n\n\treturn delta;\n}\n\nfunction getWidthOrHeight( elem, dimension, extra ) {\n\n\t// Start with computed style\n\tvar styles = getStyles( elem ),\n\t\tval = curCSS( elem, dimension, styles ),\n\t\tisBorderBox = jQuery.css( elem, \"boxSizing\", false, styles ) === \"border-box\",\n\t\tvalueIsBorderBox = isBorderBox;\n\n\t// Support: Firefox <=54\n\t// Return a confounding non-pixel value or feign ignorance, as appropriate.\n\tif ( rnumnonpx.test( val ) ) {\n\t\tif ( !extra ) {\n\t\t\treturn val;\n\t\t}\n\t\tval = \"auto\";\n\t}\n\n\t// Check for style in case a browser which returns unreliable values\n\t// for getComputedStyle silently falls back to the reliable elem.style\n\tvalueIsBorderBox = valueIsBorderBox &&\n\t\t( support.boxSizingReliable() || val === elem.style[ dimension ] );\n\n\t// Fall back to offsetWidth/offsetHeight when value is \"auto\"\n\t// This happens for inline elements with no explicit setting (gh-3571)\n\t// Support: Android <=4.1 - 4.3 only\n\t// Also use offsetWidth/offsetHeight for misreported inline dimensions (gh-3602)\n\tif ( val === \"auto\" ||\n\t\t!parseFloat( val ) && jQuery.css( elem, \"display\", false, styles ) === \"inline\" ) {\n\n\t\tval = elem[ \"offset\" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ];\n\n\t\t// offsetWidth/offsetHeight provide border-box values\n\t\tvalueIsBorderBox = true;\n\t}\n\n\t// Normalize \"\" and auto\n\tval = parseFloat( val ) || 0;\n\n\t// Adjust for the element's box model\n\treturn ( val +\n\t\tboxModelAdjustment(\n\t\t\telem,\n\t\t\tdimension,\n\t\t\textra || ( isBorderBox ? \"border\" : \"content\" ),\n\t\t\tvalueIsBorderBox,\n\t\t\tstyles,\n\n\t\t\t// Provide the current computed size to request scroll gutter calculation (gh-3589)\n\t\t\tval\n\t\t)\n\t) + \"px\";\n}\n\njQuery.extend( {\n\n\t// Add in style property hooks for overriding the default\n\t// behavior of getting and setting a style property\n\tcssHooks: {\n\t\topacity: {\n\t\t\tget: function( elem, computed ) {\n\t\t\t\tif ( computed ) {\n\n\t\t\t\t\t// We should always get a number back from opacity\n\t\t\t\t\tvar ret = curCSS( elem, \"opacity\" );\n\t\t\t\t\treturn ret === \"\" ? \"1\" : ret;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t},\n\n\t// Don't automatically add \"px\" to these possibly-unitless properties\n\tcssNumber: {\n\t\t\"animationIterationCount\": true,\n\t\t\"columnCount\": true,\n\t\t\"fillOpacity\": true,\n\t\t\"flexGrow\": true,\n\t\t\"flexShrink\": true,\n\t\t\"fontWeight\": true,\n\t\t\"lineHeight\": true,\n\t\t\"opacity\": true,\n\t\t\"order\": true,\n\t\t\"orphans\": true,\n\t\t\"widows\": true,\n\t\t\"zIndex\": true,\n\t\t\"zoom\": true\n\t},\n\n\t// Add in properties whose names you wish to fix before\n\t// setting or getting the value\n\tcssProps: {},\n\n\t// Get and set the style property on a DOM Node\n\tstyle: function( elem, name, value, extra ) {\n\n\t\t// Don't set styles on text and comment nodes\n\t\tif ( !elem || elem.nodeType === 3 || elem.nodeType === 8 || !elem.style ) {\n\t\t\treturn;\n\t\t}\n\n\t\t// Make sure that we're working with the right name\n\t\tvar ret, type, hooks,\n\t\t\torigName = camelCase( name ),\n\t\t\tisCustomProp = rcustomProp.test( name ),\n\t\t\tstyle = elem.style;\n\n\t\t// Make sure that we're working with the right name. We don't\n\t\t// want to query the value if it is a CSS custom property\n\t\t// since they are user-defined.\n\t\tif ( !isCustomProp ) {\n\t\t\tname = finalPropName( origName );\n\t\t}\n\n\t\t// Gets hook for the prefixed version, then unprefixed version\n\t\thooks = jQuery.cssHooks[ name ] || jQuery.cssHooks[ origName ];\n\n\t\t// Check if we're setting a value\n\t\tif ( value !== undefined ) {\n\t\t\ttype = typeof value;\n\n\t\t\t// Convert \"+=\" or \"-=\" to relative numbers (#7345)\n\t\t\tif ( type === \"string\" && ( ret = rcssNum.exec( value ) ) && ret[ 1 ] ) {\n\t\t\t\tvalue = adjustCSS( elem, name, ret );\n\n\t\t\t\t// Fixes bug #9237\n\t\t\t\ttype = \"number\";\n\t\t\t}\n\n\t\t\t// Make sure that null and NaN values aren't set (#7116)\n\t\t\tif ( value == null || value !== value ) {\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\t// If a number was passed in, add the unit (except for certain CSS properties)\n\t\t\tif ( type === \"number\" ) {\n\t\t\t\tvalue += ret && ret[ 3 ] || ( jQuery.cssNumber[ origName ] ? \"\" : \"px\" );\n\t\t\t}\n\n\t\t\t// background-* props affect original clone's values\n\t\t\tif ( !support.clearCloneStyle && value === \"\" && name.indexOf( \"background\" ) === 0 ) {\n\t\t\t\tstyle[ name ] = \"inherit\";\n\t\t\t}\n\n\t\t\t// If a hook was provided, use that value, otherwise just set the specified value\n\t\t\tif ( !hooks || !( \"set\" in hooks ) ||\n\t\t\t\t( value = hooks.set( elem, value, extra ) ) !== undefined ) {\n\n\t\t\t\tif ( isCustomProp ) {\n\t\t\t\t\tstyle.setProperty( name, value );\n\t\t\t\t} else {\n\t\t\t\t\tstyle[ name ] = value;\n\t\t\t\t}\n\t\t\t}\n\n\t\t} else {\n\n\t\t\t// If a hook was provided get the non-computed value from there\n\t\t\tif ( hooks && \"get\" in hooks &&\n\t\t\t\t( ret = hooks.get( elem, false, extra ) ) !== undefined ) {\n\n\t\t\t\treturn ret;\n\t\t\t}\n\n\t\t\t// Otherwise just get the value from the style object\n\t\t\treturn style[ name ];\n\t\t}\n\t},\n\n\tcss: function( elem, name, extra, styles ) {\n\t\tvar val, num, hooks,\n\t\t\torigName = camelCase( name ),\n\t\t\tisCustomProp = rcustomProp.test( name );\n\n\t\t// Make sure that we're working with the right name. We don't\n\t\t// want to modify the value if it is a CSS custom property\n\t\t// since they are user-defined.\n\t\tif ( !isCustomProp ) {\n\t\t\tname = finalPropName( origName );\n\t\t}\n\n\t\t// Try prefixed name followed by the unprefixed name\n\t\thooks = jQuery.cssHooks[ name ] || jQuery.cssHooks[ origName ];\n\n\t\t// If a hook was provided get the computed value from there\n\t\tif ( hooks && \"get\" in hooks ) {\n\t\t\tval = hooks.get( elem, true, extra );\n\t\t}\n\n\t\t// Otherwise, if a way to get the computed value exists, use that\n\t\tif ( val === undefined ) {\n\t\t\tval = curCSS( elem, name, styles );\n\t\t}\n\n\t\t// Convert \"normal\" to computed value\n\t\tif ( val === \"normal\" && name in cssNormalTransform ) {\n\t\t\tval = cssNormalTransform[ name ];\n\t\t}\n\n\t\t// Make numeric if forced or a qualifier was provided and val looks numeric\n\t\tif ( extra === \"\" || extra ) {\n\t\t\tnum = parseFloat( val );\n\t\t\treturn extra === true || isFinite( num ) ? num || 0 : val;\n\t\t}\n\n\t\treturn val;\n\t}\n} );\n\njQuery.each( [ \"height\", \"width\" ], function( i, dimension ) {\n\tjQuery.cssHooks[ dimension ] = {\n\t\tget: function( elem, computed, extra ) {\n\t\t\tif ( computed ) {\n\n\t\t\t\t// Certain elements can have dimension info if we invisibly show them\n\t\t\t\t// but it must have a current display style that would benefit\n\t\t\t\treturn rdisplayswap.test( jQuery.css( elem, \"display\" ) ) &&\n\n\t\t\t\t\t// Support: Safari 8+\n\t\t\t\t\t// Table columns in Safari have non-zero offsetWidth & zero\n\t\t\t\t\t// getBoundingClientRect().width unless display is changed.\n\t\t\t\t\t// Support: IE <=11 only\n\t\t\t\t\t// Running getBoundingClientRect on a disconnected node\n\t\t\t\t\t// in IE throws an error.\n\t\t\t\t\t( !elem.getClientRects().length || !elem.getBoundingClientRect().width ) ?\n\t\t\t\t\t\tswap( elem, cssShow, function() {\n\t\t\t\t\t\t\treturn getWidthOrHeight( elem, dimension, extra );\n\t\t\t\t\t\t} ) :\n\t\t\t\t\t\tgetWidthOrHeight( elem, dimension, extra );\n\t\t\t}\n\t\t},\n\n\t\tset: function( elem, value, extra ) {\n\t\t\tvar matches,\n\t\t\t\tstyles = getStyles( elem ),\n\t\t\t\tisBorderBox = jQuery.css( elem, \"boxSizing\", false, styles ) === \"border-box\",\n\t\t\t\tsubtract = extra && boxModelAdjustment(\n\t\t\t\t\telem,\n\t\t\t\t\tdimension,\n\t\t\t\t\textra,\n\t\t\t\t\tisBorderBox,\n\t\t\t\t\tstyles\n\t\t\t\t);\n\n\t\t\t// Account for unreliable border-box dimensions by comparing offset* to computed and\n\t\t\t// faking a content-box to get border and padding (gh-3699)\n\t\t\tif ( isBorderBox && support.scrollboxSize() === styles.position ) {\n\t\t\t\tsubtract -= Math.ceil(\n\t\t\t\t\telem[ \"offset\" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ] -\n\t\t\t\t\tparseFloat( styles[ dimension ] ) -\n\t\t\t\t\tboxModelAdjustment( elem, dimension, \"border\", false, styles ) -\n\t\t\t\t\t0.5\n\t\t\t\t);\n\t\t\t}\n\n\t\t\t// Convert to pixels if value adjustment is needed\n\t\t\tif ( subtract && ( matches = rcssNum.exec( value ) ) &&\n\t\t\t\t( matches[ 3 ] || \"px\" ) !== \"px\" ) {\n\n\t\t\t\telem.style[ dimension ] = value;\n\t\t\t\tvalue = jQuery.css( elem, dimension );\n\t\t\t}\n\n\t\t\treturn setPositiveNumber( elem, value, subtract );\n\t\t}\n\t};\n} );\n\njQuery.cssHooks.marginLeft = addGetHookIf( support.reliableMarginLeft,\n\tfunction( elem, computed ) {\n\t\tif ( computed ) {\n\t\t\treturn ( parseFloat( curCSS( elem, \"marginLeft\" ) ) ||\n\t\t\t\telem.getBoundingClientRect().left -\n\t\t\t\t\tswap( elem, { marginLeft: 0 }, function() {\n\t\t\t\t\t\treturn elem.getBoundingClientRect().left;\n\t\t\t\t\t} )\n\t\t\t\t) + \"px\";\n\t\t}\n\t}\n);\n\n// These hooks are used by animate to expand properties\njQuery.each( {\n\tmargin: \"\",\n\tpadding: \"\",\n\tborder: \"Width\"\n}, function( prefix, suffix ) {\n\tjQuery.cssHooks[ prefix + suffix ] = {\n\t\texpand: function( value ) {\n\t\t\tvar i = 0,\n\t\t\t\texpanded = {},\n\n\t\t\t\t// Assumes a single number if not a string\n\t\t\t\tparts = typeof value === \"string\" ? value.split( \" \" ) : [ value ];\n\n\t\t\tfor ( ; i < 4; i++ ) {\n\t\t\t\texpanded[ prefix + cssExpand[ i ] + suffix ] =\n\t\t\t\t\tparts[ i ] || parts[ i - 2 ] || parts[ 0 ];\n\t\t\t}\n\n\t\t\treturn expanded;\n\t\t}\n\t};\n\n\tif ( prefix !== \"margin\" ) {\n\t\tjQuery.cssHooks[ prefix + suffix ].set = setPositiveNumber;\n\t}\n} );\n\njQuery.fn.extend( {\n\tcss: function( name, value ) {\n\t\treturn access( this, function( elem, name, value ) {\n\t\t\tvar styles, len,\n\t\t\t\tmap = {},\n\t\t\t\ti = 0;\n\n\t\t\tif ( Array.isArray( name ) ) {\n\t\t\t\tstyles = getStyles( elem );\n\t\t\t\tlen = name.length;\n\n\t\t\t\tfor ( ; i < len; i++ ) {\n\t\t\t\t\tmap[ name[ i ] ] = jQuery.css( elem, name[ i ], false, styles );\n\t\t\t\t}\n\n\t\t\t\treturn map;\n\t\t\t}\n\n\t\t\treturn value !== undefined ?\n\t\t\t\tjQuery.style( elem, name, value ) :\n\t\t\t\tjQuery.css( elem, name );\n\t\t}, name, value, arguments.length > 1 );\n\t}\n} );\n\n\nfunction Tween( elem, options, prop, end, easing ) {\n\treturn new Tween.prototype.init( elem, options, prop, end, easing );\n}\njQuery.Tween = Tween;\n\nTween.prototype = {\n\tconstructor: Tween,\n\tinit: function( elem, options, prop, end, easing, unit ) {\n\t\tthis.elem = elem;\n\t\tthis.prop = prop;\n\t\tthis.easing = easing || jQuery.easing._default;\n\t\tthis.options = options;\n\t\tthis.start = this.now = this.cur();\n\t\tthis.end = end;\n\t\tthis.unit = unit || ( jQuery.cssNumber[ prop ] ? \"\" : \"px\" );\n\t},\n\tcur: function() {\n\t\tvar hooks = Tween.propHooks[ this.prop ];\n\n\t\treturn hooks && hooks.get ?\n\t\t\thooks.get( this ) :\n\t\t\tTween.propHooks._default.get( this );\n\t},\n\trun: function( percent ) {\n\t\tvar eased,\n\t\t\thooks = Tween.propHooks[ this.prop ];\n\n\t\tif ( this.options.duration ) {\n\t\t\tthis.pos = eased = jQuery.easing[ this.easing ](\n\t\t\t\tpercent, this.options.duration * percent, 0, 1, this.options.duration\n\t\t\t);\n\t\t} else {\n\t\t\tthis.pos = eased = percent;\n\t\t}\n\t\tthis.now = ( this.end - this.start ) * eased + this.start;\n\n\t\tif ( this.options.step ) {\n\t\t\tthis.options.step.call( this.elem, this.now, this );\n\t\t}\n\n\t\tif ( hooks && hooks.set ) {\n\t\t\thooks.set( this );\n\t\t} else {\n\t\t\tTween.propHooks._default.set( this );\n\t\t}\n\t\treturn this;\n\t}\n};\n\nTween.prototype.init.prototype = Tween.prototype;\n\nTween.propHooks = {\n\t_default: {\n\t\tget: function( tween ) {\n\t\t\tvar result;\n\n\t\t\t// Use a property on the element directly when it is not a DOM element,\n\t\t\t// or when there is no matching style property that exists.\n\t\t\tif ( tween.elem.nodeType !== 1 ||\n\t\t\t\ttween.elem[ tween.prop ] != null && tween.elem.style[ tween.prop ] == null ) {\n\t\t\t\treturn tween.elem[ tween.prop ];\n\t\t\t}\n\n\t\t\t// Passing an empty string as a 3rd parameter to .css will automatically\n\t\t\t// attempt a parseFloat and fallback to a string if the parse fails.\n\t\t\t// Simple values such as \"10px\" are parsed to Float;\n\t\t\t// complex values such as \"rotate(1rad)\" are returned as-is.\n\t\t\tresult = jQuery.css( tween.elem, tween.prop, \"\" );\n\n\t\t\t// Empty strings, null, undefined and \"auto\" are converted to 0.\n\t\t\treturn !result || result === \"auto\" ? 0 : result;\n\t\t},\n\t\tset: function( tween ) {\n\n\t\t\t// Use step hook for back compat.\n\t\t\t// Use cssHook if its there.\n\t\t\t// Use .style if available and use plain properties where available.\n\t\t\tif ( jQuery.fx.step[ tween.prop ] ) {\n\t\t\t\tjQuery.fx.step[ tween.prop ]( tween );\n\t\t\t} else if ( tween.elem.nodeType === 1 &&\n\t\t\t\t( tween.elem.style[ jQuery.cssProps[ tween.prop ] ] != null ||\n\t\t\t\t\tjQuery.cssHooks[ tween.prop ] ) ) {\n\t\t\t\tjQuery.style( tween.elem, tween.prop, tween.now + tween.unit );\n\t\t\t} else {\n\t\t\t\ttween.elem[ tween.prop ] = tween.now;\n\t\t\t}\n\t\t}\n\t}\n};\n\n// Support: IE <=9 only\n// Panic based approach to setting things on disconnected nodes\nTween.propHooks.scrollTop = Tween.propHooks.scrollLeft = {\n\tset: function( tween ) {\n\t\tif ( tween.elem.nodeType && tween.elem.parentNode ) {\n\t\t\ttween.elem[ tween.prop ] = tween.now;\n\t\t}\n\t}\n};\n\njQuery.easing = {\n\tlinear: function( p ) {\n\t\treturn p;\n\t},\n\tswing: function( p ) {\n\t\treturn 0.5 - Math.cos( p * Math.PI ) / 2;\n\t},\n\t_default: \"swing\"\n};\n\njQuery.fx = Tween.prototype.init;\n\n// Back compat <1.8 extension point\njQuery.fx.step = {};\n\n\n\n\nvar\n\tfxNow, inProgress,\n\trfxtypes = /^(?:toggle|show|hide)$/,\n\trrun = /queueHooks$/;\n\nfunction schedule() {\n\tif ( inProgress ) {\n\t\tif ( document.hidden === false && window.requestAnimationFrame ) {\n\t\t\twindow.requestAnimationFrame( schedule );\n\t\t} else {\n\t\t\twindow.setTimeout( schedule, jQuery.fx.interval );\n\t\t}\n\n\t\tjQuery.fx.tick();\n\t}\n}\n\n// Animations created synchronously will run synchronously\nfunction createFxNow() {\n\twindow.setTimeout( function() {\n\t\tfxNow = undefined;\n\t} );\n\treturn ( fxNow = Date.now() );\n}\n\n// Generate parameters to create a standard animation\nfunction genFx( type, includeWidth ) {\n\tvar which,\n\t\ti = 0,\n\t\tattrs = { height: type };\n\n\t// If we include width, step value is 1 to do all cssExpand values,\n\t// otherwise step value is 2 to skip over Left and Right\n\tincludeWidth = includeWidth ? 1 : 0;\n\tfor ( ; i < 4; i += 2 - includeWidth ) {\n\t\twhich = cssExpand[ i ];\n\t\tattrs[ \"margin\" + which ] = attrs[ \"padding\" + which ] = type;\n\t}\n\n\tif ( includeWidth ) {\n\t\tattrs.opacity = attrs.width = type;\n\t}\n\n\treturn attrs;\n}\n\nfunction createTween( value, prop, animation ) {\n\tvar tween,\n\t\tcollection = ( Animation.tweeners[ prop ] || [] ).concat( Animation.tweeners[ \"*\" ] ),\n\t\tindex = 0,\n\t\tlength = collection.length;\n\tfor ( ; index < length; index++ ) {\n\t\tif ( ( tween = collection[ index ].call( animation, prop, value ) ) ) {\n\n\t\t\t// We're done with this property\n\t\t\treturn tween;\n\t\t}\n\t}\n}\n\nfunction defaultPrefilter( elem, props, opts ) {\n\tvar prop, value, toggle, hooks, oldfire, propTween, restoreDisplay, display,\n\t\tisBox = \"width\" in props || \"height\" in props,\n\t\tanim = this,\n\t\torig = {},\n\t\tstyle = elem.style,\n\t\thidden = elem.nodeType && isHiddenWithinTree( elem ),\n\t\tdataShow = dataPriv.get( elem, \"fxshow\" );\n\n\t// Queue-skipping animations hijack the fx hooks\n\tif ( !opts.queue ) {\n\t\thooks = jQuery._queueHooks( elem, \"fx\" );\n\t\tif ( hooks.unqueued == null ) {\n\t\t\thooks.unqueued = 0;\n\t\t\toldfire = hooks.empty.fire;\n\t\t\thooks.empty.fire = function() {\n\t\t\t\tif ( !hooks.unqueued ) {\n\t\t\t\t\toldfire();\n\t\t\t\t}\n\t\t\t};\n\t\t}\n\t\thooks.unqueued++;\n\n\t\tanim.always( function() {\n\n\t\t\t// Ensure the complete handler is called before this completes\n\t\t\tanim.always( function() {\n\t\t\t\thooks.unqueued--;\n\t\t\t\tif ( !jQuery.queue( elem, \"fx\" ).length ) {\n\t\t\t\t\thooks.empty.fire();\n\t\t\t\t}\n\t\t\t} );\n\t\t} );\n\t}\n\n\t// Detect show/hide animations\n\tfor ( prop in props ) {\n\t\tvalue = props[ prop ];\n\t\tif ( rfxtypes.test( value ) ) {\n\t\t\tdelete props[ prop ];\n\t\t\ttoggle = toggle || value === \"toggle\";\n\t\t\tif ( value === ( hidden ? \"hide\" : \"show\" ) ) {\n\n\t\t\t\t// Pretend to be hidden if this is a \"show\" and\n\t\t\t\t// there is still data from a stopped show/hide\n\t\t\t\tif ( value === \"show\" && dataShow && dataShow[ prop ] !== undefined ) {\n\t\t\t\t\thidden = true;\n\n\t\t\t\t// Ignore all other no-op show/hide data\n\t\t\t\t} else {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t}\n\t\t\torig[ prop ] = dataShow && dataShow[ prop ] || jQuery.style( elem, prop );\n\t\t}\n\t}\n\n\t// Bail out if this is a no-op like .hide().hide()\n\tpropTween = !jQuery.isEmptyObject( props );\n\tif ( !propTween && jQuery.isEmptyObject( orig ) ) {\n\t\treturn;\n\t}\n\n\t// Restrict \"overflow\" and \"display\" styles during box animations\n\tif ( isBox && elem.nodeType === 1 ) {\n\n\t\t// Support: IE <=9 - 11, Edge 12 - 15\n\t\t// Record all 3 overflow attributes because IE does not infer the shorthand\n\t\t// from identically-valued overflowX and overflowY and Edge just mirrors\n\t\t// the overflowX value there.\n\t\topts.overflow = [ style.overflow, style.overflowX, style.overflowY ];\n\n\t\t// Identify a display type, preferring old show/hide data over the CSS cascade\n\t\trestoreDisplay = dataShow && dataShow.display;\n\t\tif ( restoreDisplay == null ) {\n\t\t\trestoreDisplay = dataPriv.get( elem, \"display\" );\n\t\t}\n\t\tdisplay = jQuery.css( elem, \"display\" );\n\t\tif ( display === \"none\" ) {\n\t\t\tif ( restoreDisplay ) {\n\t\t\t\tdisplay = restoreDisplay;\n\t\t\t} else {\n\n\t\t\t\t// Get nonempty value(s) by temporarily forcing visibility\n\t\t\t\tshowHide( [ elem ], true );\n\t\t\t\trestoreDisplay = elem.style.display || restoreDisplay;\n\t\t\t\tdisplay = jQuery.css( elem, \"display\" );\n\t\t\t\tshowHide( [ elem ] );\n\t\t\t}\n\t\t}\n\n\t\t// Animate inline elements as inline-block\n\t\tif ( display === \"inline\" || display === \"inline-block\" && restoreDisplay != null ) {\n\t\t\tif ( jQuery.css( elem, \"float\" ) === \"none\" ) {\n\n\t\t\t\t// Restore the original display value at the end of pure show/hide animations\n\t\t\t\tif ( !propTween ) {\n\t\t\t\t\tanim.done( function() {\n\t\t\t\t\t\tstyle.display = restoreDisplay;\n\t\t\t\t\t} );\n\t\t\t\t\tif ( restoreDisplay == null ) {\n\t\t\t\t\t\tdisplay = style.display;\n\t\t\t\t\t\trestoreDisplay = display === \"none\" ? \"\" : display;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tstyle.display = \"inline-block\";\n\t\t\t}\n\t\t}\n\t}\n\n\tif ( opts.overflow ) {\n\t\tstyle.overflow = \"hidden\";\n\t\tanim.always( function() {\n\t\t\tstyle.overflow = opts.overflow[ 0 ];\n\t\t\tstyle.overflowX = opts.overflow[ 1 ];\n\t\t\tstyle.overflowY = opts.overflow[ 2 ];\n\t\t} );\n\t}\n\n\t// Implement show/hide animations\n\tpropTween = false;\n\tfor ( prop in orig ) {\n\n\t\t// General show/hide setup for this element animation\n\t\tif ( !propTween ) {\n\t\t\tif ( dataShow ) {\n\t\t\t\tif ( \"hidden\" in dataShow ) {\n\t\t\t\t\thidden = dataShow.hidden;\n\t\t\t\t}\n\t\t\t} else {\n\t\t\t\tdataShow = dataPriv.access( elem, \"fxshow\", { display: restoreDisplay } );\n\t\t\t}\n\n\t\t\t// Store hidden/visible for toggle so `.stop().toggle()` \"reverses\"\n\t\t\tif ( toggle ) {\n\t\t\t\tdataShow.hidden = !hidden;\n\t\t\t}\n\n\t\t\t// Show elements before animating them\n\t\t\tif ( hidden ) {\n\t\t\t\tshowHide( [ elem ], true );\n\t\t\t}\n\n\t\t\t/* eslint-disable no-loop-func */\n\n\t\t\tanim.done( function() {\n\n\t\t\t/* eslint-enable no-loop-func */\n\n\t\t\t\t// The final step of a \"hide\" animation is actually hiding the element\n\t\t\t\tif ( !hidden ) {\n\t\t\t\t\tshowHide( [ elem ] );\n\t\t\t\t}\n\t\t\t\tdataPriv.remove( elem, \"fxshow\" );\n\t\t\t\tfor ( prop in orig ) {\n\t\t\t\t\tjQuery.style( elem, prop, orig[ prop ] );\n\t\t\t\t}\n\t\t\t} );\n\t\t}\n\n\t\t// Per-property setup\n\t\tpropTween = createTween( hidden ? dataShow[ prop ] : 0, prop, anim );\n\t\tif ( !( prop in dataShow ) ) {\n\t\t\tdataShow[ prop ] = propTween.start;\n\t\t\tif ( hidden ) {\n\t\t\t\tpropTween.end = propTween.start;\n\t\t\t\tpropTween.start = 0;\n\t\t\t}\n\t\t}\n\t}\n}\n\nfunction propFilter( props, specialEasing ) {\n\tvar index, name, easing, value, hooks;\n\n\t// camelCase, specialEasing and expand cssHook pass\n\tfor ( index in props ) {\n\t\tname = camelCase( index );\n\t\teasing = specialEasing[ name ];\n\t\tvalue = props[ index ];\n\t\tif ( Array.isArray( value ) ) {\n\t\t\teasing = value[ 1 ];\n\t\t\tvalue = props[ index ] = value[ 0 ];\n\t\t}\n\n\t\tif ( index !== name ) {\n\t\t\tprops[ name ] = value;\n\t\t\tdelete props[ index ];\n\t\t}\n\n\t\thooks = jQuery.cssHooks[ name ];\n\t\tif ( hooks && \"expand\" in hooks ) {\n\t\t\tvalue = hooks.expand( value );\n\t\t\tdelete props[ name ];\n\n\t\t\t// Not quite $.extend, this won't overwrite existing keys.\n\t\t\t// Reusing 'index' because we have the correct \"name\"\n\t\t\tfor ( index in value ) {\n\t\t\t\tif ( !( index in props ) ) {\n\t\t\t\t\tprops[ index ] = value[ index ];\n\t\t\t\t\tspecialEasing[ index ] = easing;\n\t\t\t\t}\n\t\t\t}\n\t\t} else {\n\t\t\tspecialEasing[ name ] = easing;\n\t\t}\n\t}\n}\n\nfunction Animation( elem, properties, options ) {\n\tvar result,\n\t\tstopped,\n\t\tindex = 0,\n\t\tlength = Animation.prefilters.length,\n\t\tdeferred = jQuery.Deferred().always( function() {\n\n\t\t\t// Don't match elem in the :animated selector\n\t\t\tdelete tick.elem;\n\t\t} ),\n\t\ttick = function() {\n\t\t\tif ( stopped ) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tvar currentTime = fxNow || createFxNow(),\n\t\t\t\tremaining = Math.max( 0, animation.startTime + animation.duration - currentTime ),\n\n\t\t\t\t// Support: Android 2.3 only\n\t\t\t\t// Archaic crash bug won't allow us to use `1 - ( 0.5 || 0 )` (#12497)\n\t\t\t\ttemp = remaining / animation.duration || 0,\n\t\t\t\tpercent = 1 - temp,\n\t\t\t\tindex = 0,\n\t\t\t\tlength = animation.tweens.length;\n\n\t\t\tfor ( ; index < length; index++ ) {\n\t\t\t\tanimation.tweens[ index ].run( percent );\n\t\t\t}\n\n\t\t\tdeferred.notifyWith( elem, [ animation, percent, remaining ] );\n\n\t\t\t// If there's more to do, yield\n\t\t\tif ( percent < 1 && length ) {\n\t\t\t\treturn remaining;\n\t\t\t}\n\n\t\t\t// If this was an empty animation, synthesize a final progress notification\n\t\t\tif ( !length ) {\n\t\t\t\tdeferred.notifyWith( elem, [ animation, 1, 0 ] );\n\t\t\t}\n\n\t\t\t// Resolve the animation and report its conclusion\n\t\t\tdeferred.resolveWith( elem, [ animation ] );\n\t\t\treturn false;\n\t\t},\n\t\tanimation = deferred.promise( {\n\t\t\telem: elem,\n\t\t\tprops: jQuery.extend( {}, properties ),\n\t\t\topts: jQuery.extend( true, {\n\t\t\t\tspecialEasing: {},\n\t\t\t\teasing: jQuery.easing._default\n\t\t\t}, options ),\n\t\t\toriginalProperties: properties,\n\t\t\toriginalOptions: options,\n\t\t\tstartTime: fxNow || createFxNow(),\n\t\t\tduration: options.duration,\n\t\t\ttweens: [],\n\t\t\tcreateTween: function( prop, end ) {\n\t\t\t\tvar tween = jQuery.Tween( elem, animation.opts, prop, end,\n\t\t\t\t\t\tanimation.opts.specialEasing[ prop ] || animation.opts.easing );\n\t\t\t\tanimation.tweens.push( tween );\n\t\t\t\treturn tween;\n\t\t\t},\n\t\t\tstop: function( gotoEnd ) {\n\t\t\t\tvar index = 0,\n\n\t\t\t\t\t// If we are going to the end, we want to run all the tweens\n\t\t\t\t\t// otherwise we skip this part\n\t\t\t\t\tlength = gotoEnd ? animation.tweens.length : 0;\n\t\t\t\tif ( stopped ) {\n\t\t\t\t\treturn this;\n\t\t\t\t}\n\t\t\t\tstopped = true;\n\t\t\t\tfor ( ; index < length; index++ ) {\n\t\t\t\t\tanimation.tweens[ index ].run( 1 );\n\t\t\t\t}\n\n\t\t\t\t// Resolve when we played the last frame; otherwise, reject\n\t\t\t\tif ( gotoEnd ) {\n\t\t\t\t\tdeferred.notifyWith( elem, [ animation, 1, 0 ] );\n\t\t\t\t\tdeferred.resolveWith( elem, [ animation, gotoEnd ] );\n\t\t\t\t} else {\n\t\t\t\t\tdeferred.rejectWith( elem, [ animation, gotoEnd ] );\n\t\t\t\t}\n\t\t\t\treturn this;\n\t\t\t}\n\t\t} ),\n\t\tprops = animation.props;\n\n\tpropFilter( props, animation.opts.specialEasing );\n\n\tfor ( ; index < length; index++ ) {\n\t\tresult = Animation.prefilters[ index ].call( animation, elem, props, animation.opts );\n\t\tif ( result ) {\n\t\t\tif ( isFunction( result.stop ) ) {\n\t\t\t\tjQuery._queueHooks( animation.elem, animation.opts.queue ).stop =\n\t\t\t\t\tresult.stop.bind( result );\n\t\t\t}\n\t\t\treturn result;\n\t\t}\n\t}\n\n\tjQuery.map( props, createTween, animation );\n\n\tif ( isFunction( animation.opts.start ) ) {\n\t\tanimation.opts.start.call( elem, animation );\n\t}\n\n\t// Attach callbacks from options\n\tanimation\n\t\t.progress( animation.opts.progress )\n\t\t.done( animation.opts.done, animation.opts.complete )\n\t\t.fail( animation.opts.fail )\n\t\t.always( animation.opts.always );\n\n\tjQuery.fx.timer(\n\t\tjQuery.extend( tick, {\n\t\t\telem: elem,\n\t\t\tanim: animation,\n\t\t\tqueue: animation.opts.queue\n\t\t} )\n\t);\n\n\treturn animation;\n}\n\njQuery.Animation = jQuery.extend( Animation, {\n\n\ttweeners: {\n\t\t\"*\": [ function( prop, value ) {\n\t\t\tvar tween = this.createTween( prop, value );\n\t\t\tadjustCSS( tween.elem, prop, rcssNum.exec( value ), tween );\n\t\t\treturn tween;\n\t\t} ]\n\t},\n\n\ttweener: function( props, callback ) {\n\t\tif ( isFunction( props ) ) {\n\t\t\tcallback = props;\n\t\t\tprops = [ \"*\" ];\n\t\t} else {\n\t\t\tprops = props.match( rnothtmlwhite );\n\t\t}\n\n\t\tvar prop,\n\t\t\tindex = 0,\n\t\t\tlength = props.length;\n\n\t\tfor ( ; index < length; index++ ) {\n\t\t\tprop = props[ index ];\n\t\t\tAnimation.tweeners[ prop ] = Animation.tweeners[ prop ] || [];\n\t\t\tAnimation.tweeners[ prop ].unshift( callback );\n\t\t}\n\t},\n\n\tprefilters: [ defaultPrefilter ],\n\n\tprefilter: function( callback, prepend ) {\n\t\tif ( prepend ) {\n\t\t\tAnimation.prefilters.unshift( callback );\n\t\t} else {\n\t\t\tAnimation.prefilters.push( callback );\n\t\t}\n\t}\n} );\n\njQuery.speed = function( speed, easing, fn ) {\n\tvar opt = speed && typeof speed === \"object\" ? jQuery.extend( {}, speed ) : {\n\t\tcomplete: fn || !fn && easing ||\n\t\t\tisFunction( speed ) && speed,\n\t\tduration: speed,\n\t\teasing: fn && easing || easing && !isFunction( easing ) && easing\n\t};\n\n\t// Go to the end state if fx are off\n\tif ( jQuery.fx.off ) {\n\t\topt.duration = 0;\n\n\t} else {\n\t\tif ( typeof opt.duration !== \"number\" ) {\n\t\t\tif ( opt.duration in jQuery.fx.speeds ) {\n\t\t\t\topt.duration = jQuery.fx.speeds[ opt.duration ];\n\n\t\t\t} else {\n\t\t\t\topt.duration = jQuery.fx.speeds._default;\n\t\t\t}\n\t\t}\n\t}\n\n\t// Normalize opt.queue - true/undefined/null -> \"fx\"\n\tif ( opt.queue == null || opt.queue === true ) {\n\t\topt.queue = \"fx\";\n\t}\n\n\t// Queueing\n\topt.old = opt.complete;\n\n\topt.complete = function() {\n\t\tif ( isFunction( opt.old ) ) {\n\t\t\topt.old.call( this );\n\t\t}\n\n\t\tif ( opt.queue ) {\n\t\t\tjQuery.dequeue( this, opt.queue );\n\t\t}\n\t};\n\n\treturn opt;\n};\n\njQuery.fn.extend( {\n\tfadeTo: function( speed, to, easing, callback ) {\n\n\t\t// Show any hidden elements after setting opacity to 0\n\t\treturn this.filter( isHiddenWithinTree ).css( \"opacity\", 0 ).show()\n\n\t\t\t// Animate to the value specified\n\t\t\t.end().animate( { opacity: to }, speed, easing, callback );\n\t},\n\tanimate: function( prop, speed, easing, callback ) {\n\t\tvar empty = jQuery.isEmptyObject( prop ),\n\t\t\toptall = jQuery.speed( speed, easing, callback ),\n\t\t\tdoAnimation = function() {\n\n\t\t\t\t// Operate on a copy of prop so per-property easing won't be lost\n\t\t\t\tvar anim = Animation( this, jQuery.extend( {}, prop ), optall );\n\n\t\t\t\t// Empty animations, or finishing resolves immediately\n\t\t\t\tif ( empty || dataPriv.get( this, \"finish\" ) ) {\n\t\t\t\t\tanim.stop( true );\n\t\t\t\t}\n\t\t\t};\n\t\t\tdoAnimation.finish = doAnimation;\n\n\t\treturn empty || optall.queue === false ?\n\t\t\tthis.each( doAnimation ) :\n\t\t\tthis.queue( optall.queue, doAnimation );\n\t},\n\tstop: function( type, clearQueue, gotoEnd ) {\n\t\tvar stopQueue = function( hooks ) {\n\t\t\tvar stop = hooks.stop;\n\t\t\tdelete hooks.stop;\n\t\t\tstop( gotoEnd );\n\t\t};\n\n\t\tif ( typeof type !== \"string\" ) {\n\t\t\tgotoEnd = clearQueue;\n\t\t\tclearQueue = type;\n\t\t\ttype = undefined;\n\t\t}\n\t\tif ( clearQueue && type !== false ) {\n\t\t\tthis.queue( type || \"fx\", [] );\n\t\t}\n\n\t\treturn this.each( function() {\n\t\t\tvar dequeue = true,\n\t\t\t\tindex = type != null && type + \"queueHooks\",\n\t\t\t\ttimers = jQuery.timers,\n\t\t\t\tdata = dataPriv.get( this );\n\n\t\t\tif ( index ) {\n\t\t\t\tif ( data[ index ] && data[ index ].stop ) {\n\t\t\t\t\tstopQueue( data[ index ] );\n\t\t\t\t}\n\t\t\t} else {\n\t\t\t\tfor ( index in data ) {\n\t\t\t\t\tif ( data[ index ] && data[ index ].stop && rrun.test( index ) ) {\n\t\t\t\t\t\tstopQueue( data[ index ] );\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tfor ( index = timers.length; index--; ) {\n\t\t\t\tif ( timers[ index ].elem === this &&\n\t\t\t\t\t( type == null || timers[ index ].queue === type ) ) {\n\n\t\t\t\t\ttimers[ index ].anim.stop( gotoEnd );\n\t\t\t\t\tdequeue = false;\n\t\t\t\t\ttimers.splice( index, 1 );\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// Start the next in the queue if the last step wasn't forced.\n\t\t\t// Timers currently will call their complete callbacks, which\n\t\t\t// will dequeue but only if they were gotoEnd.\n\t\t\tif ( dequeue || !gotoEnd ) {\n\t\t\t\tjQuery.dequeue( this, type );\n\t\t\t}\n\t\t} );\n\t},\n\tfinish: function( type ) {\n\t\tif ( type !== false ) {\n\t\t\ttype = type || \"fx\";\n\t\t}\n\t\treturn this.each( function() {\n\t\t\tvar index,\n\t\t\t\tdata = dataPriv.get( this ),\n\t\t\t\tqueue = data[ type + \"queue\" ],\n\t\t\t\thooks = data[ type + \"queueHooks\" ],\n\t\t\t\ttimers = jQuery.timers,\n\t\t\t\tlength = queue ? queue.length : 0;\n\n\t\t\t// Enable finishing flag on private data\n\t\t\tdata.finish = true;\n\n\t\t\t// Empty the queue first\n\t\t\tjQuery.queue( this, type, [] );\n\n\t\t\tif ( hooks && hooks.stop ) {\n\t\t\t\thooks.stop.call( this, true );\n\t\t\t}\n\n\t\t\t// Look for any active animations, and finish them\n\t\t\tfor ( index = timers.length; index--; ) {\n\t\t\t\tif ( timers[ index ].elem === this && timers[ index ].queue === type ) {\n\t\t\t\t\ttimers[ index ].anim.stop( true );\n\t\t\t\t\ttimers.splice( index, 1 );\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// Look for any animations in the old queue and finish them\n\t\t\tfor ( index = 0; index < length; index++ ) {\n\t\t\t\tif ( queue[ index ] && queue[ index ].finish ) {\n\t\t\t\t\tqueue[ index ].finish.call( this );\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// Turn off finishing flag\n\t\t\tdelete data.finish;\n\t\t} );\n\t}\n} );\n\njQuery.each( [ \"toggle\", \"show\", \"hide\" ], function( i, name ) {\n\tvar cssFn = jQuery.fn[ name ];\n\tjQuery.fn[ name ] = function( speed, easing, callback ) {\n\t\treturn speed == null || typeof speed === \"boolean\" ?\n\t\t\tcssFn.apply( this, arguments ) :\n\t\t\tthis.animate( genFx( name, true ), speed, easing, callback );\n\t};\n} );\n\n// Generate shortcuts for custom animations\njQuery.each( {\n\tslideDown: genFx( \"show\" ),\n\tslideUp: genFx( \"hide\" ),\n\tslideToggle: genFx( \"toggle\" ),\n\tfadeIn: { opacity: \"show\" },\n\tfadeOut: { opacity: \"hide\" },\n\tfadeToggle: { opacity: \"toggle\" }\n}, function( name, props ) {\n\tjQuery.fn[ name ] = function( speed, easing, callback ) {\n\t\treturn this.animate( props, speed, easing, callback );\n\t};\n} );\n\njQuery.timers = [];\njQuery.fx.tick = function() {\n\tvar timer,\n\t\ti = 0,\n\t\ttimers = jQuery.timers;\n\n\tfxNow = Date.now();\n\n\tfor ( ; i < timers.length; i++ ) {\n\t\ttimer = timers[ i ];\n\n\t\t// Run the timer and safely remove it when done (allowing for external removal)\n\t\tif ( !timer() && timers[ i ] === timer ) {\n\t\t\ttimers.splice( i--, 1 );\n\t\t}\n\t}\n\n\tif ( !timers.length ) {\n\t\tjQuery.fx.stop();\n\t}\n\tfxNow = undefined;\n};\n\njQuery.fx.timer = function( timer ) {\n\tjQuery.timers.push( timer );\n\tjQuery.fx.start();\n};\n\njQuery.fx.interval = 13;\njQuery.fx.start = function() {\n\tif ( inProgress ) {\n\t\treturn;\n\t}\n\n\tinProgress = true;\n\tschedule();\n};\n\njQuery.fx.stop = function() {\n\tinProgress = null;\n};\n\njQuery.fx.speeds = {\n\tslow: 600,\n\tfast: 200,\n\n\t// Default speed\n\t_default: 400\n};\n\n\n// Based off of the plugin by Clint Helfers, with permission.\n// https://web.archive.org/web/20100324014747/http://blindsignals.com/index.php/2009/07/jquery-delay/\njQuery.fn.delay = function( time, type ) {\n\ttime = jQuery.fx ? jQuery.fx.speeds[ time ] || time : time;\n\ttype = type || \"fx\";\n\n\treturn this.queue( type, function( next, hooks ) {\n\t\tvar timeout = window.setTimeout( next, time );\n\t\thooks.stop = function() {\n\t\t\twindow.clearTimeout( timeout );\n\t\t};\n\t} );\n};\n\n\n( function() {\n\tvar input = document.createElement( \"input\" ),\n\t\tselect = document.createElement( \"select\" ),\n\t\topt = select.appendChild( document.createElement( \"option\" ) );\n\n\tinput.type = \"checkbox\";\n\n\t// Support: Android <=4.3 only\n\t// Default value for a checkbox should be \"on\"\n\tsupport.checkOn = input.value !== \"\";\n\n\t// Support: IE <=11 only\n\t// Must access selectedIndex to make default options select\n\tsupport.optSelected = opt.selected;\n\n\t// Support: IE <=11 only\n\t// An input loses its value after becoming a radio\n\tinput = document.createElement( \"input\" );\n\tinput.value = \"t\";\n\tinput.type = \"radio\";\n\tsupport.radioValue = input.value === \"t\";\n} )();\n\n\nvar boolHook,\n\tattrHandle = jQuery.expr.attrHandle;\n\njQuery.fn.extend( {\n\tattr: function( name, value ) {\n\t\treturn access( this, jQuery.attr, name, value, arguments.length > 1 );\n\t},\n\n\tremoveAttr: function( name ) {\n\t\treturn this.each( function() {\n\t\t\tjQuery.removeAttr( this, name );\n\t\t} );\n\t}\n} );\n\njQuery.extend( {\n\tattr: function( elem, name, value ) {\n\t\tvar ret, hooks,\n\t\t\tnType = elem.nodeType;\n\n\t\t// Don't get/set attributes on text, comment and attribute nodes\n\t\tif ( nType === 3 || nType === 8 || nType === 2 ) {\n\t\t\treturn;\n\t\t}\n\n\t\t// Fallback to prop when attributes are not supported\n\t\tif ( typeof elem.getAttribute === \"undefined\" ) {\n\t\t\treturn jQuery.prop( elem, name, value );\n\t\t}\n\n\t\t// Attribute hooks are determined by the lowercase version\n\t\t// Grab necessary hook if one is defined\n\t\tif ( nType !== 1 || !jQuery.isXMLDoc( elem ) ) {\n\t\t\thooks = jQuery.attrHooks[ name.toLowerCase() ] ||\n\t\t\t\t( jQuery.expr.match.bool.test( name ) ? boolHook : undefined );\n\t\t}\n\n\t\tif ( value !== undefined ) {\n\t\t\tif ( value === null ) {\n\t\t\t\tjQuery.removeAttr( elem, name );\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\tif ( hooks && \"set\" in hooks &&\n\t\t\t\t( ret = hooks.set( elem, value, name ) ) !== undefined ) {\n\t\t\t\treturn ret;\n\t\t\t}\n\n\t\t\telem.setAttribute( name, value + \"\" );\n\t\t\treturn value;\n\t\t}\n\n\t\tif ( hooks && \"get\" in hooks && ( ret = hooks.get( elem, name ) ) !== null ) {\n\t\t\treturn ret;\n\t\t}\n\n\t\tret = jQuery.find.attr( elem, name );\n\n\t\t// Non-existent attributes return null, we normalize to undefined\n\t\treturn ret == null ? undefined : ret;\n\t},\n\n\tattrHooks: {\n\t\ttype: {\n\t\t\tset: function( elem, value ) {\n\t\t\t\tif ( !support.radioValue && value === \"radio\" &&\n\t\t\t\t\tnodeName( elem, \"input\" ) ) {\n\t\t\t\t\tvar val = elem.value;\n\t\t\t\t\telem.setAttribute( \"type\", value );\n\t\t\t\t\tif ( val ) {\n\t\t\t\t\t\telem.value = val;\n\t\t\t\t\t}\n\t\t\t\t\treturn value;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t},\n\n\tremoveAttr: function( elem, value ) {\n\t\tvar name,\n\t\t\ti = 0,\n\n\t\t\t// Attribute names can contain non-HTML whitespace characters\n\t\t\t// https://html.spec.whatwg.org/multipage/syntax.html#attributes-2\n\t\t\tattrNames = value && value.match( rnothtmlwhite );\n\n\t\tif ( attrNames && elem.nodeType === 1 ) {\n\t\t\twhile ( ( name = attrNames[ i++ ] ) ) {\n\t\t\t\telem.removeAttribute( name );\n\t\t\t}\n\t\t}\n\t}\n} );\n\n// Hooks for boolean attributes\nboolHook = {\n\tset: function( elem, value, name ) {\n\t\tif ( value === false ) {\n\n\t\t\t// Remove boolean attributes when set to false\n\t\t\tjQuery.removeAttr( elem, name );\n\t\t} else {\n\t\t\telem.setAttribute( name, name );\n\t\t}\n\t\treturn name;\n\t}\n};\n\njQuery.each( jQuery.expr.match.bool.source.match( /\\w+/g ), function( i, name ) {\n\tvar getter = attrHandle[ name ] || jQuery.find.attr;\n\n\tattrHandle[ name ] = function( elem, name, isXML ) {\n\t\tvar ret, handle,\n\t\t\tlowercaseName = name.toLowerCase();\n\n\t\tif ( !isXML ) {\n\n\t\t\t// Avoid an infinite loop by temporarily removing this function from the getter\n\t\t\thandle = attrHandle[ lowercaseName ];\n\t\t\tattrHandle[ lowercaseName ] = ret;\n\t\t\tret = getter( elem, name, isXML ) != null ?\n\t\t\t\tlowercaseName :\n\t\t\t\tnull;\n\t\t\tattrHandle[ lowercaseName ] = handle;\n\t\t}\n\t\treturn ret;\n\t};\n} );\n\n\n\n\nvar rfocusable = /^(?:input|select|textarea|button)$/i,\n\trclickable = /^(?:a|area)$/i;\n\njQuery.fn.extend( {\n\tprop: function( name, value ) {\n\t\treturn access( this, jQuery.prop, name, value, arguments.length > 1 );\n\t},\n\n\tremoveProp: function( name ) {\n\t\treturn this.each( function() {\n\t\t\tdelete this[ jQuery.propFix[ name ] || name ];\n\t\t} );\n\t}\n} );\n\njQuery.extend( {\n\tprop: function( elem, name, value ) {\n\t\tvar ret, hooks,\n\t\t\tnType = elem.nodeType;\n\n\t\t// Don't get/set properties on text, comment and attribute nodes\n\t\tif ( nType === 3 || nType === 8 || nType === 2 ) {\n\t\t\treturn;\n\t\t}\n\n\t\tif ( nType !== 1 || !jQuery.isXMLDoc( elem ) ) {\n\n\t\t\t// Fix name and attach hooks\n\t\t\tname = jQuery.propFix[ name ] || name;\n\t\t\thooks = jQuery.propHooks[ name ];\n\t\t}\n\n\t\tif ( value !== undefined ) {\n\t\t\tif ( hooks && \"set\" in hooks &&\n\t\t\t\t( ret = hooks.set( elem, value, name ) ) !== undefined ) {\n\t\t\t\treturn ret;\n\t\t\t}\n\n\t\t\treturn ( elem[ name ] = value );\n\t\t}\n\n\t\tif ( hooks && \"get\" in hooks && ( ret = hooks.get( elem, name ) ) !== null ) {\n\t\t\treturn ret;\n\t\t}\n\n\t\treturn elem[ name ];\n\t},\n\n\tpropHooks: {\n\t\ttabIndex: {\n\t\t\tget: function( elem ) {\n\n\t\t\t\t// Support: IE <=9 - 11 only\n\t\t\t\t// elem.tabIndex doesn't always return the\n\t\t\t\t// correct value when it hasn't been explicitly set\n\t\t\t\t// https://web.archive.org/web/20141116233347/http://fluidproject.org/blog/2008/01/09/getting-setting-and-removing-tabindex-values-with-javascript/\n\t\t\t\t// Use proper attribute retrieval(#12072)\n\t\t\t\tvar tabindex = jQuery.find.attr( elem, \"tabindex\" );\n\n\t\t\t\tif ( tabindex ) {\n\t\t\t\t\treturn parseInt( tabindex, 10 );\n\t\t\t\t}\n\n\t\t\t\tif (\n\t\t\t\t\trfocusable.test( elem.nodeName ) ||\n\t\t\t\t\trclickable.test( elem.nodeName ) &&\n\t\t\t\t\telem.href\n\t\t\t\t) {\n\t\t\t\t\treturn 0;\n\t\t\t\t}\n\n\t\t\t\treturn -1;\n\t\t\t}\n\t\t}\n\t},\n\n\tpropFix: {\n\t\t\"for\": \"htmlFor\",\n\t\t\"class\": \"className\"\n\t}\n} );\n\n// Support: IE <=11 only\n// Accessing the selectedIndex property\n// forces the browser to respect setting selected\n// on the option\n// The getter ensures a default option is selected\n// when in an optgroup\n// eslint rule \"no-unused-expressions\" is disabled for this code\n// since it considers such accessions noop\nif ( !support.optSelected ) {\n\tjQuery.propHooks.selected = {\n\t\tget: function( elem ) {\n\n\t\t\t/* eslint no-unused-expressions: \"off\" */\n\n\t\t\tvar parent = elem.parentNode;\n\t\t\tif ( parent && parent.parentNode ) {\n\t\t\t\tparent.parentNode.selectedIndex;\n\t\t\t}\n\t\t\treturn null;\n\t\t},\n\t\tset: function( elem ) {\n\n\t\t\t/* eslint no-unused-expressions: \"off\" */\n\n\t\t\tvar parent = elem.parentNode;\n\t\t\tif ( parent ) {\n\t\t\t\tparent.selectedIndex;\n\n\t\t\t\tif ( parent.parentNode ) {\n\t\t\t\t\tparent.parentNode.selectedIndex;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t};\n}\n\njQuery.each( [\n\t\"tabIndex\",\n\t\"readOnly\",\n\t\"maxLength\",\n\t\"cellSpacing\",\n\t\"cellPadding\",\n\t\"rowSpan\",\n\t\"colSpan\",\n\t\"useMap\",\n\t\"frameBorder\",\n\t\"contentEditable\"\n], function() {\n\tjQuery.propFix[ this.toLowerCase() ] = this;\n} );\n\n\n\n\n\t// Strip and collapse whitespace according to HTML spec\n\t// https://infra.spec.whatwg.org/#strip-and-collapse-ascii-whitespace\n\tfunction stripAndCollapse( value ) {\n\t\tvar tokens = value.match( rnothtmlwhite ) || [];\n\t\treturn tokens.join( \" \" );\n\t}\n\n\nfunction getClass( elem ) {\n\treturn elem.getAttribute && elem.getAttribute( \"class\" ) || \"\";\n}\n\nfunction classesToArray( value ) {\n\tif ( Array.isArray( value ) ) {\n\t\treturn value;\n\t}\n\tif ( typeof value === \"string\" ) {\n\t\treturn value.match( rnothtmlwhite ) || [];\n\t}\n\treturn [];\n}\n\njQuery.fn.extend( {\n\taddClass: function( value ) {\n\t\tvar classes, elem, cur, curValue, clazz, j, finalValue,\n\t\t\ti = 0;\n\n\t\tif ( isFunction( value ) ) {\n\t\t\treturn this.each( function( j ) {\n\t\t\t\tjQuery( this ).addClass( value.call( this, j, getClass( this ) ) );\n\t\t\t} );\n\t\t}\n\n\t\tclasses = classesToArray( value );\n\n\t\tif ( classes.length ) {\n\t\t\twhile ( ( elem = this[ i++ ] ) ) {\n\t\t\t\tcurValue = getClass( elem );\n\t\t\t\tcur = elem.nodeType === 1 && ( \" \" + stripAndCollapse( curValue ) + \" \" );\n\n\t\t\t\tif ( cur ) {\n\t\t\t\t\tj = 0;\n\t\t\t\t\twhile ( ( clazz = classes[ j++ ] ) ) {\n\t\t\t\t\t\tif ( cur.indexOf( \" \" + clazz + \" \" ) < 0 ) {\n\t\t\t\t\t\t\tcur += clazz + \" \";\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t\t// Only assign if different to avoid unneeded rendering.\n\t\t\t\t\tfinalValue = stripAndCollapse( cur );\n\t\t\t\t\tif ( curValue !== finalValue ) {\n\t\t\t\t\t\telem.setAttribute( \"class\", finalValue );\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn this;\n\t},\n\n\tremoveClass: function( value ) {\n\t\tvar classes, elem, cur, curValue, clazz, j, finalValue,\n\t\t\ti = 0;\n\n\t\tif ( isFunction( value ) ) {\n\t\t\treturn this.each( function( j ) {\n\t\t\t\tjQuery( this ).removeClass( value.call( this, j, getClass( this ) ) );\n\t\t\t} );\n\t\t}\n\n\t\tif ( !arguments.length ) {\n\t\t\treturn this.attr( \"class\", \"\" );\n\t\t}\n\n\t\tclasses = classesToArray( value );\n\n\t\tif ( classes.length ) {\n\t\t\twhile ( ( elem = this[ i++ ] ) ) {\n\t\t\t\tcurValue = getClass( elem );\n\n\t\t\t\t// This expression is here for better compressibility (see addClass)\n\t\t\t\tcur = elem.nodeType === 1 && ( \" \" + stripAndCollapse( curValue ) + \" \" );\n\n\t\t\t\tif ( cur ) {\n\t\t\t\t\tj = 0;\n\t\t\t\t\twhile ( ( clazz = classes[ j++ ] ) ) {\n\n\t\t\t\t\t\t// Remove *all* instances\n\t\t\t\t\t\twhile ( cur.indexOf( \" \" + clazz + \" \" ) > -1 ) {\n\t\t\t\t\t\t\tcur = cur.replace( \" \" + clazz + \" \", \" \" );\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t\t// Only assign if different to avoid unneeded rendering.\n\t\t\t\t\tfinalValue = stripAndCollapse( cur );\n\t\t\t\t\tif ( curValue !== finalValue ) {\n\t\t\t\t\t\telem.setAttribute( \"class\", finalValue );\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn this;\n\t},\n\n\ttoggleClass: function( value, stateVal ) {\n\t\tvar type = typeof value,\n\t\t\tisValidValue = type === \"string\" || Array.isArray( value );\n\n\t\tif ( typeof stateVal === \"boolean\" && isValidValue ) {\n\t\t\treturn stateVal ? this.addClass( value ) : this.removeClass( value );\n\t\t}\n\n\t\tif ( isFunction( value ) ) {\n\t\t\treturn this.each( function( i ) {\n\t\t\t\tjQuery( this ).toggleClass(\n\t\t\t\t\tvalue.call( this, i, getClass( this ), stateVal ),\n\t\t\t\t\tstateVal\n\t\t\t\t);\n\t\t\t} );\n\t\t}\n\n\t\treturn this.each( function() {\n\t\t\tvar className, i, self, classNames;\n\n\t\t\tif ( isValidValue ) {\n\n\t\t\t\t// Toggle individual class names\n\t\t\t\ti = 0;\n\t\t\t\tself = jQuery( this );\n\t\t\t\tclassNames = classesToArray( value );\n\n\t\t\t\twhile ( ( className = classNames[ i++ ] ) ) {\n\n\t\t\t\t\t// Check each className given, space separated list\n\t\t\t\t\tif ( self.hasClass( className ) ) {\n\t\t\t\t\t\tself.removeClass( className );\n\t\t\t\t\t} else {\n\t\t\t\t\t\tself.addClass( className );\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t// Toggle whole class name\n\t\t\t} else if ( value === undefined || type === \"boolean\" ) {\n\t\t\t\tclassName = getClass( this );\n\t\t\t\tif ( className ) {\n\n\t\t\t\t\t// Store className if set\n\t\t\t\t\tdataPriv.set( this, \"__className__\", className );\n\t\t\t\t}\n\n\t\t\t\t// If the element has a class name or if we're passed `false`,\n\t\t\t\t// then remove the whole classname (if there was one, the above saved it).\n\t\t\t\t// Otherwise bring back whatever was previously saved (if anything),\n\t\t\t\t// falling back to the empty string if nothing was stored.\n\t\t\t\tif ( this.setAttribute ) {\n\t\t\t\t\tthis.setAttribute( \"class\",\n\t\t\t\t\t\tclassName || value === false ?\n\t\t\t\t\t\t\"\" :\n\t\t\t\t\t\tdataPriv.get( this, \"__className__\" ) || \"\"\n\t\t\t\t\t);\n\t\t\t\t}\n\t\t\t}\n\t\t} );\n\t},\n\n\thasClass: function( selector ) {\n\t\tvar className, elem,\n\t\t\ti = 0;\n\n\t\tclassName = \" \" + selector + \" \";\n\t\twhile ( ( elem = this[ i++ ] ) ) {\n\t\t\tif ( elem.nodeType === 1 &&\n\t\t\t\t( \" \" + stripAndCollapse( getClass( elem ) ) + \" \" ).indexOf( className ) > -1 ) {\n\t\t\t\t\treturn true;\n\t\t\t}\n\t\t}\n\n\t\treturn false;\n\t}\n} );\n\n\n\n\nvar rreturn = /\\r/g;\n\njQuery.fn.extend( {\n\tval: function( value ) {\n\t\tvar hooks, ret, valueIsFunction,\n\t\t\telem = this[ 0 ];\n\n\t\tif ( !arguments.length ) {\n\t\t\tif ( elem ) {\n\t\t\t\thooks = jQuery.valHooks[ elem.type ] ||\n\t\t\t\t\tjQuery.valHooks[ elem.nodeName.toLowerCase() ];\n\n\t\t\t\tif ( hooks &&\n\t\t\t\t\t\"get\" in hooks &&\n\t\t\t\t\t( ret = hooks.get( elem, \"value\" ) ) !== undefined\n\t\t\t\t) {\n\t\t\t\t\treturn ret;\n\t\t\t\t}\n\n\t\t\t\tret = elem.value;\n\n\t\t\t\t// Handle most common string cases\n\t\t\t\tif ( typeof ret === \"string\" ) {\n\t\t\t\t\treturn ret.replace( rreturn, \"\" );\n\t\t\t\t}\n\n\t\t\t\t// Handle cases where value is null/undef or number\n\t\t\t\treturn ret == null ? \"\" : ret;\n\t\t\t}\n\n\t\t\treturn;\n\t\t}\n\n\t\tvalueIsFunction = isFunction( value );\n\n\t\treturn this.each( function( i ) {\n\t\t\tvar val;\n\n\t\t\tif ( this.nodeType !== 1 ) {\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\tif ( valueIsFunction ) {\n\t\t\t\tval = value.call( this, i, jQuery( this ).val() );\n\t\t\t} else {\n\t\t\t\tval = value;\n\t\t\t}\n\n\t\t\t// Treat null/undefined as \"\"; convert numbers to string\n\t\t\tif ( val == null ) {\n\t\t\t\tval = \"\";\n\n\t\t\t} else if ( typeof val === \"number\" ) {\n\t\t\t\tval += \"\";\n\n\t\t\t} else if ( Array.isArray( val ) ) {\n\t\t\t\tval = jQuery.map( val, function( value ) {\n\t\t\t\t\treturn value == null ? \"\" : value + \"\";\n\t\t\t\t} );\n\t\t\t}\n\n\t\t\thooks = jQuery.valHooks[ this.type ] || jQuery.valHooks[ this.nodeName.toLowerCase() ];\n\n\t\t\t// If set returns undefined, fall back to normal setting\n\t\t\tif ( !hooks || !( \"set\" in hooks ) || hooks.set( this, val, \"value\" ) === undefined ) {\n\t\t\t\tthis.value = val;\n\t\t\t}\n\t\t} );\n\t}\n} );\n\njQuery.extend( {\n\tvalHooks: {\n\t\toption: {\n\t\t\tget: function( elem ) {\n\n\t\t\t\tvar val = jQuery.find.attr( elem, \"value\" );\n\t\t\t\treturn val != null ?\n\t\t\t\t\tval :\n\n\t\t\t\t\t// Support: IE <=10 - 11 only\n\t\t\t\t\t// option.text throws exceptions (#14686, #14858)\n\t\t\t\t\t// Strip and collapse whitespace\n\t\t\t\t\t// https://html.spec.whatwg.org/#strip-and-collapse-whitespace\n\t\t\t\t\tstripAndCollapse( jQuery.text( elem ) );\n\t\t\t}\n\t\t},\n\t\tselect: {\n\t\t\tget: function( elem ) {\n\t\t\t\tvar value, option, i,\n\t\t\t\t\toptions = elem.options,\n\t\t\t\t\tindex = elem.selectedIndex,\n\t\t\t\t\tone = elem.type === \"select-one\",\n\t\t\t\t\tvalues = one ? null : [],\n\t\t\t\t\tmax = one ? index + 1 : options.length;\n\n\t\t\t\tif ( index < 0 ) {\n\t\t\t\t\ti = max;\n\n\t\t\t\t} else {\n\t\t\t\t\ti = one ? index : 0;\n\t\t\t\t}\n\n\t\t\t\t// Loop through all the selected options\n\t\t\t\tfor ( ; i < max; i++ ) {\n\t\t\t\t\toption = options[ i ];\n\n\t\t\t\t\t// Support: IE <=9 only\n\t\t\t\t\t// IE8-9 doesn't update selected after form reset (#2551)\n\t\t\t\t\tif ( ( option.selected || i === index ) &&\n\n\t\t\t\t\t\t\t// Don't return options that are disabled or in a disabled optgroup\n\t\t\t\t\t\t\t!option.disabled &&\n\t\t\t\t\t\t\t( !option.parentNode.disabled ||\n\t\t\t\t\t\t\t\t!nodeName( option.parentNode, \"optgroup\" ) ) ) {\n\n\t\t\t\t\t\t// Get the specific value for the option\n\t\t\t\t\t\tvalue = jQuery( option ).val();\n\n\t\t\t\t\t\t// We don't need an array for one selects\n\t\t\t\t\t\tif ( one ) {\n\t\t\t\t\t\t\treturn value;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t// Multi-Selects return an array\n\t\t\t\t\t\tvalues.push( value );\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\treturn values;\n\t\t\t},\n\n\t\t\tset: function( elem, value ) {\n\t\t\t\tvar optionSet, option,\n\t\t\t\t\toptions = elem.options,\n\t\t\t\t\tvalues = jQuery.makeArray( value ),\n\t\t\t\t\ti = options.length;\n\n\t\t\t\twhile ( i-- ) {\n\t\t\t\t\toption = options[ i ];\n\n\t\t\t\t\t/* eslint-disable no-cond-assign */\n\n\t\t\t\t\tif ( option.selected =\n\t\t\t\t\t\tjQuery.inArray( jQuery.valHooks.option.get( option ), values ) > -1\n\t\t\t\t\t) {\n\t\t\t\t\t\toptionSet = true;\n\t\t\t\t\t}\n\n\t\t\t\t\t/* eslint-enable no-cond-assign */\n\t\t\t\t}\n\n\t\t\t\t// Force browsers to behave consistently when non-matching value is set\n\t\t\t\tif ( !optionSet ) {\n\t\t\t\t\telem.selectedIndex = -1;\n\t\t\t\t}\n\t\t\t\treturn values;\n\t\t\t}\n\t\t}\n\t}\n} );\n\n// Radios and checkboxes getter/setter\njQuery.each( [ \"radio\", \"checkbox\" ], function() {\n\tjQuery.valHooks[ this ] = {\n\t\tset: function( elem, value ) {\n\t\t\tif ( Array.isArray( value ) ) {\n\t\t\t\treturn ( elem.checked = jQuery.inArray( jQuery( elem ).val(), value ) > -1 );\n\t\t\t}\n\t\t}\n\t};\n\tif ( !support.checkOn ) {\n\t\tjQuery.valHooks[ this ].get = function( elem ) {\n\t\t\treturn elem.getAttribute( \"value\" ) === null ? \"on\" : elem.value;\n\t\t};\n\t}\n} );\n\n\n\n\n// Return jQuery for attributes-only inclusion\n\n\nsupport.focusin = \"onfocusin\" in window;\n\n\nvar rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,\n\tstopPropagationCallback = function( e ) {\n\t\te.stopPropagation();\n\t};\n\njQuery.extend( jQuery.event, {\n\n\ttrigger: function( event, data, elem, onlyHandlers ) {\n\n\t\tvar i, cur, tmp, bubbleType, ontype, handle, special, lastElement,\n\t\t\teventPath = [ elem || document ],\n\t\t\ttype = hasOwn.call( event, \"type\" ) ? event.type : event,\n\t\t\tnamespaces = hasOwn.call( event, \"namespace\" ) ? event.namespace.split( \".\" ) : [];\n\n\t\tcur = lastElement = tmp = elem = elem || document;\n\n\t\t// Don't do events on text and comment nodes\n\t\tif ( elem.nodeType === 3 || elem.nodeType === 8 ) {\n\t\t\treturn;\n\t\t}\n\n\t\t// focus/blur morphs to focusin/out; ensure we're not firing them right now\n\t\tif ( rfocusMorph.test( type + jQuery.event.triggered ) ) {\n\t\t\treturn;\n\t\t}\n\n\t\tif ( type.indexOf( \".\" ) > -1 ) {\n\n\t\t\t// Namespaced trigger; create a regexp to match event type in handle()\n\t\t\tnamespaces = type.split( \".\" );\n\t\t\ttype = namespaces.shift();\n\t\t\tnamespaces.sort();\n\t\t}\n\t\tontype = type.indexOf( \":\" ) < 0 && \"on\" + type;\n\n\t\t// Caller can pass in a jQuery.Event object, Object, or just an event type string\n\t\tevent = event[ jQuery.expando ] ?\n\t\t\tevent :\n\t\t\tnew jQuery.Event( type, typeof event === \"object\" && event );\n\n\t\t// Trigger bitmask: & 1 for native handlers; & 2 for jQuery (always true)\n\t\tevent.isTrigger = onlyHandlers ? 2 : 3;\n\t\tevent.namespace = namespaces.join( \".\" );\n\t\tevent.rnamespace = event.namespace ?\n\t\t\tnew RegExp( \"(^|\\\\.)\" + namespaces.join( \"\\\\.(?:.*\\\\.|)\" ) + \"(\\\\.|$)\" ) :\n\t\t\tnull;\n\n\t\t// Clean up the event in case it is being reused\n\t\tevent.result = undefined;\n\t\tif ( !event.target ) {\n\t\t\tevent.target = elem;\n\t\t}\n\n\t\t// Clone any incoming data and prepend the event, creating the handler arg list\n\t\tdata = data == null ?\n\t\t\t[ event ] :\n\t\t\tjQuery.makeArray( data, [ event ] );\n\n\t\t// Allow special events to draw outside the lines\n\t\tspecial = jQuery.event.special[ type ] || {};\n\t\tif ( !onlyHandlers && special.trigger && special.trigger.apply( elem, data ) === false ) {\n\t\t\treturn;\n\t\t}\n\n\t\t// Determine event propagation path in advance, per W3C events spec (#9951)\n\t\t// Bubble up to document, then to window; watch for a global ownerDocument var (#9724)\n\t\tif ( !onlyHandlers && !special.noBubble && !isWindow( elem ) ) {\n\n\t\t\tbubbleType = special.delegateType || type;\n\t\t\tif ( !rfocusMorph.test( bubbleType + type ) ) {\n\t\t\t\tcur = cur.parentNode;\n\t\t\t}\n\t\t\tfor ( ; cur; cur = cur.parentNode ) {\n\t\t\t\teventPath.push( cur );\n\t\t\t\ttmp = cur;\n\t\t\t}\n\n\t\t\t// Only add window if we got to document (e.g., not plain obj or detached DOM)\n\t\t\tif ( tmp === ( elem.ownerDocument || document ) ) {\n\t\t\t\teventPath.push( tmp.defaultView || tmp.parentWindow || window );\n\t\t\t}\n\t\t}\n\n\t\t// Fire handlers on the event path\n\t\ti = 0;\n\t\twhile ( ( cur = eventPath[ i++ ] ) && !event.isPropagationStopped() ) {\n\t\t\tlastElement = cur;\n\t\t\tevent.type = i > 1 ?\n\t\t\t\tbubbleType :\n\t\t\t\tspecial.bindType || type;\n\n\t\t\t// jQuery handler\n\t\t\thandle = ( dataPriv.get( cur, \"events\" ) || {} )[ event.type ] &&\n\t\t\t\tdataPriv.get( cur, \"handle\" );\n\t\t\tif ( handle ) {\n\t\t\t\thandle.apply( cur, data );\n\t\t\t}\n\n\t\t\t// Native handler\n\t\t\thandle = ontype && cur[ ontype ];\n\t\t\tif ( handle && handle.apply && acceptData( cur ) ) {\n\t\t\t\tevent.result = handle.apply( cur, data );\n\t\t\t\tif ( event.result === false ) {\n\t\t\t\t\tevent.preventDefault();\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tevent.type = type;\n\n\t\t// If nobody prevented the default action, do it now\n\t\tif ( !onlyHandlers && !event.isDefaultPrevented() ) {\n\n\t\t\tif ( ( !special._default ||\n\t\t\t\tspecial._default.apply( eventPath.pop(), data ) === false ) &&\n\t\t\t\tacceptData( elem ) ) {\n\n\t\t\t\t// Call a native DOM method on the target with the same name as the event.\n\t\t\t\t// Don't do default actions on window, that's where global variables be (#6170)\n\t\t\t\tif ( ontype && isFunction( elem[ type ] ) && !isWindow( elem ) ) {\n\n\t\t\t\t\t// Don't re-trigger an onFOO event when we call its FOO() method\n\t\t\t\t\ttmp = elem[ ontype ];\n\n\t\t\t\t\tif ( tmp ) {\n\t\t\t\t\t\telem[ ontype ] = null;\n\t\t\t\t\t}\n\n\t\t\t\t\t// Prevent re-triggering of the same event, since we already bubbled it above\n\t\t\t\t\tjQuery.event.triggered = type;\n\n\t\t\t\t\tif ( event.isPropagationStopped() ) {\n\t\t\t\t\t\tlastElement.addEventListener( type, stopPropagationCallback );\n\t\t\t\t\t}\n\n\t\t\t\t\telem[ type ]();\n\n\t\t\t\t\tif ( event.isPropagationStopped() ) {\n\t\t\t\t\t\tlastElement.removeEventListener( type, stopPropagationCallback );\n\t\t\t\t\t}\n\n\t\t\t\t\tjQuery.event.triggered = undefined;\n\n\t\t\t\t\tif ( tmp ) {\n\t\t\t\t\t\telem[ ontype ] = tmp;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn event.result;\n\t},\n\n\t// Piggyback on a donor event to simulate a different one\n\t// Used only for `focus(in | out)` events\n\tsimulate: function( type, elem, event ) {\n\t\tvar e = jQuery.extend(\n\t\t\tnew jQuery.Event(),\n\t\t\tevent,\n\t\t\t{\n\t\t\t\ttype: type,\n\t\t\t\tisSimulated: true\n\t\t\t}\n\t\t);\n\n\t\tjQuery.event.trigger( e, null, elem );\n\t}\n\n} );\n\njQuery.fn.extend( {\n\n\ttrigger: function( type, data ) {\n\t\treturn this.each( function() {\n\t\t\tjQuery.event.trigger( type, data, this );\n\t\t} );\n\t},\n\ttriggerHandler: function( type, data ) {\n\t\tvar elem = this[ 0 ];\n\t\tif ( elem ) {\n\t\t\treturn jQuery.event.trigger( type, data, elem, true );\n\t\t}\n\t}\n} );\n\n\n// Support: Firefox <=44\n// Firefox doesn't have focus(in | out) events\n// Related ticket - https://bugzilla.mozilla.org/show_bug.cgi?id=687787\n//\n// Support: Chrome <=48 - 49, Safari <=9.0 - 9.1\n// focus(in | out) events fire after focus & blur events,\n// which is spec violation - http://www.w3.org/TR/DOM-Level-3-Events/#events-focusevent-event-order\n// Related ticket - https://bugs.chromium.org/p/chromium/issues/detail?id=449857\nif ( !support.focusin ) {\n\tjQuery.each( { focus: \"focusin\", blur: \"focusout\" }, function( orig, fix ) {\n\n\t\t// Attach a single capturing handler on the document while someone wants focusin/focusout\n\t\tvar handler = function( event ) {\n\t\t\tjQuery.event.simulate( fix, event.target, jQuery.event.fix( event ) );\n\t\t};\n\n\t\tjQuery.event.special[ fix ] = {\n\t\t\tsetup: function() {\n\t\t\t\tvar doc = this.ownerDocument || this,\n\t\t\t\t\tattaches = dataPriv.access( doc, fix );\n\n\t\t\t\tif ( !attaches ) {\n\t\t\t\t\tdoc.addEventListener( orig, handler, true );\n\t\t\t\t}\n\t\t\t\tdataPriv.access( doc, fix, ( attaches || 0 ) + 1 );\n\t\t\t},\n\t\t\tteardown: function() {\n\t\t\t\tvar doc = this.ownerDocument || this,\n\t\t\t\t\tattaches = dataPriv.access( doc, fix ) - 1;\n\n\t\t\t\tif ( !attaches ) {\n\t\t\t\t\tdoc.removeEventListener( orig, handler, true );\n\t\t\t\t\tdataPriv.remove( doc, fix );\n\n\t\t\t\t} else {\n\t\t\t\t\tdataPriv.access( doc, fix, attaches );\n\t\t\t\t}\n\t\t\t}\n\t\t};\n\t} );\n}\nvar location = window.location;\n\nvar nonce = Date.now();\n\nvar rquery = ( /\\?/ );\n\n\n\n// Cross-browser xml parsing\njQuery.parseXML = function( data ) {\n\tvar xml;\n\tif ( !data || typeof data !== \"string\" ) {\n\t\treturn null;\n\t}\n\n\t// Support: IE 9 - 11 only\n\t// IE throws on parseFromString with invalid input.\n\ttry {\n\t\txml = ( new window.DOMParser() ).parseFromString( data, \"text/xml\" );\n\t} catch ( e ) {\n\t\txml = undefined;\n\t}\n\n\tif ( !xml || xml.getElementsByTagName( \"parsererror\" ).length ) {\n\t\tjQuery.error( \"Invalid XML: \" + data );\n\t}\n\treturn xml;\n};\n\n\nvar\n\trbracket = /\\[\\]$/,\n\trCRLF = /\\r?\\n/g,\n\trsubmitterTypes = /^(?:submit|button|image|reset|file)$/i,\n\trsubmittable = /^(?:input|select|textarea|keygen)/i;\n\nfunction buildParams( prefix, obj, traditional, add ) {\n\tvar name;\n\n\tif ( Array.isArray( obj ) ) {\n\n\t\t// Serialize array item.\n\t\tjQuery.each( obj, function( i, v ) {\n\t\t\tif ( traditional || rbracket.test( prefix ) ) {\n\n\t\t\t\t// Treat each array item as a scalar.\n\t\t\t\tadd( prefix, v );\n\n\t\t\t} else {\n\n\t\t\t\t// Item is non-scalar (array or object), encode its numeric index.\n\t\t\t\tbuildParams(\n\t\t\t\t\tprefix + \"[\" + ( typeof v === \"object\" && v != null ? i : \"\" ) + \"]\",\n\t\t\t\t\tv,\n\t\t\t\t\ttraditional,\n\t\t\t\t\tadd\n\t\t\t\t);\n\t\t\t}\n\t\t} );\n\n\t} else if ( !traditional && toType( obj ) === \"object\" ) {\n\n\t\t// Serialize object item.\n\t\tfor ( name in obj ) {\n\t\t\tbuildParams( prefix + \"[\" + name + \"]\", obj[ name ], traditional, add );\n\t\t}\n\n\t} else {\n\n\t\t// Serialize scalar item.\n\t\tadd( prefix, obj );\n\t}\n}\n\n// Serialize an array of form elements or a set of\n// key/values into a query string\njQuery.param = function( a, traditional ) {\n\tvar prefix,\n\t\ts = [],\n\t\tadd = function( key, valueOrFunction ) {\n\n\t\t\t// If value is a function, invoke it and use its return value\n\t\t\tvar value = isFunction( valueOrFunction ) ?\n\t\t\t\tvalueOrFunction() :\n\t\t\t\tvalueOrFunction;\n\n\t\t\ts[ s.length ] = encodeURIComponent( key ) + \"=\" +\n\t\t\t\tencodeURIComponent( value == null ? \"\" : value );\n\t\t};\n\n\t// If an array was passed in, assume that it is an array of form elements.\n\tif ( Array.isArray( a ) || ( a.jquery && !jQuery.isPlainObject( a ) ) ) {\n\n\t\t// Serialize the form elements\n\t\tjQuery.each( a, function() {\n\t\t\tadd( this.name, this.value );\n\t\t} );\n\n\t} else {\n\n\t\t// If traditional, encode the \"old\" way (the way 1.3.2 or older\n\t\t// did it), otherwise encode params recursively.\n\t\tfor ( prefix in a ) {\n\t\t\tbuildParams( prefix, a[ prefix ], traditional, add );\n\t\t}\n\t}\n\n\t// Return the resulting serialization\n\treturn s.join( \"&\" );\n};\n\njQuery.fn.extend( {\n\tserialize: function() {\n\t\treturn jQuery.param( this.serializeArray() );\n\t},\n\tserializeArray: function() {\n\t\treturn this.map( function() {\n\n\t\t\t// Can add propHook for \"elements\" to filter or add form elements\n\t\t\tvar elements = jQuery.prop( this, \"elements\" );\n\t\t\treturn elements ? jQuery.makeArray( elements ) : this;\n\t\t} )\n\t\t.filter( function() {\n\t\t\tvar type = this.type;\n\n\t\t\t// Use .is( \":disabled\" ) so that fieldset[disabled] works\n\t\t\treturn this.name && !jQuery( this ).is( \":disabled\" ) &&\n\t\t\t\trsubmittable.test( this.nodeName ) && !rsubmitterTypes.test( type ) &&\n\t\t\t\t( this.checked || !rcheckableType.test( type ) );\n\t\t} )\n\t\t.map( function( i, elem ) {\n\t\t\tvar val = jQuery( this ).val();\n\n\t\t\tif ( val == null ) {\n\t\t\t\treturn null;\n\t\t\t}\n\n\t\t\tif ( Array.isArray( val ) ) {\n\t\t\t\treturn jQuery.map( val, function( val ) {\n\t\t\t\t\treturn { name: elem.name, value: val.replace( rCRLF, \"\\r\\n\" ) };\n\t\t\t\t} );\n\t\t\t}\n\n\t\t\treturn { name: elem.name, value: val.replace( rCRLF, \"\\r\\n\" ) };\n\t\t} ).get();\n\t}\n} );\n\n\nvar\n\tr20 = /%20/g,\n\trhash = /#.*$/,\n\trantiCache = /([?&])_=[^&]*/,\n\trheaders = /^(.*?):[ \\t]*([^\\r\\n]*)$/mg,\n\n\t// #7653, #8125, #8152: local protocol detection\n\trlocalProtocol = /^(?:about|app|app-storage|.+-extension|file|res|widget):$/,\n\trnoContent = /^(?:GET|HEAD)$/,\n\trprotocol = /^\\/\\//,\n\n\t/* Prefilters\n\t * 1) They are useful to introduce custom dataTypes (see ajax/jsonp.js for an example)\n\t * 2) These are called:\n\t *    - BEFORE asking for a transport\n\t *    - AFTER param serialization (s.data is a string if s.processData is true)\n\t * 3) key is the dataType\n\t * 4) the catchall symbol \"*\" can be used\n\t * 5) execution will start with transport dataType and THEN continue down to \"*\" if needed\n\t */\n\tprefilters = {},\n\n\t/* Transports bindings\n\t * 1) key is the dataType\n\t * 2) the catchall symbol \"*\" can be used\n\t * 3) selection will start with transport dataType and THEN go to \"*\" if needed\n\t */\n\ttransports = {},\n\n\t// Avoid comment-prolog char sequence (#10098); must appease lint and evade compression\n\tallTypes = \"*/\".concat( \"*\" ),\n\n\t// Anchor tag for parsing the document origin\n\toriginAnchor = document.createElement( \"a\" );\n\toriginAnchor.href = location.href;\n\n// Base \"constructor\" for jQuery.ajaxPrefilter and jQuery.ajaxTransport\nfunction addToPrefiltersOrTransports( structure ) {\n\n\t// dataTypeExpression is optional and defaults to \"*\"\n\treturn function( dataTypeExpression, func ) {\n\n\t\tif ( typeof dataTypeExpression !== \"string\" ) {\n\t\t\tfunc = dataTypeExpression;\n\t\t\tdataTypeExpression = \"*\";\n\t\t}\n\n\t\tvar dataType,\n\t\t\ti = 0,\n\t\t\tdataTypes = dataTypeExpression.toLowerCase().match( rnothtmlwhite ) || [];\n\n\t\tif ( isFunction( func ) ) {\n\n\t\t\t// For each dataType in the dataTypeExpression\n\t\t\twhile ( ( dataType = dataTypes[ i++ ] ) ) {\n\n\t\t\t\t// Prepend if requested\n\t\t\t\tif ( dataType[ 0 ] === \"+\" ) {\n\t\t\t\t\tdataType = dataType.slice( 1 ) || \"*\";\n\t\t\t\t\t( structure[ dataType ] = structure[ dataType ] || [] ).unshift( func );\n\n\t\t\t\t// Otherwise append\n\t\t\t\t} else {\n\t\t\t\t\t( structure[ dataType ] = structure[ dataType ] || [] ).push( func );\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t};\n}\n\n// Base inspection function for prefilters and transports\nfunction inspectPrefiltersOrTransports( structure, options, originalOptions, jqXHR ) {\n\n\tvar inspected = {},\n\t\tseekingTransport = ( structure === transports );\n\n\tfunction inspect( dataType ) {\n\t\tvar selected;\n\t\tinspected[ dataType ] = true;\n\t\tjQuery.each( structure[ dataType ] || [], function( _, prefilterOrFactory ) {\n\t\t\tvar dataTypeOrTransport = prefilterOrFactory( options, originalOptions, jqXHR );\n\t\t\tif ( typeof dataTypeOrTransport === \"string\" &&\n\t\t\t\t!seekingTransport && !inspected[ dataTypeOrTransport ] ) {\n\n\t\t\t\toptions.dataTypes.unshift( dataTypeOrTransport );\n\t\t\t\tinspect( dataTypeOrTransport );\n\t\t\t\treturn false;\n\t\t\t} else if ( seekingTransport ) {\n\t\t\t\treturn !( selected = dataTypeOrTransport );\n\t\t\t}\n\t\t} );\n\t\treturn selected;\n\t}\n\n\treturn inspect( options.dataTypes[ 0 ] ) || !inspected[ \"*\" ] && inspect( \"*\" );\n}\n\n// A special extend for ajax options\n// that takes \"flat\" options (not to be deep extended)\n// Fixes #9887\nfunction ajaxExtend( target, src ) {\n\tvar key, deep,\n\t\tflatOptions = jQuery.ajaxSettings.flatOptions || {};\n\n\tfor ( key in src ) {\n\t\tif ( src[ key ] !== undefined ) {\n\t\t\t( flatOptions[ key ] ? target : ( deep || ( deep = {} ) ) )[ key ] = src[ key ];\n\t\t}\n\t}\n\tif ( deep ) {\n\t\tjQuery.extend( true, target, deep );\n\t}\n\n\treturn target;\n}\n\n/* Handles responses to an ajax request:\n * - finds the right dataType (mediates between content-type and expected dataType)\n * - returns the corresponding response\n */\nfunction ajaxHandleResponses( s, jqXHR, responses ) {\n\n\tvar ct, type, finalDataType, firstDataType,\n\t\tcontents = s.contents,\n\t\tdataTypes = s.dataTypes;\n\n\t// Remove auto dataType and get content-type in the process\n\twhile ( dataTypes[ 0 ] === \"*\" ) {\n\t\tdataTypes.shift();\n\t\tif ( ct === undefined ) {\n\t\t\tct = s.mimeType || jqXHR.getResponseHeader( \"Content-Type\" );\n\t\t}\n\t}\n\n\t// Check if we're dealing with a known content-type\n\tif ( ct ) {\n\t\tfor ( type in contents ) {\n\t\t\tif ( contents[ type ] && contents[ type ].test( ct ) ) {\n\t\t\t\tdataTypes.unshift( type );\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t}\n\n\t// Check to see if we have a response for the expected dataType\n\tif ( dataTypes[ 0 ] in responses ) {\n\t\tfinalDataType = dataTypes[ 0 ];\n\t} else {\n\n\t\t// Try convertible dataTypes\n\t\tfor ( type in responses ) {\n\t\t\tif ( !dataTypes[ 0 ] || s.converters[ type + \" \" + dataTypes[ 0 ] ] ) {\n\t\t\t\tfinalDataType = type;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tif ( !firstDataType ) {\n\t\t\t\tfirstDataType = type;\n\t\t\t}\n\t\t}\n\n\t\t// Or just use first one\n\t\tfinalDataType = finalDataType || firstDataType;\n\t}\n\n\t// If we found a dataType\n\t// We add the dataType to the list if needed\n\t// and return the corresponding response\n\tif ( finalDataType ) {\n\t\tif ( finalDataType !== dataTypes[ 0 ] ) {\n\t\t\tdataTypes.unshift( finalDataType );\n\t\t}\n\t\treturn responses[ finalDataType ];\n\t}\n}\n\n/* Chain conversions given the request and the original response\n * Also sets the responseXXX fields on the jqXHR instance\n */\nfunction ajaxConvert( s, response, jqXHR, isSuccess ) {\n\tvar conv2, current, conv, tmp, prev,\n\t\tconverters = {},\n\n\t\t// Work with a copy of dataTypes in case we need to modify it for conversion\n\t\tdataTypes = s.dataTypes.slice();\n\n\t// Create converters map with lowercased keys\n\tif ( dataTypes[ 1 ] ) {\n\t\tfor ( conv in s.converters ) {\n\t\t\tconverters[ conv.toLowerCase() ] = s.converters[ conv ];\n\t\t}\n\t}\n\n\tcurrent = dataTypes.shift();\n\n\t// Convert to each sequential dataType\n\twhile ( current ) {\n\n\t\tif ( s.responseFields[ current ] ) {\n\t\t\tjqXHR[ s.responseFields[ current ] ] = response;\n\t\t}\n\n\t\t// Apply the dataFilter if provided\n\t\tif ( !prev && isSuccess && s.dataFilter ) {\n\t\t\tresponse = s.dataFilter( response, s.dataType );\n\t\t}\n\n\t\tprev = current;\n\t\tcurrent = dataTypes.shift();\n\n\t\tif ( current ) {\n\n\t\t\t// There's only work to do if current dataType is non-auto\n\t\t\tif ( current === \"*\" ) {\n\n\t\t\t\tcurrent = prev;\n\n\t\t\t// Convert response if prev dataType is non-auto and differs from current\n\t\t\t} else if ( prev !== \"*\" && prev !== current ) {\n\n\t\t\t\t// Seek a direct converter\n\t\t\t\tconv = converters[ prev + \" \" + current ] || converters[ \"* \" + current ];\n\n\t\t\t\t// If none found, seek a pair\n\t\t\t\tif ( !conv ) {\n\t\t\t\t\tfor ( conv2 in converters ) {\n\n\t\t\t\t\t\t// If conv2 outputs current\n\t\t\t\t\t\ttmp = conv2.split( \" \" );\n\t\t\t\t\t\tif ( tmp[ 1 ] === current ) {\n\n\t\t\t\t\t\t\t// If prev can be converted to accepted input\n\t\t\t\t\t\t\tconv = converters[ prev + \" \" + tmp[ 0 ] ] ||\n\t\t\t\t\t\t\t\tconverters[ \"* \" + tmp[ 0 ] ];\n\t\t\t\t\t\t\tif ( conv ) {\n\n\t\t\t\t\t\t\t\t// Condense equivalence converters\n\t\t\t\t\t\t\t\tif ( conv === true ) {\n\t\t\t\t\t\t\t\t\tconv = converters[ conv2 ];\n\n\t\t\t\t\t\t\t\t// Otherwise, insert the intermediate dataType\n\t\t\t\t\t\t\t\t} else if ( converters[ conv2 ] !== true ) {\n\t\t\t\t\t\t\t\t\tcurrent = tmp[ 0 ];\n\t\t\t\t\t\t\t\t\tdataTypes.unshift( tmp[ 1 ] );\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\t// Apply converter (if not an equivalence)\n\t\t\t\tif ( conv !== true ) {\n\n\t\t\t\t\t// Unless errors are allowed to bubble, catch and return them\n\t\t\t\t\tif ( conv && s.throws ) {\n\t\t\t\t\t\tresponse = conv( response );\n\t\t\t\t\t} else {\n\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\tresponse = conv( response );\n\t\t\t\t\t\t} catch ( e ) {\n\t\t\t\t\t\t\treturn {\n\t\t\t\t\t\t\t\tstate: \"parsererror\",\n\t\t\t\t\t\t\t\terror: conv ? e : \"No conversion from \" + prev + \" to \" + current\n\t\t\t\t\t\t\t};\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\treturn { state: \"success\", data: response };\n}\n\njQuery.extend( {\n\n\t// Counter for holding the number of active queries\n\tactive: 0,\n\n\t// Last-Modified header cache for next request\n\tlastModified: {},\n\tetag: {},\n\n\tajaxSettings: {\n\t\turl: location.href,\n\t\ttype: \"GET\",\n\t\tisLocal: rlocalProtocol.test( location.protocol ),\n\t\tglobal: true,\n\t\tprocessData: true,\n\t\tasync: true,\n\t\tcontentType: \"application/x-www-form-urlencoded; charset=UTF-8\",\n\n\t\t/*\n\t\ttimeout: 0,\n\t\tdata: null,\n\t\tdataType: null,\n\t\tusername: null,\n\t\tpassword: null,\n\t\tcache: null,\n\t\tthrows: false,\n\t\ttraditional: false,\n\t\theaders: {},\n\t\t*/\n\n\t\taccepts: {\n\t\t\t\"*\": allTypes,\n\t\t\ttext: \"text/plain\",\n\t\t\thtml: \"text/html\",\n\t\t\txml: \"application/xml, text/xml\",\n\t\t\tjson: \"application/json, text/javascript\"\n\t\t},\n\n\t\tcontents: {\n\t\t\txml: /\\bxml\\b/,\n\t\t\thtml: /\\bhtml/,\n\t\t\tjson: /\\bjson\\b/\n\t\t},\n\n\t\tresponseFields: {\n\t\t\txml: \"responseXML\",\n\t\t\ttext: \"responseText\",\n\t\t\tjson: \"responseJSON\"\n\t\t},\n\n\t\t// Data converters\n\t\t// Keys separate source (or catchall \"*\") and destination types with a single space\n\t\tconverters: {\n\n\t\t\t// Convert anything to text\n\t\t\t\"* text\": String,\n\n\t\t\t// Text to html (true = no transformation)\n\t\t\t\"text html\": true,\n\n\t\t\t// Evaluate text as a json expression\n\t\t\t\"text json\": JSON.parse,\n\n\t\t\t// Parse text as xml\n\t\t\t\"text xml\": jQuery.parseXML\n\t\t},\n\n\t\t// For options that shouldn't be deep extended:\n\t\t// you can add your own custom options here if\n\t\t// and when you create one that shouldn't be\n\t\t// deep extended (see ajaxExtend)\n\t\tflatOptions: {\n\t\t\turl: true,\n\t\t\tcontext: true\n\t\t}\n\t},\n\n\t// Creates a full fledged settings object into target\n\t// with both ajaxSettings and settings fields.\n\t// If target is omitted, writes into ajaxSettings.\n\tajaxSetup: function( target, settings ) {\n\t\treturn settings ?\n\n\t\t\t// Building a settings object\n\t\t\tajaxExtend( ajaxExtend( target, jQuery.ajaxSettings ), settings ) :\n\n\t\t\t// Extending ajaxSettings\n\t\t\tajaxExtend( jQuery.ajaxSettings, target );\n\t},\n\n\tajaxPrefilter: addToPrefiltersOrTransports( prefilters ),\n\tajaxTransport: addToPrefiltersOrTransports( transports ),\n\n\t// Main method\n\tajax: function( url, options ) {\n\n\t\t// If url is an object, simulate pre-1.5 signature\n\t\tif ( typeof url === \"object\" ) {\n\t\t\toptions = url;\n\t\t\turl = undefined;\n\t\t}\n\n\t\t// Force options to be an object\n\t\toptions = options || {};\n\n\t\tvar transport,\n\n\t\t\t// URL without anti-cache param\n\t\t\tcacheURL,\n\n\t\t\t// Response headers\n\t\t\tresponseHeadersString,\n\t\t\tresponseHeaders,\n\n\t\t\t// timeout handle\n\t\t\ttimeoutTimer,\n\n\t\t\t// Url cleanup var\n\t\t\turlAnchor,\n\n\t\t\t// Request state (becomes false upon send and true upon completion)\n\t\t\tcompleted,\n\n\t\t\t// To know if global events are to be dispatched\n\t\t\tfireGlobals,\n\n\t\t\t// Loop variable\n\t\t\ti,\n\n\t\t\t// uncached part of the url\n\t\t\tuncached,\n\n\t\t\t// Create the final options object\n\t\t\ts = jQuery.ajaxSetup( {}, options ),\n\n\t\t\t// Callbacks context\n\t\t\tcallbackContext = s.context || s,\n\n\t\t\t// Context for global events is callbackContext if it is a DOM node or jQuery collection\n\t\t\tglobalEventContext = s.context &&\n\t\t\t\t( callbackContext.nodeType || callbackContext.jquery ) ?\n\t\t\t\t\tjQuery( callbackContext ) :\n\t\t\t\t\tjQuery.event,\n\n\t\t\t// Deferreds\n\t\t\tdeferred = jQuery.Deferred(),\n\t\t\tcompleteDeferred = jQuery.Callbacks( \"once memory\" ),\n\n\t\t\t// Status-dependent callbacks\n\t\t\tstatusCode = s.statusCode || {},\n\n\t\t\t// Headers (they are sent all at once)\n\t\t\trequestHeaders = {},\n\t\t\trequestHeadersNames = {},\n\n\t\t\t// Default abort message\n\t\t\tstrAbort = \"canceled\",\n\n\t\t\t// Fake xhr\n\t\t\tjqXHR = {\n\t\t\t\treadyState: 0,\n\n\t\t\t\t// Builds headers hashtable if needed\n\t\t\t\tgetResponseHeader: function( key ) {\n\t\t\t\t\tvar match;\n\t\t\t\t\tif ( completed ) {\n\t\t\t\t\t\tif ( !responseHeaders ) {\n\t\t\t\t\t\t\tresponseHeaders = {};\n\t\t\t\t\t\t\twhile ( ( match = rheaders.exec( responseHeadersString ) ) ) {\n\t\t\t\t\t\t\t\tresponseHeaders[ match[ 1 ].toLowerCase() ] = match[ 2 ];\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tmatch = responseHeaders[ key.toLowerCase() ];\n\t\t\t\t\t}\n\t\t\t\t\treturn match == null ? null : match;\n\t\t\t\t},\n\n\t\t\t\t// Raw string\n\t\t\t\tgetAllResponseHeaders: function() {\n\t\t\t\t\treturn completed ? responseHeadersString : null;\n\t\t\t\t},\n\n\t\t\t\t// Caches the header\n\t\t\t\tsetRequestHeader: function( name, value ) {\n\t\t\t\t\tif ( completed == null ) {\n\t\t\t\t\t\tname = requestHeadersNames[ name.toLowerCase() ] =\n\t\t\t\t\t\t\trequestHeadersNames[ name.toLowerCase() ] || name;\n\t\t\t\t\t\trequestHeaders[ name ] = value;\n\t\t\t\t\t}\n\t\t\t\t\treturn this;\n\t\t\t\t},\n\n\t\t\t\t// Overrides response content-type header\n\t\t\t\toverrideMimeType: function( type ) {\n\t\t\t\t\tif ( completed == null ) {\n\t\t\t\t\t\ts.mimeType = type;\n\t\t\t\t\t}\n\t\t\t\t\treturn this;\n\t\t\t\t},\n\n\t\t\t\t// Status-dependent callbacks\n\t\t\t\tstatusCode: function( map ) {\n\t\t\t\t\tvar code;\n\t\t\t\t\tif ( map ) {\n\t\t\t\t\t\tif ( completed ) {\n\n\t\t\t\t\t\t\t// Execute the appropriate callbacks\n\t\t\t\t\t\t\tjqXHR.always( map[ jqXHR.status ] );\n\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\t// Lazy-add the new callbacks in a way that preserves old ones\n\t\t\t\t\t\t\tfor ( code in map ) {\n\t\t\t\t\t\t\t\tstatusCode[ code ] = [ statusCode[ code ], map[ code ] ];\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\treturn this;\n\t\t\t\t},\n\n\t\t\t\t// Cancel the request\n\t\t\t\tabort: function( statusText ) {\n\t\t\t\t\tvar finalText = statusText || strAbort;\n\t\t\t\t\tif ( transport ) {\n\t\t\t\t\t\ttransport.abort( finalText );\n\t\t\t\t\t}\n\t\t\t\t\tdone( 0, finalText );\n\t\t\t\t\treturn this;\n\t\t\t\t}\n\t\t\t};\n\n\t\t// Attach deferreds\n\t\tdeferred.promise( jqXHR );\n\n\t\t// Add protocol if not provided (prefilters might expect it)\n\t\t// Handle falsy url in the settings object (#10093: consistency with old signature)\n\t\t// We also use the url parameter if available\n\t\ts.url = ( ( url || s.url || location.href ) + \"\" )\n\t\t\t.replace( rprotocol, location.protocol + \"//\" );\n\n\t\t// Alias method option to type as per ticket #12004\n\t\ts.type = options.method || options.type || s.method || s.type;\n\n\t\t// Extract dataTypes list\n\t\ts.dataTypes = ( s.dataType || \"*\" ).toLowerCase().match( rnothtmlwhite ) || [ \"\" ];\n\n\t\t// A cross-domain request is in order when the origin doesn't match the current origin.\n\t\tif ( s.crossDomain == null ) {\n\t\t\turlAnchor = document.createElement( \"a\" );\n\n\t\t\t// Support: IE <=8 - 11, Edge 12 - 15\n\t\t\t// IE throws exception on accessing the href property if url is malformed,\n\t\t\t// e.g. http://example.com:80x/\n\t\t\ttry {\n\t\t\t\turlAnchor.href = s.url;\n\n\t\t\t\t// Support: IE <=8 - 11 only\n\t\t\t\t// Anchor's host property isn't correctly set when s.url is relative\n\t\t\t\turlAnchor.href = urlAnchor.href;\n\t\t\t\ts.crossDomain = originAnchor.protocol + \"//\" + originAnchor.host !==\n\t\t\t\t\turlAnchor.protocol + \"//\" + urlAnchor.host;\n\t\t\t} catch ( e ) {\n\n\t\t\t\t// If there is an error parsing the URL, assume it is crossDomain,\n\t\t\t\t// it can be rejected by the transport if it is invalid\n\t\t\t\ts.crossDomain = true;\n\t\t\t}\n\t\t}\n\n\t\t// Convert data if not already a string\n\t\tif ( s.data && s.processData && typeof s.data !== \"string\" ) {\n\t\t\ts.data = jQuery.param( s.data, s.traditional );\n\t\t}\n\n\t\t// Apply prefilters\n\t\tinspectPrefiltersOrTransports( prefilters, s, options, jqXHR );\n\n\t\t// If request was aborted inside a prefilter, stop there\n\t\tif ( completed ) {\n\t\t\treturn jqXHR;\n\t\t}\n\n\t\t// We can fire global events as of now if asked to\n\t\t// Don't fire events if jQuery.event is undefined in an AMD-usage scenario (#15118)\n\t\tfireGlobals = jQuery.event && s.global;\n\n\t\t// Watch for a new set of requests\n\t\tif ( fireGlobals && jQuery.active++ === 0 ) {\n\t\t\tjQuery.event.trigger( \"ajaxStart\" );\n\t\t}\n\n\t\t// Uppercase the type\n\t\ts.type = s.type.toUpperCase();\n\n\t\t// Determine if request has content\n\t\ts.hasContent = !rnoContent.test( s.type );\n\n\t\t// Save the URL in case we're toying with the If-Modified-Since\n\t\t// and/or If-None-Match header later on\n\t\t// Remove hash to simplify url manipulation\n\t\tcacheURL = s.url.replace( rhash, \"\" );\n\n\t\t// More options handling for requests with no content\n\t\tif ( !s.hasContent ) {\n\n\t\t\t// Remember the hash so we can put it back\n\t\t\tuncached = s.url.slice( cacheURL.length );\n\n\t\t\t// If data is available and should be processed, append data to url\n\t\t\tif ( s.data && ( s.processData || typeof s.data === \"string\" ) ) {\n\t\t\t\tcacheURL += ( rquery.test( cacheURL ) ? \"&\" : \"?\" ) + s.data;\n\n\t\t\t\t// #9682: remove data so that it's not used in an eventual retry\n\t\t\t\tdelete s.data;\n\t\t\t}\n\n\t\t\t// Add or update anti-cache param if needed\n\t\t\tif ( s.cache === false ) {\n\t\t\t\tcacheURL = cacheURL.replace( rantiCache, \"$1\" );\n\t\t\t\tuncached = ( rquery.test( cacheURL ) ? \"&\" : \"?\" ) + \"_=\" + ( nonce++ ) + uncached;\n\t\t\t}\n\n\t\t\t// Put hash and anti-cache on the URL that will be requested (gh-1732)\n\t\t\ts.url = cacheURL + uncached;\n\n\t\t// Change '%20' to '+' if this is encoded form body content (gh-2658)\n\t\t} else if ( s.data && s.processData &&\n\t\t\t( s.contentType || \"\" ).indexOf( \"application/x-www-form-urlencoded\" ) === 0 ) {\n\t\t\ts.data = s.data.replace( r20, \"+\" );\n\t\t}\n\n\t\t// Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.\n\t\tif ( s.ifModified ) {\n\t\t\tif ( jQuery.lastModified[ cacheURL ] ) {\n\t\t\t\tjqXHR.setRequestHeader( \"If-Modified-Since\", jQuery.lastModified[ cacheURL ] );\n\t\t\t}\n\t\t\tif ( jQuery.etag[ cacheURL ] ) {\n\t\t\t\tjqXHR.setRequestHeader( \"If-None-Match\", jQuery.etag[ cacheURL ] );\n\t\t\t}\n\t\t}\n\n\t\t// Set the correct header, if data is being sent\n\t\tif ( s.data && s.hasContent && s.contentType !== false || options.contentType ) {\n\t\t\tjqXHR.setRequestHeader( \"Content-Type\", s.contentType );\n\t\t}\n\n\t\t// Set the Accepts header for the server, depending on the dataType\n\t\tjqXHR.setRequestHeader(\n\t\t\t\"Accept\",\n\t\t\ts.dataTypes[ 0 ] && s.accepts[ s.dataTypes[ 0 ] ] ?\n\t\t\t\ts.accepts[ s.dataTypes[ 0 ] ] +\n\t\t\t\t\t( s.dataTypes[ 0 ] !== \"*\" ? \", \" + allTypes + \"; q=0.01\" : \"\" ) :\n\t\t\t\ts.accepts[ \"*\" ]\n\t\t);\n\n\t\t// Check for headers option\n\t\tfor ( i in s.headers ) {\n\t\t\tjqXHR.setRequestHeader( i, s.headers[ i ] );\n\t\t}\n\n\t\t// Allow custom headers/mimetypes and early abort\n\t\tif ( s.beforeSend &&\n\t\t\t( s.beforeSend.call( callbackContext, jqXHR, s ) === false || completed ) ) {\n\n\t\t\t// Abort if not done already and return\n\t\t\treturn jqXHR.abort();\n\t\t}\n\n\t\t// Aborting is no longer a cancellation\n\t\tstrAbort = \"abort\";\n\n\t\t// Install callbacks on deferreds\n\t\tcompleteDeferred.add( s.complete );\n\t\tjqXHR.done( s.success );\n\t\tjqXHR.fail( s.error );\n\n\t\t// Get transport\n\t\ttransport = inspectPrefiltersOrTransports( transports, s, options, jqXHR );\n\n\t\t// If no transport, we auto-abort\n\t\tif ( !transport ) {\n\t\t\tdone( -1, \"No Transport\" );\n\t\t} else {\n\t\t\tjqXHR.readyState = 1;\n\n\t\t\t// Send global event\n\t\t\tif ( fireGlobals ) {\n\t\t\t\tglobalEventContext.trigger( \"ajaxSend\", [ jqXHR, s ] );\n\t\t\t}\n\n\t\t\t// If request was aborted inside ajaxSend, stop there\n\t\t\tif ( completed ) {\n\t\t\t\treturn jqXHR;\n\t\t\t}\n\n\t\t\t// Timeout\n\t\t\tif ( s.async && s.timeout > 0 ) {\n\t\t\t\ttimeoutTimer = window.setTimeout( function() {\n\t\t\t\t\tjqXHR.abort( \"timeout\" );\n\t\t\t\t}, s.timeout );\n\t\t\t}\n\n\t\t\ttry {\n\t\t\t\tcompleted = false;\n\t\t\t\ttransport.send( requestHeaders, done );\n\t\t\t} catch ( e ) {\n\n\t\t\t\t// Rethrow post-completion exceptions\n\t\t\t\tif ( completed ) {\n\t\t\t\t\tthrow e;\n\t\t\t\t}\n\n\t\t\t\t// Propagate others as results\n\t\t\t\tdone( -1, e );\n\t\t\t}\n\t\t}\n\n\t\t// Callback for when everything is done\n\t\tfunction done( status, nativeStatusText, responses, headers ) {\n\t\t\tvar isSuccess, success, error, response, modified,\n\t\t\t\tstatusText = nativeStatusText;\n\n\t\t\t// Ignore repeat invocations\n\t\t\tif ( completed ) {\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\tcompleted = true;\n\n\t\t\t// Clear timeout if it exists\n\t\t\tif ( timeoutTimer ) {\n\t\t\t\twindow.clearTimeout( timeoutTimer );\n\t\t\t}\n\n\t\t\t// Dereference transport for early garbage collection\n\t\t\t// (no matter how long the jqXHR object will be used)\n\t\t\ttransport = undefined;\n\n\t\t\t// Cache response headers\n\t\t\tresponseHeadersString = headers || \"\";\n\n\t\t\t// Set readyState\n\t\t\tjqXHR.readyState = status > 0 ? 4 : 0;\n\n\t\t\t// Determine if successful\n\t\t\tisSuccess = status >= 200 && status < 300 || status === 304;\n\n\t\t\t// Get response data\n\t\t\tif ( responses ) {\n\t\t\t\tresponse = ajaxHandleResponses( s, jqXHR, responses );\n\t\t\t}\n\n\t\t\t// Convert no matter what (that way responseXXX fields are always set)\n\t\t\tresponse = ajaxConvert( s, response, jqXHR, isSuccess );\n\n\t\t\t// If successful, handle type chaining\n\t\t\tif ( isSuccess ) {\n\n\t\t\t\t// Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.\n\t\t\t\tif ( s.ifModified ) {\n\t\t\t\t\tmodified = jqXHR.getResponseHeader( \"Last-Modified\" );\n\t\t\t\t\tif ( modified ) {\n\t\t\t\t\t\tjQuery.lastModified[ cacheURL ] = modified;\n\t\t\t\t\t}\n\t\t\t\t\tmodified = jqXHR.getResponseHeader( \"etag\" );\n\t\t\t\t\tif ( modified ) {\n\t\t\t\t\t\tjQuery.etag[ cacheURL ] = modified;\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\t// if no content\n\t\t\t\tif ( status === 204 || s.type === \"HEAD\" ) {\n\t\t\t\t\tstatusText = \"nocontent\";\n\n\t\t\t\t// if not modified\n\t\t\t\t} else if ( status === 304 ) {\n\t\t\t\t\tstatusText = \"notmodified\";\n\n\t\t\t\t// If we have data, let's convert it\n\t\t\t\t} else {\n\t\t\t\t\tstatusText = response.state;\n\t\t\t\t\tsuccess = response.data;\n\t\t\t\t\terror = response.error;\n\t\t\t\t\tisSuccess = !error;\n\t\t\t\t}\n\t\t\t} else {\n\n\t\t\t\t// Extract error from statusText and normalize for non-aborts\n\t\t\t\terror = statusText;\n\t\t\t\tif ( status || !statusText ) {\n\t\t\t\t\tstatusText = \"error\";\n\t\t\t\t\tif ( status < 0 ) {\n\t\t\t\t\t\tstatus = 0;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// Set data for the fake xhr object\n\t\t\tjqXHR.status = status;\n\t\t\tjqXHR.statusText = ( nativeStatusText || statusText ) + \"\";\n\n\t\t\t// Success/Error\n\t\t\tif ( isSuccess ) {\n\t\t\t\tdeferred.resolveWith( callbackContext, [ success, statusText, jqXHR ] );\n\t\t\t} else {\n\t\t\t\tdeferred.rejectWith( callbackContext, [ jqXHR, statusText, error ] );\n\t\t\t}\n\n\t\t\t// Status-dependent callbacks\n\t\t\tjqXHR.statusCode( statusCode );\n\t\t\tstatusCode = undefined;\n\n\t\t\tif ( fireGlobals ) {\n\t\t\t\tglobalEventContext.trigger( isSuccess ? \"ajaxSuccess\" : \"ajaxError\",\n\t\t\t\t\t[ jqXHR, s, isSuccess ? success : error ] );\n\t\t\t}\n\n\t\t\t// Complete\n\t\t\tcompleteDeferred.fireWith( callbackContext, [ jqXHR, statusText ] );\n\n\t\t\tif ( fireGlobals ) {\n\t\t\t\tglobalEventContext.trigger( \"ajaxComplete\", [ jqXHR, s ] );\n\n\t\t\t\t// Handle the global AJAX counter\n\t\t\t\tif ( !( --jQuery.active ) ) {\n\t\t\t\t\tjQuery.event.trigger( \"ajaxStop\" );\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn jqXHR;\n\t},\n\n\tgetJSON: function( url, data, callback ) {\n\t\treturn jQuery.get( url, data, callback, \"json\" );\n\t},\n\n\tgetScript: function( url, callback ) {\n\t\treturn jQuery.get( url, undefined, callback, \"script\" );\n\t}\n} );\n\njQuery.each( [ \"get\", \"post\" ], function( i, method ) {\n\tjQuery[ method ] = function( url, data, callback, type ) {\n\n\t\t// Shift arguments if data argument was omitted\n\t\tif ( isFunction( data ) ) {\n\t\t\ttype = type || callback;\n\t\t\tcallback = data;\n\t\t\tdata = undefined;\n\t\t}\n\n\t\t// The url can be an options object (which then must have .url)\n\t\treturn jQuery.ajax( jQuery.extend( {\n\t\t\turl: url,\n\t\t\ttype: method,\n\t\t\tdataType: type,\n\t\t\tdata: data,\n\t\t\tsuccess: callback\n\t\t}, jQuery.isPlainObject( url ) && url ) );\n\t};\n} );\n\n\njQuery._evalUrl = function( url ) {\n\treturn jQuery.ajax( {\n\t\turl: url,\n\n\t\t// Make this explicit, since user can override this through ajaxSetup (#11264)\n\t\ttype: \"GET\",\n\t\tdataType: \"script\",\n\t\tcache: true,\n\t\tasync: false,\n\t\tglobal: false,\n\t\t\"throws\": true\n\t} );\n};\n\n\njQuery.fn.extend( {\n\twrapAll: function( html ) {\n\t\tvar wrap;\n\n\t\tif ( this[ 0 ] ) {\n\t\t\tif ( isFunction( html ) ) {\n\t\t\t\thtml = html.call( this[ 0 ] );\n\t\t\t}\n\n\t\t\t// The elements to wrap the target around\n\t\t\twrap = jQuery( html, this[ 0 ].ownerDocument ).eq( 0 ).clone( true );\n\n\t\t\tif ( this[ 0 ].parentNode ) {\n\t\t\t\twrap.insertBefore( this[ 0 ] );\n\t\t\t}\n\n\t\t\twrap.map( function() {\n\t\t\t\tvar elem = this;\n\n\t\t\t\twhile ( elem.firstElementChild ) {\n\t\t\t\t\telem = elem.firstElementChild;\n\t\t\t\t}\n\n\t\t\t\treturn elem;\n\t\t\t} ).append( this );\n\t\t}\n\n\t\treturn this;\n\t},\n\n\twrapInner: function( html ) {\n\t\tif ( isFunction( html ) ) {\n\t\t\treturn this.each( function( i ) {\n\t\t\t\tjQuery( this ).wrapInner( html.call( this, i ) );\n\t\t\t} );\n\t\t}\n\n\t\treturn this.each( function() {\n\t\t\tvar self = jQuery( this ),\n\t\t\t\tcontents = self.contents();\n\n\t\t\tif ( contents.length ) {\n\t\t\t\tcontents.wrapAll( html );\n\n\t\t\t} else {\n\t\t\t\tself.append( html );\n\t\t\t}\n\t\t} );\n\t},\n\n\twrap: function( html ) {\n\t\tvar htmlIsFunction = isFunction( html );\n\n\t\treturn this.each( function( i ) {\n\t\t\tjQuery( this ).wrapAll( htmlIsFunction ? html.call( this, i ) : html );\n\t\t} );\n\t},\n\n\tunwrap: function( selector ) {\n\t\tthis.parent( selector ).not( \"body\" ).each( function() {\n\t\t\tjQuery( this ).replaceWith( this.childNodes );\n\t\t} );\n\t\treturn this;\n\t}\n} );\n\n\njQuery.expr.pseudos.hidden = function( elem ) {\n\treturn !jQuery.expr.pseudos.visible( elem );\n};\njQuery.expr.pseudos.visible = function( elem ) {\n\treturn !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );\n};\n\n\n\n\njQuery.ajaxSettings.xhr = function() {\n\ttry {\n\t\treturn new window.XMLHttpRequest();\n\t} catch ( e ) {}\n};\n\nvar xhrSuccessStatus = {\n\n\t\t// File protocol always yields status code 0, assume 200\n\t\t0: 200,\n\n\t\t// Support: IE <=9 only\n\t\t// #1450: sometimes IE returns 1223 when it should be 204\n\t\t1223: 204\n\t},\n\txhrSupported = jQuery.ajaxSettings.xhr();\n\nsupport.cors = !!xhrSupported && ( \"withCredentials\" in xhrSupported );\nsupport.ajax = xhrSupported = !!xhrSupported;\n\njQuery.ajaxTransport( function( options ) {\n\tvar callback, errorCallback;\n\n\t// Cross domain only allowed if supported through XMLHttpRequest\n\tif ( support.cors || xhrSupported && !options.crossDomain ) {\n\t\treturn {\n\t\t\tsend: function( headers, complete ) {\n\t\t\t\tvar i,\n\t\t\t\t\txhr = options.xhr();\n\n\t\t\t\txhr.open(\n\t\t\t\t\toptions.type,\n\t\t\t\t\toptions.url,\n\t\t\t\t\toptions.async,\n\t\t\t\t\toptions.username,\n\t\t\t\t\toptions.password\n\t\t\t\t);\n\n\t\t\t\t// Apply custom fields if provided\n\t\t\t\tif ( options.xhrFields ) {\n\t\t\t\t\tfor ( i in options.xhrFields ) {\n\t\t\t\t\t\txhr[ i ] = options.xhrFields[ i ];\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\t// Override mime type if needed\n\t\t\t\tif ( options.mimeType && xhr.overrideMimeType ) {\n\t\t\t\t\txhr.overrideMimeType( options.mimeType );\n\t\t\t\t}\n\n\t\t\t\t// X-Requested-With header\n\t\t\t\t// For cross-domain requests, seeing as conditions for a preflight are\n\t\t\t\t// akin to a jigsaw puzzle, we simply never set it to be sure.\n\t\t\t\t// (it can always be set on a per-request basis or even using ajaxSetup)\n\t\t\t\t// For same-domain requests, won't change header if already provided.\n\t\t\t\tif ( !options.crossDomain && !headers[ \"X-Requested-With\" ] ) {\n\t\t\t\t\theaders[ \"X-Requested-With\" ] = \"XMLHttpRequest\";\n\t\t\t\t}\n\n\t\t\t\t// Set headers\n\t\t\t\tfor ( i in headers ) {\n\t\t\t\t\txhr.setRequestHeader( i, headers[ i ] );\n\t\t\t\t}\n\n\t\t\t\t// Callback\n\t\t\t\tcallback = function( type ) {\n\t\t\t\t\treturn function() {\n\t\t\t\t\t\tif ( callback ) {\n\t\t\t\t\t\t\tcallback = errorCallback = xhr.onload =\n\t\t\t\t\t\t\t\txhr.onerror = xhr.onabort = xhr.ontimeout =\n\t\t\t\t\t\t\t\t\txhr.onreadystatechange = null;\n\n\t\t\t\t\t\t\tif ( type === \"abort\" ) {\n\t\t\t\t\t\t\t\txhr.abort();\n\t\t\t\t\t\t\t} else if ( type === \"error\" ) {\n\n\t\t\t\t\t\t\t\t// Support: IE <=9 only\n\t\t\t\t\t\t\t\t// On a manual native abort, IE9 throws\n\t\t\t\t\t\t\t\t// errors on any property access that is not readyState\n\t\t\t\t\t\t\t\tif ( typeof xhr.status !== \"number\" ) {\n\t\t\t\t\t\t\t\t\tcomplete( 0, \"error\" );\n\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\tcomplete(\n\n\t\t\t\t\t\t\t\t\t\t// File: protocol always yields status 0; see #8605, #14207\n\t\t\t\t\t\t\t\t\t\txhr.status,\n\t\t\t\t\t\t\t\t\t\txhr.statusText\n\t\t\t\t\t\t\t\t\t);\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\tcomplete(\n\t\t\t\t\t\t\t\t\txhrSuccessStatus[ xhr.status ] || xhr.status,\n\t\t\t\t\t\t\t\t\txhr.statusText,\n\n\t\t\t\t\t\t\t\t\t// Support: IE <=9 only\n\t\t\t\t\t\t\t\t\t// IE9 has no XHR2 but throws on binary (trac-11426)\n\t\t\t\t\t\t\t\t\t// For XHR2 non-text, let the caller handle it (gh-2498)\n\t\t\t\t\t\t\t\t\t( xhr.responseType || \"text\" ) !== \"text\"  ||\n\t\t\t\t\t\t\t\t\ttypeof xhr.responseText !== \"string\" ?\n\t\t\t\t\t\t\t\t\t\t{ binary: xhr.response } :\n\t\t\t\t\t\t\t\t\t\t{ text: xhr.responseText },\n\t\t\t\t\t\t\t\t\txhr.getAllResponseHeaders()\n\t\t\t\t\t\t\t\t);\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t};\n\t\t\t\t};\n\n\t\t\t\t// Listen to events\n\t\t\t\txhr.onload = callback();\n\t\t\t\terrorCallback = xhr.onerror = xhr.ontimeout = callback( \"error\" );\n\n\t\t\t\t// Support: IE 9 only\n\t\t\t\t// Use onreadystatechange to replace onabort\n\t\t\t\t// to handle uncaught aborts\n\t\t\t\tif ( xhr.onabort !== undefined ) {\n\t\t\t\t\txhr.onabort = errorCallback;\n\t\t\t\t} else {\n\t\t\t\t\txhr.onreadystatechange = function() {\n\n\t\t\t\t\t\t// Check readyState before timeout as it changes\n\t\t\t\t\t\tif ( xhr.readyState === 4 ) {\n\n\t\t\t\t\t\t\t// Allow onerror to be called first,\n\t\t\t\t\t\t\t// but that will not handle a native abort\n\t\t\t\t\t\t\t// Also, save errorCallback to a variable\n\t\t\t\t\t\t\t// as xhr.onerror cannot be accessed\n\t\t\t\t\t\t\twindow.setTimeout( function() {\n\t\t\t\t\t\t\t\tif ( callback ) {\n\t\t\t\t\t\t\t\t\terrorCallback();\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t} );\n\t\t\t\t\t\t}\n\t\t\t\t\t};\n\t\t\t\t}\n\n\t\t\t\t// Create the abort callback\n\t\t\t\tcallback = callback( \"abort\" );\n\n\t\t\t\ttry {\n\n\t\t\t\t\t// Do send the request (this may raise an exception)\n\t\t\t\t\txhr.send( options.hasContent && options.data || null );\n\t\t\t\t} catch ( e ) {\n\n\t\t\t\t\t// #14683: Only rethrow if this hasn't been notified as an error yet\n\t\t\t\t\tif ( callback ) {\n\t\t\t\t\t\tthrow e;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\n\t\t\tabort: function() {\n\t\t\t\tif ( callback ) {\n\t\t\t\t\tcallback();\n\t\t\t\t}\n\t\t\t}\n\t\t};\n\t}\n} );\n\n\n\n\n// Prevent auto-execution of scripts when no explicit dataType was provided (See gh-2432)\njQuery.ajaxPrefilter( function( s ) {\n\tif ( s.crossDomain ) {\n\t\ts.contents.script = false;\n\t}\n} );\n\n// Install script dataType\njQuery.ajaxSetup( {\n\taccepts: {\n\t\tscript: \"text/javascript, application/javascript, \" +\n\t\t\t\"application/ecmascript, application/x-ecmascript\"\n\t},\n\tcontents: {\n\t\tscript: /\\b(?:java|ecma)script\\b/\n\t},\n\tconverters: {\n\t\t\"text script\": function( text ) {\n\t\t\tjQuery.globalEval( text );\n\t\t\treturn text;\n\t\t}\n\t}\n} );\n\n// Handle cache's special case and crossDomain\njQuery.ajaxPrefilter( \"script\", function( s ) {\n\tif ( s.cache === undefined ) {\n\t\ts.cache = false;\n\t}\n\tif ( s.crossDomain ) {\n\t\ts.type = \"GET\";\n\t}\n} );\n\n// Bind script tag hack transport\njQuery.ajaxTransport( \"script\", function( s ) {\n\n\t// This transport only deals with cross domain requests\n\tif ( s.crossDomain ) {\n\t\tvar script, callback;\n\t\treturn {\n\t\t\tsend: function( _, complete ) {\n\t\t\t\tscript = jQuery( \"<script>\" ).prop( {\n\t\t\t\t\tcharset: s.scriptCharset,\n\t\t\t\t\tsrc: s.url\n\t\t\t\t} ).on(\n\t\t\t\t\t\"load error\",\n\t\t\t\t\tcallback = function( evt ) {\n\t\t\t\t\t\tscript.remove();\n\t\t\t\t\t\tcallback = null;\n\t\t\t\t\t\tif ( evt ) {\n\t\t\t\t\t\t\tcomplete( evt.type === \"error\" ? 404 : 200, evt.type );\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t);\n\n\t\t\t\t// Use native DOM manipulation to avoid our domManip AJAX trickery\n\t\t\t\tdocument.head.appendChild( script[ 0 ] );\n\t\t\t},\n\t\t\tabort: function() {\n\t\t\t\tif ( callback ) {\n\t\t\t\t\tcallback();\n\t\t\t\t}\n\t\t\t}\n\t\t};\n\t}\n} );\n\n\n\n\nvar oldCallbacks = [],\n\trjsonp = /(=)\\?(?=&|$)|\\?\\?/;\n\n// Default jsonp settings\njQuery.ajaxSetup( {\n\tjsonp: \"callback\",\n\tjsonpCallback: function() {\n\t\tvar callback = oldCallbacks.pop() || ( jQuery.expando + \"_\" + ( nonce++ ) );\n\t\tthis[ callback ] = true;\n\t\treturn callback;\n\t}\n} );\n\n// Detect, normalize options and install callbacks for jsonp requests\njQuery.ajaxPrefilter( \"json jsonp\", function( s, originalSettings, jqXHR ) {\n\n\tvar callbackName, overwritten, responseContainer,\n\t\tjsonProp = s.jsonp !== false && ( rjsonp.test( s.url ) ?\n\t\t\t\"url\" :\n\t\t\ttypeof s.data === \"string\" &&\n\t\t\t\t( s.contentType || \"\" )\n\t\t\t\t\t.indexOf( \"application/x-www-form-urlencoded\" ) === 0 &&\n\t\t\t\trjsonp.test( s.data ) && \"data\"\n\t\t);\n\n\t// Handle iff the expected data type is \"jsonp\" or we have a parameter to set\n\tif ( jsonProp || s.dataTypes[ 0 ] === \"jsonp\" ) {\n\n\t\t// Get callback name, remembering preexisting value associated with it\n\t\tcallbackName = s.jsonpCallback = isFunction( s.jsonpCallback ) ?\n\t\t\ts.jsonpCallback() :\n\t\t\ts.jsonpCallback;\n\n\t\t// Insert callback into url or form data\n\t\tif ( jsonProp ) {\n\t\t\ts[ jsonProp ] = s[ jsonProp ].replace( rjsonp, \"$1\" + callbackName );\n\t\t} else if ( s.jsonp !== false ) {\n\t\t\ts.url += ( rquery.test( s.url ) ? \"&\" : \"?\" ) + s.jsonp + \"=\" + callbackName;\n\t\t}\n\n\t\t// Use data converter to retrieve json after script execution\n\t\ts.converters[ \"script json\" ] = function() {\n\t\t\tif ( !responseContainer ) {\n\t\t\t\tjQuery.error( callbackName + \" was not called\" );\n\t\t\t}\n\t\t\treturn responseContainer[ 0 ];\n\t\t};\n\n\t\t// Force json dataType\n\t\ts.dataTypes[ 0 ] = \"json\";\n\n\t\t// Install callback\n\t\toverwritten = window[ callbackName ];\n\t\twindow[ callbackName ] = function() {\n\t\t\tresponseContainer = arguments;\n\t\t};\n\n\t\t// Clean-up function (fires after converters)\n\t\tjqXHR.always( function() {\n\n\t\t\t// If previous value didn't exist - remove it\n\t\t\tif ( overwritten === undefined ) {\n\t\t\t\tjQuery( window ).removeProp( callbackName );\n\n\t\t\t// Otherwise restore preexisting value\n\t\t\t} else {\n\t\t\t\twindow[ callbackName ] = overwritten;\n\t\t\t}\n\n\t\t\t// Save back as free\n\t\t\tif ( s[ callbackName ] ) {\n\n\t\t\t\t// Make sure that re-using the options doesn't screw things around\n\t\t\t\ts.jsonpCallback = originalSettings.jsonpCallback;\n\n\t\t\t\t// Save the callback name for future use\n\t\t\t\toldCallbacks.push( callbackName );\n\t\t\t}\n\n\t\t\t// Call if it was a function and we have a response\n\t\t\tif ( responseContainer && isFunction( overwritten ) ) {\n\t\t\t\toverwritten( responseContainer[ 0 ] );\n\t\t\t}\n\n\t\t\tresponseContainer = overwritten = undefined;\n\t\t} );\n\n\t\t// Delegate to script\n\t\treturn \"script\";\n\t}\n} );\n\n\n\n\n// Support: Safari 8 only\n// In Safari 8 documents created via document.implementation.createHTMLDocument\n// collapse sibling forms: the second one becomes a child of the first one.\n// Because of that, this security measure has to be disabled in Safari 8.\n// https://bugs.webkit.org/show_bug.cgi?id=137337\nsupport.createHTMLDocument = ( function() {\n\tvar body = document.implementation.createHTMLDocument( \"\" ).body;\n\tbody.innerHTML = \"<form></form><form></form>\";\n\treturn body.childNodes.length === 2;\n} )();\n\n\n// Argument \"data\" should be string of html\n// context (optional): If specified, the fragment will be created in this context,\n// defaults to document\n// keepScripts (optional): If true, will include scripts passed in the html string\njQuery.parseHTML = function( data, context, keepScripts ) {\n\tif ( typeof data !== \"string\" ) {\n\t\treturn [];\n\t}\n\tif ( typeof context === \"boolean\" ) {\n\t\tkeepScripts = context;\n\t\tcontext = false;\n\t}\n\n\tvar base, parsed, scripts;\n\n\tif ( !context ) {\n\n\t\t// Stop scripts or inline event handlers from being executed immediately\n\t\t// by using document.implementation\n\t\tif ( support.createHTMLDocument ) {\n\t\t\tcontext = document.implementation.createHTMLDocument( \"\" );\n\n\t\t\t// Set the base href for the created document\n\t\t\t// so any parsed elements with URLs\n\t\t\t// are based on the document's URL (gh-2965)\n\t\t\tbase = context.createElement( \"base\" );\n\t\t\tbase.href = document.location.href;\n\t\t\tcontext.head.appendChild( base );\n\t\t} else {\n\t\t\tcontext = document;\n\t\t}\n\t}\n\n\tparsed = rsingleTag.exec( data );\n\tscripts = !keepScripts && [];\n\n\t// Single tag\n\tif ( parsed ) {\n\t\treturn [ context.createElement( parsed[ 1 ] ) ];\n\t}\n\n\tparsed = buildFragment( [ data ], context, scripts );\n\n\tif ( scripts && scripts.length ) {\n\t\tjQuery( scripts ).remove();\n\t}\n\n\treturn jQuery.merge( [], parsed.childNodes );\n};\n\n\n/**\n * Load a url into a page\n */\njQuery.fn.load = function( url, params, callback ) {\n\tvar selector, type, response,\n\t\tself = this,\n\t\toff = url.indexOf( \" \" );\n\n\tif ( off > -1 ) {\n\t\tselector = stripAndCollapse( url.slice( off ) );\n\t\turl = url.slice( 0, off );\n\t}\n\n\t// If it's a function\n\tif ( isFunction( params ) ) {\n\n\t\t// We assume that it's the callback\n\t\tcallback = params;\n\t\tparams = undefined;\n\n\t// Otherwise, build a param string\n\t} else if ( params && typeof params === \"object\" ) {\n\t\ttype = \"POST\";\n\t}\n\n\t// If we have elements to modify, make the request\n\tif ( self.length > 0 ) {\n\t\tjQuery.ajax( {\n\t\t\turl: url,\n\n\t\t\t// If \"type\" variable is undefined, then \"GET\" method will be used.\n\t\t\t// Make value of this field explicit since\n\t\t\t// user can override it through ajaxSetup method\n\t\t\ttype: type || \"GET\",\n\t\t\tdataType: \"html\",\n\t\t\tdata: params\n\t\t} ).done( function( responseText ) {\n\n\t\t\t// Save response for use in complete callback\n\t\t\tresponse = arguments;\n\n\t\t\tself.html( selector ?\n\n\t\t\t\t// If a selector was specified, locate the right elements in a dummy div\n\t\t\t\t// Exclude scripts to avoid IE 'Permission Denied' errors\n\t\t\t\tjQuery( \"<div>\" ).append( jQuery.parseHTML( responseText ) ).find( selector ) :\n\n\t\t\t\t// Otherwise use the full result\n\t\t\t\tresponseText );\n\n\t\t// If the request succeeds, this function gets \"data\", \"status\", \"jqXHR\"\n\t\t// but they are ignored because response was set above.\n\t\t// If it fails, this function gets \"jqXHR\", \"status\", \"error\"\n\t\t} ).always( callback && function( jqXHR, status ) {\n\t\t\tself.each( function() {\n\t\t\t\tcallback.apply( this, response || [ jqXHR.responseText, status, jqXHR ] );\n\t\t\t} );\n\t\t} );\n\t}\n\n\treturn this;\n};\n\n\n\n\n// Attach a bunch of functions for handling common AJAX events\njQuery.each( [\n\t\"ajaxStart\",\n\t\"ajaxStop\",\n\t\"ajaxComplete\",\n\t\"ajaxError\",\n\t\"ajaxSuccess\",\n\t\"ajaxSend\"\n], function( i, type ) {\n\tjQuery.fn[ type ] = function( fn ) {\n\t\treturn this.on( type, fn );\n\t};\n} );\n\n\n\n\njQuery.expr.pseudos.animated = function( elem ) {\n\treturn jQuery.grep( jQuery.timers, function( fn ) {\n\t\treturn elem === fn.elem;\n\t} ).length;\n};\n\n\n\n\njQuery.offset = {\n\tsetOffset: function( elem, options, i ) {\n\t\tvar curPosition, curLeft, curCSSTop, curTop, curOffset, curCSSLeft, calculatePosition,\n\t\t\tposition = jQuery.css( elem, \"position\" ),\n\t\t\tcurElem = jQuery( elem ),\n\t\t\tprops = {};\n\n\t\t// Set position first, in-case top/left are set even on static elem\n\t\tif ( position === \"static\" ) {\n\t\t\telem.style.position = \"relative\";\n\t\t}\n\n\t\tcurOffset = curElem.offset();\n\t\tcurCSSTop = jQuery.css( elem, \"top\" );\n\t\tcurCSSLeft = jQuery.css( elem, \"left\" );\n\t\tcalculatePosition = ( position === \"absolute\" || position === \"fixed\" ) &&\n\t\t\t( curCSSTop + curCSSLeft ).indexOf( \"auto\" ) > -1;\n\n\t\t// Need to be able to calculate position if either\n\t\t// top or left is auto and position is either absolute or fixed\n\t\tif ( calculatePosition ) {\n\t\t\tcurPosition = curElem.position();\n\t\t\tcurTop = curPosition.top;\n\t\t\tcurLeft = curPosition.left;\n\n\t\t} else {\n\t\t\tcurTop = parseFloat( curCSSTop ) || 0;\n\t\t\tcurLeft = parseFloat( curCSSLeft ) || 0;\n\t\t}\n\n\t\tif ( isFunction( options ) ) {\n\n\t\t\t// Use jQuery.extend here to allow modification of coordinates argument (gh-1848)\n\t\t\toptions = options.call( elem, i, jQuery.extend( {}, curOffset ) );\n\t\t}\n\n\t\tif ( options.top != null ) {\n\t\t\tprops.top = ( options.top - curOffset.top ) + curTop;\n\t\t}\n\t\tif ( options.left != null ) {\n\t\t\tprops.left = ( options.left - curOffset.left ) + curLeft;\n\t\t}\n\n\t\tif ( \"using\" in options ) {\n\t\t\toptions.using.call( elem, props );\n\n\t\t} else {\n\t\t\tcurElem.css( props );\n\t\t}\n\t}\n};\n\njQuery.fn.extend( {\n\n\t// offset() relates an element's border box to the document origin\n\toffset: function( options ) {\n\n\t\t// Preserve chaining for setter\n\t\tif ( arguments.length ) {\n\t\t\treturn options === undefined ?\n\t\t\t\tthis :\n\t\t\t\tthis.each( function( i ) {\n\t\t\t\t\tjQuery.offset.setOffset( this, options, i );\n\t\t\t\t} );\n\t\t}\n\n\t\tvar rect, win,\n\t\t\telem = this[ 0 ];\n\n\t\tif ( !elem ) {\n\t\t\treturn;\n\t\t}\n\n\t\t// Return zeros for disconnected and hidden (display: none) elements (gh-2310)\n\t\t// Support: IE <=11 only\n\t\t// Running getBoundingClientRect on a\n\t\t// disconnected node in IE throws an error\n\t\tif ( !elem.getClientRects().length ) {\n\t\t\treturn { top: 0, left: 0 };\n\t\t}\n\n\t\t// Get document-relative position by adding viewport scroll to viewport-relative gBCR\n\t\trect = elem.getBoundingClientRect();\n\t\twin = elem.ownerDocument.defaultView;\n\t\treturn {\n\t\t\ttop: rect.top + win.pageYOffset,\n\t\t\tleft: rect.left + win.pageXOffset\n\t\t};\n\t},\n\n\t// position() relates an element's margin box to its offset parent's padding box\n\t// This corresponds to the behavior of CSS absolute positioning\n\tposition: function() {\n\t\tif ( !this[ 0 ] ) {\n\t\t\treturn;\n\t\t}\n\n\t\tvar offsetParent, offset, doc,\n\t\t\telem = this[ 0 ],\n\t\t\tparentOffset = { top: 0, left: 0 };\n\n\t\t// position:fixed elements are offset from the viewport, which itself always has zero offset\n\t\tif ( jQuery.css( elem, \"position\" ) === \"fixed\" ) {\n\n\t\t\t// Assume position:fixed implies availability of getBoundingClientRect\n\t\t\toffset = elem.getBoundingClientRect();\n\n\t\t} else {\n\t\t\toffset = this.offset();\n\n\t\t\t// Account for the *real* offset parent, which can be the document or its root element\n\t\t\t// when a statically positioned element is identified\n\t\t\tdoc = elem.ownerDocument;\n\t\t\toffsetParent = elem.offsetParent || doc.documentElement;\n\t\t\twhile ( offsetParent &&\n\t\t\t\t( offsetParent === doc.body || offsetParent === doc.documentElement ) &&\n\t\t\t\tjQuery.css( offsetParent, \"position\" ) === \"static\" ) {\n\n\t\t\t\toffsetParent = offsetParent.parentNode;\n\t\t\t}\n\t\t\tif ( offsetParent && offsetParent !== elem && offsetParent.nodeType === 1 ) {\n\n\t\t\t\t// Incorporate borders into its offset, since they are outside its content origin\n\t\t\t\tparentOffset = jQuery( offsetParent ).offset();\n\t\t\t\tparentOffset.top += jQuery.css( offsetParent, \"borderTopWidth\", true );\n\t\t\t\tparentOffset.left += jQuery.css( offsetParent, \"borderLeftWidth\", true );\n\t\t\t}\n\t\t}\n\n\t\t// Subtract parent offsets and element margins\n\t\treturn {\n\t\t\ttop: offset.top - parentOffset.top - jQuery.css( elem, \"marginTop\", true ),\n\t\t\tleft: offset.left - parentOffset.left - jQuery.css( elem, \"marginLeft\", true )\n\t\t};\n\t},\n\n\t// This method will return documentElement in the following cases:\n\t// 1) For the element inside the iframe without offsetParent, this method will return\n\t//    documentElement of the parent window\n\t// 2) For the hidden or detached element\n\t// 3) For body or html element, i.e. in case of the html node - it will return itself\n\t//\n\t// but those exceptions were never presented as a real life use-cases\n\t// and might be considered as more preferable results.\n\t//\n\t// This logic, however, is not guaranteed and can change at any point in the future\n\toffsetParent: function() {\n\t\treturn this.map( function() {\n\t\t\tvar offsetParent = this.offsetParent;\n\n\t\t\twhile ( offsetParent && jQuery.css( offsetParent, \"position\" ) === \"static\" ) {\n\t\t\t\toffsetParent = offsetParent.offsetParent;\n\t\t\t}\n\n\t\t\treturn offsetParent || documentElement;\n\t\t} );\n\t}\n} );\n\n// Create scrollLeft and scrollTop methods\njQuery.each( { scrollLeft: \"pageXOffset\", scrollTop: \"pageYOffset\" }, function( method, prop ) {\n\tvar top = \"pageYOffset\" === prop;\n\n\tjQuery.fn[ method ] = function( val ) {\n\t\treturn access( this, function( elem, method, val ) {\n\n\t\t\t// Coalesce documents and windows\n\t\t\tvar win;\n\t\t\tif ( isWindow( elem ) ) {\n\t\t\t\twin = elem;\n\t\t\t} else if ( elem.nodeType === 9 ) {\n\t\t\t\twin = elem.defaultView;\n\t\t\t}\n\n\t\t\tif ( val === undefined ) {\n\t\t\t\treturn win ? win[ prop ] : elem[ method ];\n\t\t\t}\n\n\t\t\tif ( win ) {\n\t\t\t\twin.scrollTo(\n\t\t\t\t\t!top ? val : win.pageXOffset,\n\t\t\t\t\ttop ? val : win.pageYOffset\n\t\t\t\t);\n\n\t\t\t} else {\n\t\t\t\telem[ method ] = val;\n\t\t\t}\n\t\t}, method, val, arguments.length );\n\t};\n} );\n\n// Support: Safari <=7 - 9.1, Chrome <=37 - 49\n// Add the top/left cssHooks using jQuery.fn.position\n// Webkit bug: https://bugs.webkit.org/show_bug.cgi?id=29084\n// Blink bug: https://bugs.chromium.org/p/chromium/issues/detail?id=589347\n// getComputedStyle returns percent when specified for top/left/bottom/right;\n// rather than make the css module depend on the offset module, just check for it here\njQuery.each( [ \"top\", \"left\" ], function( i, prop ) {\n\tjQuery.cssHooks[ prop ] = addGetHookIf( support.pixelPosition,\n\t\tfunction( elem, computed ) {\n\t\t\tif ( computed ) {\n\t\t\t\tcomputed = curCSS( elem, prop );\n\n\t\t\t\t// If curCSS returns percentage, fallback to offset\n\t\t\t\treturn rnumnonpx.test( computed ) ?\n\t\t\t\t\tjQuery( elem ).position()[ prop ] + \"px\" :\n\t\t\t\t\tcomputed;\n\t\t\t}\n\t\t}\n\t);\n} );\n\n\n// Create innerHeight, innerWidth, height, width, outerHeight and outerWidth methods\njQuery.each( { Height: \"height\", Width: \"width\" }, function( name, type ) {\n\tjQuery.each( { padding: \"inner\" + name, content: type, \"\": \"outer\" + name },\n\t\tfunction( defaultExtra, funcName ) {\n\n\t\t// Margin is only for outerHeight, outerWidth\n\t\tjQuery.fn[ funcName ] = function( margin, value ) {\n\t\t\tvar chainable = arguments.length && ( defaultExtra || typeof margin !== \"boolean\" ),\n\t\t\t\textra = defaultExtra || ( margin === true || value === true ? \"margin\" : \"border\" );\n\n\t\t\treturn access( this, function( elem, type, value ) {\n\t\t\t\tvar doc;\n\n\t\t\t\tif ( isWindow( elem ) ) {\n\n\t\t\t\t\t// $( window ).outerWidth/Height return w/h including scrollbars (gh-1729)\n\t\t\t\t\treturn funcName.indexOf( \"outer\" ) === 0 ?\n\t\t\t\t\t\telem[ \"inner\" + name ] :\n\t\t\t\t\t\telem.document.documentElement[ \"client\" + name ];\n\t\t\t\t}\n\n\t\t\t\t// Get document width or height\n\t\t\t\tif ( elem.nodeType === 9 ) {\n\t\t\t\t\tdoc = elem.documentElement;\n\n\t\t\t\t\t// Either scroll[Width/Height] or offset[Width/Height] or client[Width/Height],\n\t\t\t\t\t// whichever is greatest\n\t\t\t\t\treturn Math.max(\n\t\t\t\t\t\telem.body[ \"scroll\" + name ], doc[ \"scroll\" + name ],\n\t\t\t\t\t\telem.body[ \"offset\" + name ], doc[ \"offset\" + name ],\n\t\t\t\t\t\tdoc[ \"client\" + name ]\n\t\t\t\t\t);\n\t\t\t\t}\n\n\t\t\t\treturn value === undefined ?\n\n\t\t\t\t\t// Get width or height on the element, requesting but not forcing parseFloat\n\t\t\t\t\tjQuery.css( elem, type, extra ) :\n\n\t\t\t\t\t// Set width or height on the element\n\t\t\t\t\tjQuery.style( elem, type, value, extra );\n\t\t\t}, type, chainable ? margin : undefined, chainable );\n\t\t};\n\t} );\n} );\n\n\njQuery.each( ( \"blur focus focusin focusout resize scroll click dblclick \" +\n\t\"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave \" +\n\t\"change select submit keydown keypress keyup contextmenu\" ).split( \" \" ),\n\tfunction( i, name ) {\n\n\t// Handle event binding\n\tjQuery.fn[ name ] = function( data, fn ) {\n\t\treturn arguments.length > 0 ?\n\t\t\tthis.on( name, null, data, fn ) :\n\t\t\tthis.trigger( name );\n\t};\n} );\n\njQuery.fn.extend( {\n\thover: function( fnOver, fnOut ) {\n\t\treturn this.mouseenter( fnOver ).mouseleave( fnOut || fnOver );\n\t}\n} );\n\n\n\n\njQuery.fn.extend( {\n\n\tbind: function( types, data, fn ) {\n\t\treturn this.on( types, null, data, fn );\n\t},\n\tunbind: function( types, fn ) {\n\t\treturn this.off( types, null, fn );\n\t},\n\n\tdelegate: function( selector, types, data, fn ) {\n\t\treturn this.on( types, selector, data, fn );\n\t},\n\tundelegate: function( selector, types, fn ) {\n\n\t\t// ( namespace ) or ( selector, types [, fn] )\n\t\treturn arguments.length === 1 ?\n\t\t\tthis.off( selector, \"**\" ) :\n\t\t\tthis.off( types, selector || \"**\", fn );\n\t}\n} );\n\n// Bind a function to a context, optionally partially applying any\n// arguments.\n// jQuery.proxy is deprecated to promote standards (specifically Function#bind)\n// However, it is not slated for removal any time soon\njQuery.proxy = function( fn, context ) {\n\tvar tmp, args, proxy;\n\n\tif ( typeof context === \"string\" ) {\n\t\ttmp = fn[ context ];\n\t\tcontext = fn;\n\t\tfn = tmp;\n\t}\n\n\t// Quick check to determine if target is callable, in the spec\n\t// this throws a TypeError, but we will just return undefined.\n\tif ( !isFunction( fn ) ) {\n\t\treturn undefined;\n\t}\n\n\t// Simulated bind\n\targs = slice.call( arguments, 2 );\n\tproxy = function() {\n\t\treturn fn.apply( context || this, args.concat( slice.call( arguments ) ) );\n\t};\n\n\t// Set the guid of unique handler to the same of original handler, so it can be removed\n\tproxy.guid = fn.guid = fn.guid || jQuery.guid++;\n\n\treturn proxy;\n};\n\njQuery.holdReady = function( hold ) {\n\tif ( hold ) {\n\t\tjQuery.readyWait++;\n\t} else {\n\t\tjQuery.ready( true );\n\t}\n};\njQuery.isArray = Array.isArray;\njQuery.parseJSON = JSON.parse;\njQuery.nodeName = nodeName;\njQuery.isFunction = isFunction;\njQuery.isWindow = isWindow;\njQuery.camelCase = camelCase;\njQuery.type = toType;\n\njQuery.now = Date.now;\n\njQuery.isNumeric = function( obj ) {\n\n\t// As of jQuery 3.0, isNumeric is limited to\n\t// strings and numbers (primitives or objects)\n\t// that can be coerced to finite numbers (gh-2662)\n\tvar type = jQuery.type( obj );\n\treturn ( type === \"number\" || type === \"string\" ) &&\n\n\t\t// parseFloat NaNs numeric-cast false positives (\"\")\n\t\t// ...but misinterprets leading-number strings, particularly hex literals (\"0x...\")\n\t\t// subtraction forces infinities to NaN\n\t\t!isNaN( obj - parseFloat( obj ) );\n};\n\n\n\n\n// Register as a named AMD module, since jQuery can be concatenated with other\n// files that may use define, but not via a proper concatenation script that\n// understands anonymous AMD modules. A named AMD is safest and most robust\n// way to register. Lowercase jquery is used because AMD module names are\n// derived from file names, and jQuery is normally delivered in a lowercase\n// file name. Do this after creating the global so that if an AMD module wants\n// to call noConflict to hide this version of jQuery, it will work.\n\n// Note that for maximum portability, libraries that are not jQuery should\n// declare themselves as anonymous modules, and avoid setting a global if an\n// AMD loader is present. jQuery is a special case. For more information, see\n// https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#wiki-anon\n\nif ( true ) {\n\t!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function() {\n\t\treturn jQuery;\n\t}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),\n\t\t\t\t__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));\n}\n\n\n\n\nvar\n\n\t// Map over jQuery in case of overwrite\n\t_jQuery = window.jQuery,\n\n\t// Map over the $ in case of overwrite\n\t_$ = window.$;\n\njQuery.noConflict = function( deep ) {\n\tif ( window.$ === jQuery ) {\n\t\twindow.$ = _$;\n\t}\n\n\tif ( deep && window.jQuery === jQuery ) {\n\t\twindow.jQuery = _jQuery;\n\t}\n\n\treturn jQuery;\n};\n\n// Expose jQuery and $ identifiers, even in AMD\n// (#7102#comment:10, https://github.com/jquery/jquery/pull/557)\n// and CommonJS for browser emulators (#13566)\nif ( !noGlobal ) {\n\twindow.jQuery = window.$ = jQuery;\n}\n\n\n\n\nreturn jQuery;\n} );\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./node_modules/jquery/dist/jquery.js\n// module id = 0\n// module chunks = 0\n\n//# sourceURL=webpack:///./node_modules/jquery/dist/jquery.js?");
+module.exports = jQuery;
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(2);\nmodule.exports = __webpack_require__(13);\n\n\n//////////////////\n// WEBPACK FOOTER\n// multi ./js/app.js ./css/app.css\n// module id = 1\n// module chunks = 0\n\n//# sourceURL=webpack:///multi_./js/app.js_./css/app.css?");
+__webpack_require__(2);
+module.exports = __webpack_require__(7);
+
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-eval("\n\n/*\n * js/app.js\n * Created: Thu Jan 25 2018 01:17:09 GMT+0530 (IST)\n * Copyright 2018 Harish.K<harish2704@gmail.com>\n */\nvar jquery = __webpack_require__(0);\nvar ndarray = __webpack_require__(3);\nvar ndarrayOps = __webpack_require__(6);\n__webpack_require__(11);\nvar glyphsList = __webpack_require__(12);\nglyphsList.unshift('');\nvar $ = jquery;\nvar range = function range(a) {\n  return Array.from(new Uint32Array(a)).map(function (v, i) {\n    return i;\n  });\n};\nvar IMG_WIDTH = 1024;\nvar IMG_HEIGHT = 32;\n\nObject.assign(window, {\n  ndarray: ndarray,\n  ndarrayOps: ndarrayOps\n});\n\n$(function () {\n  if (!KerasJS.GPU_SUPPORT) {\n    alert('Sorry. WebGL 2 support not found. \\nExiting...');\n    $('.container').hide();\n  }\n  var img = $('#for-cropper');\n  var output = $('#output');\n  var tmpScaleCanvas = document.createElement('canvas');\n  tmpScaleCanvas.width = 2048;\n  tmpScaleCanvas.height = IMG_HEIGHT;\n  var tmpScaleCanvasCtx = tmpScaleCanvas.getContext('2d');\n  var imgCropper = img.cropper();\n\n  function initUi() {\n\n    $(\".input-file\").before(function () {\n      if (!$(this).prev().hasClass('input-ghost')) {\n        var element = $(\"<input type='file' class='input-ghost' accept=\\\"image/*\\\" style='visibility:hidden; height:0'>\");\n        element.attr(\"name\", $(this).attr(\"name\"));\n        element.change(function (e) {\n          var imgUrl = URL.createObjectURL(e.target.files[0]);\n          imgCropper.data('cropper').replace(imgUrl);\n          element.next(element).find('input').val(element.val().split('\\\\').pop());\n        });\n        $(this).find(\"button.btn-choose\").click(function () {\n          element.click();\n        });\n        $(this).find('input').css(\"cursor\", \"pointer\");\n        $(this).find('input').mousedown(function () {\n          $(this).parents('.input-file').prev().click();\n          return false;\n        });\n        return element;\n      }\n    });\n\n    $('#rotate-buttons > button').click(function () {\n      imgCropper.data('cropper').rotate($(this).data().degree);\n    });\n  }\n\n  var model = new KerasJS.Model({\n    filepath: './data/pottan.bin',\n    gpu: true,\n    transferLayerOutputs: !true\n  });\n\n  model.events.on('loadingProgress', function (i) {\n    console.log('loadingProgress', i);\n  });\n  // model.events.on('initProgress', this.handleInitProgress)\n  function decodeStr(strEnc) {\n    var raw = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;\n\n    return strEnc.map(function (v, i) {\n      return raw || strEnc[i - 1] !== v ? glyphsList[v] : '';\n    }).join('');\n  }\n\n  initUi();\n  $('#run-btn').click(function () {\n    if (!imgCropper) {\n      return;\n    }\n    var croppedCanvas = imgCropper.data('cropper').getCroppedCanvas();\n    var scaleFactor = IMG_HEIGHT / croppedCanvas.height;\n    var origWidth = croppedCanvas.width,\n        newWidth = parseInt(scaleFactor * origWidth);\n    tmpScaleCanvasCtx.drawImage(croppedCanvas, 0, 0, newWidth, IMG_HEIGHT);\n    var imageDataScaled = tmpScaleCanvasCtx.getImageData(0, 0, newWidth, IMG_HEIGHT);\n\n    var data = ndarray(Float32Array.from(imageDataScaled.data), [imageDataScaled.height, imageDataScaled.width, 4]);\n    // pick any one of the color channel. ( Here it is Green )\n    data = data.pick(null, null, 1);\n\n    // Normalize the values . Fit between -1 & 1\n    data = ndarrayOps.subseq(data, 127.5);\n    data = ndarrayOps.divseq(data, 127.5);\n\n    var input = ndarray(new Float32Array(IMG_HEIGHT * IMG_WIDTH), [IMG_HEIGHT, IMG_WIDTH]);\n    ndarrayOps.assigns(input, 1);\n    ndarrayOps.assign(input.hi(null, data.shape[1]), data);\n\n    model.predict({ input: input.data }).then(function (outputData) {\n      var nClasses = glyphsList.length;\n      var nPredictions = outputData.output.length / nClasses;\n      outputData = ndarray(outputData.output, [nPredictions, nClasses]);\n      var predictions = range(nPredictions).map(function (i) {\n        return ndarrayOps.argmax(outputData.pick(i, null))[0];\n      });\n      var out = decodeStr(predictions);\n      output.text(out);\n    });\n  });\n});\n\n//////////////////\n// WEBPACK FOOTER\n// ./js/app.js\n// module id = 2\n// module chunks = 0\n\n//# sourceURL=webpack:///./js/app.js?");
-
+/*
+ * js/app.js
+ * Created: Thu Jan 25 2018 01:17:09 GMT+0530 (IST)
+ * Copyright 2018 Harish.K<harish2704@gmail.com>
+ */
 var jquery = __webpack_require__(0);
-document.onpaste = function(event){
-  var items = (event.clipboardData || event.originalEvent.clipboardData).items;
-  for (var index in items) {
-    var item = items[index];
-    if (item.kind === 'file') {
-      var blob = item.getAsFile();
-      var reader = new FileReader();
-      reader.onload = function(event){
-        var img = jquery('#for-cropper');
-        var imgCropper = img.cropper();
-        imgCropper.data('cropper').replace( event.target.result );
-      }; // data url!
-      reader.readAsDataURL(blob);
+
+var glyphsList = __webpack_require__(3);
+
+var tf = __webpack_require__(4);
+
+window.tf = tf;
+window.$ = jquery;
+glyphsList.unshift('');
+var IMG_HEIGHT = 32;
+
+__webpack_require__(5);
+
+tf.enableProdMode();
+$(function () {
+  var img = $('#for-cropper');
+  var output = $('#output');
+  var imgCropper = img.cropper().data('cropper');
+  var debugCheckbox = $('#cb_debug');
+
+  function initUi() {
+    img.on('ready', function () {
+      imgCropper.setCropBoxData({
+        left: 208.5,
+        top: 49,
+        width: 211,
+        height: 41
+      });
+    });
+    $('#cb_backend').on('change', function (ev) {
+      tf.setBackend(event.target.checked ? 'webgl' : 'cpu');
+    });
+    $(".input-file").before(function () {
+      if (!$(this).prev().hasClass('input-ghost')) {
+        var element = $("<input type='file' class='input-ghost' accept=\"image/*\" style='visibility:hidden; height:0'>");
+        element.attr("name", $(this).attr("name"));
+        element.change(function (e) {
+          var imgUrl = URL.createObjectURL(e.target.files[0]);
+          imgCropper.replace(imgUrl);
+          element.next(element).find('input').val(element.val().split('\\').pop());
+        });
+        $(this).find("button.btn-choose").click(function () {
+          element.click();
+        });
+        $(this).find('input').css("cursor", "pointer");
+        $(this).find('input').mousedown(function () {
+          $(this).parents('.input-file').prev().click();
+          return false;
+        });
+        return element;
+      }
+    });
+    $('#rotate-buttons > button').click(function () {
+      imgCropper.rotate($(this).data().degree);
+    });
+  }
+
+  function decodeStr(strEnc, raw = false) {
+    return strEnc.map((v, i) => {
+      return raw || strEnc[i - 1] !== v ? glyphsList[v] : '';
+    }).join('');
+  }
+
+  tf.loadLayersModel('./tfjs_kcrnn/model.json').then(model => {
+    window.model = model; // This is hack to trace outputs of each layer after execution
+
+    model.layers.forEach(function (l) {
+      l.__orig_call = l.call;
+
+      l.call = function (inputs, args) {
+        var out = this.__orig_call(inputs, args);
+
+        this.__hari_lastout = tf.keep(out.clone());
+        return out;
+      };
+    });
+  });
+  initUi();
+  $('#run-btn').click(function () {
+    if (!imgCropper) {
+      return;
+    }
+
+    var croppedCanvas = imgCropper.getCroppedCanvas();
+    var scaleFactor = IMG_HEIGHT / croppedCanvas.height;
+    var origWidth = croppedCanvas.width,
+        newWidth = parseInt(scaleFactor * origWidth);
+    var data = tf.browser.fromPixels(croppedCanvas); // pick any one of the color channel. ( Here it is Green )
+
+    data = data.gather([0], [2]);
+    data = tf.image.resizeBilinear(data, [IMG_HEIGHT, newWidth]); // Normalize the values . Fit between -1 & 1
+
+    data = data.sub(127.5);
+    data = data.div(127.5);
+    var outputData = model.predict(data.expandDims());
+    var predictions = outputData.argMax(2).squeeze(); // tf.print( predictions,1 );
+
+    var out = decodeStr(Array.from(predictions.dataSync()));
+    output.text(out);
+
+    if (debugCheckbox.prop("checked")) {
+      renderLayerOutputs(model);
+    }
+  });
+});
+
+async function renderLayerOutputs(model) {
+  var tfvis = __webpack_require__(6);
+
+  window.tfvis = tfvis;
+  console.log(`Total num layers: ${model.layers.length}`);
+
+  for (var i = 0; i < 28; i++) {
+    var layer = model.layers[i];
+    var surface = tfvis.visor().surface({
+      name: 'Layer outputs',
+      tab: layer.name
+    });
+
+    var out = layer.__hari_lastout.squeeze(); // Normalize the data with in the range 0 - 1.0
+
+
+    out = out.sub(out.min());
+    out = out.div(out.max());
+
+    if (out.shape.length > 2) {
+      await renderImage(surface.drawArea, out.transpose([2, 0, 1]).reshape([out.shape[1], out.shape[0] * out.shape[2]].reverse()));
+    } else {
+      await renderImage(surface.drawArea, out.transpose([1, 0]));
     }
   }
-};
+}
+
+async function renderImage(container, tensor) {
+  const canvas = document.createElement('canvas');
+  canvas.width = tensor.shape[0];
+  canvas.height = tensor.shape[1];
+  canvas.style = `margin: 2px;height: ${tensor.shape[0] * 4}px; width: ${tensor.shape[1] * 4}px;image-rendering: pixelated;`;
+  container.appendChild(canvas);
+  return await tf.browser.toPixels(tensor, canvas);
+}
+
 /***/ }),
 /* 3 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-eval("var iota = __webpack_require__(4)\nvar isBuffer = __webpack_require__(5)\n\nvar hasTypedArrays  = ((typeof Float64Array) !== \"undefined\")\n\nfunction compare1st(a, b) {\n  return a[0] - b[0]\n}\n\nfunction order() {\n  var stride = this.stride\n  var terms = new Array(stride.length)\n  var i\n  for(i=0; i<terms.length; ++i) {\n    terms[i] = [Math.abs(stride[i]), i]\n  }\n  terms.sort(compare1st)\n  var result = new Array(terms.length)\n  for(i=0; i<result.length; ++i) {\n    result[i] = terms[i][1]\n  }\n  return result\n}\n\nfunction compileConstructor(dtype, dimension) {\n  var className = [\"View\", dimension, \"d\", dtype].join(\"\")\n  if(dimension < 0) {\n    className = \"View_Nil\" + dtype\n  }\n  var useGetters = (dtype === \"generic\")\n\n  if(dimension === -1) {\n    //Special case for trivial arrays\n    var code =\n      \"function \"+className+\"(a){this.data=a;};\\\nvar proto=\"+className+\".prototype;\\\nproto.dtype='\"+dtype+\"';\\\nproto.index=function(){return -1};\\\nproto.size=0;\\\nproto.dimension=-1;\\\nproto.shape=proto.stride=proto.order=[];\\\nproto.lo=proto.hi=proto.transpose=proto.step=\\\nfunction(){return new \"+className+\"(this.data);};\\\nproto.get=proto.set=function(){};\\\nproto.pick=function(){return null};\\\nreturn function construct_\"+className+\"(a){return new \"+className+\"(a);}\"\n    var procedure = new Function(code)\n    return procedure()\n  } else if(dimension === 0) {\n    //Special case for 0d arrays\n    var code =\n      \"function \"+className+\"(a,d) {\\\nthis.data = a;\\\nthis.offset = d\\\n};\\\nvar proto=\"+className+\".prototype;\\\nproto.dtype='\"+dtype+\"';\\\nproto.index=function(){return this.offset};\\\nproto.dimension=0;\\\nproto.size=1;\\\nproto.shape=\\\nproto.stride=\\\nproto.order=[];\\\nproto.lo=\\\nproto.hi=\\\nproto.transpose=\\\nproto.step=function \"+className+\"_copy() {\\\nreturn new \"+className+\"(this.data,this.offset)\\\n};\\\nproto.pick=function \"+className+\"_pick(){\\\nreturn TrivialArray(this.data);\\\n};\\\nproto.valueOf=proto.get=function \"+className+\"_get(){\\\nreturn \"+(useGetters ? \"this.data.get(this.offset)\" : \"this.data[this.offset]\")+\n\"};\\\nproto.set=function \"+className+\"_set(v){\\\nreturn \"+(useGetters ? \"this.data.set(this.offset,v)\" : \"this.data[this.offset]=v\")+\"\\\n};\\\nreturn function construct_\"+className+\"(a,b,c,d){return new \"+className+\"(a,d)}\"\n    var procedure = new Function(\"TrivialArray\", code)\n    return procedure(CACHED_CONSTRUCTORS[dtype][0])\n  }\n\n  var code = [\"'use strict'\"]\n\n  //Create constructor for view\n  var indices = iota(dimension)\n  var args = indices.map(function(i) { return \"i\"+i })\n  var index_str = \"this.offset+\" + indices.map(function(i) {\n        return \"this.stride[\" + i + \"]*i\" + i\n      }).join(\"+\")\n  var shapeArg = indices.map(function(i) {\n      return \"b\"+i\n    }).join(\",\")\n  var strideArg = indices.map(function(i) {\n      return \"c\"+i\n    }).join(\",\")\n  code.push(\n    \"function \"+className+\"(a,\" + shapeArg + \",\" + strideArg + \",d){this.data=a\",\n      \"this.shape=[\" + shapeArg + \"]\",\n      \"this.stride=[\" + strideArg + \"]\",\n      \"this.offset=d|0}\",\n    \"var proto=\"+className+\".prototype\",\n    \"proto.dtype='\"+dtype+\"'\",\n    \"proto.dimension=\"+dimension)\n\n  //view.size:\n  code.push(\"Object.defineProperty(proto,'size',{get:function \"+className+\"_size(){\\\nreturn \"+indices.map(function(i) { return \"this.shape[\"+i+\"]\" }).join(\"*\"),\n\"}})\")\n\n  //view.order:\n  if(dimension === 1) {\n    code.push(\"proto.order=[0]\")\n  } else {\n    code.push(\"Object.defineProperty(proto,'order',{get:\")\n    if(dimension < 4) {\n      code.push(\"function \"+className+\"_order(){\")\n      if(dimension === 2) {\n        code.push(\"return (Math.abs(this.stride[0])>Math.abs(this.stride[1]))?[1,0]:[0,1]}})\")\n      } else if(dimension === 3) {\n        code.push(\n\"var s0=Math.abs(this.stride[0]),s1=Math.abs(this.stride[1]),s2=Math.abs(this.stride[2]);\\\nif(s0>s1){\\\nif(s1>s2){\\\nreturn [2,1,0];\\\n}else if(s0>s2){\\\nreturn [1,2,0];\\\n}else{\\\nreturn [1,0,2];\\\n}\\\n}else if(s0>s2){\\\nreturn [2,0,1];\\\n}else if(s2>s1){\\\nreturn [0,1,2];\\\n}else{\\\nreturn [0,2,1];\\\n}}})\")\n      }\n    } else {\n      code.push(\"ORDER})\")\n    }\n  }\n\n  //view.set(i0, ..., v):\n  code.push(\n\"proto.set=function \"+className+\"_set(\"+args.join(\",\")+\",v){\")\n  if(useGetters) {\n    code.push(\"return this.data.set(\"+index_str+\",v)}\")\n  } else {\n    code.push(\"return this.data[\"+index_str+\"]=v}\")\n  }\n\n  //view.get(i0, ...):\n  code.push(\"proto.get=function \"+className+\"_get(\"+args.join(\",\")+\"){\")\n  if(useGetters) {\n    code.push(\"return this.data.get(\"+index_str+\")}\")\n  } else {\n    code.push(\"return this.data[\"+index_str+\"]}\")\n  }\n\n  //view.index:\n  code.push(\n    \"proto.index=function \"+className+\"_index(\", args.join(), \"){return \"+index_str+\"}\")\n\n  //view.hi():\n  code.push(\"proto.hi=function \"+className+\"_hi(\"+args.join(\",\")+\"){return new \"+className+\"(this.data,\"+\n    indices.map(function(i) {\n      return [\"(typeof i\",i,\"!=='number'||i\",i,\"<0)?this.shape[\", i, \"]:i\", i,\"|0\"].join(\"\")\n    }).join(\",\")+\",\"+\n    indices.map(function(i) {\n      return \"this.stride[\"+i + \"]\"\n    }).join(\",\")+\",this.offset)}\")\n\n  //view.lo():\n  var a_vars = indices.map(function(i) { return \"a\"+i+\"=this.shape[\"+i+\"]\" })\n  var c_vars = indices.map(function(i) { return \"c\"+i+\"=this.stride[\"+i+\"]\" })\n  code.push(\"proto.lo=function \"+className+\"_lo(\"+args.join(\",\")+\"){var b=this.offset,d=0,\"+a_vars.join(\",\")+\",\"+c_vars.join(\",\"))\n  for(var i=0; i<dimension; ++i) {\n    code.push(\n\"if(typeof i\"+i+\"==='number'&&i\"+i+\">=0){\\\nd=i\"+i+\"|0;\\\nb+=c\"+i+\"*d;\\\na\"+i+\"-=d}\")\n  }\n  code.push(\"return new \"+className+\"(this.data,\"+\n    indices.map(function(i) {\n      return \"a\"+i\n    }).join(\",\")+\",\"+\n    indices.map(function(i) {\n      return \"c\"+i\n    }).join(\",\")+\",b)}\")\n\n  //view.step():\n  code.push(\"proto.step=function \"+className+\"_step(\"+args.join(\",\")+\"){var \"+\n    indices.map(function(i) {\n      return \"a\"+i+\"=this.shape[\"+i+\"]\"\n    }).join(\",\")+\",\"+\n    indices.map(function(i) {\n      return \"b\"+i+\"=this.stride[\"+i+\"]\"\n    }).join(\",\")+\",c=this.offset,d=0,ceil=Math.ceil\")\n  for(var i=0; i<dimension; ++i) {\n    code.push(\n\"if(typeof i\"+i+\"==='number'){\\\nd=i\"+i+\"|0;\\\nif(d<0){\\\nc+=b\"+i+\"*(a\"+i+\"-1);\\\na\"+i+\"=ceil(-a\"+i+\"/d)\\\n}else{\\\na\"+i+\"=ceil(a\"+i+\"/d)\\\n}\\\nb\"+i+\"*=d\\\n}\")\n  }\n  code.push(\"return new \"+className+\"(this.data,\"+\n    indices.map(function(i) {\n      return \"a\" + i\n    }).join(\",\")+\",\"+\n    indices.map(function(i) {\n      return \"b\" + i\n    }).join(\",\")+\",c)}\")\n\n  //view.transpose():\n  var tShape = new Array(dimension)\n  var tStride = new Array(dimension)\n  for(var i=0; i<dimension; ++i) {\n    tShape[i] = \"a[i\"+i+\"]\"\n    tStride[i] = \"b[i\"+i+\"]\"\n  }\n  code.push(\"proto.transpose=function \"+className+\"_transpose(\"+args+\"){\"+\n    args.map(function(n,idx) { return n + \"=(\" + n + \"===undefined?\" + idx + \":\" + n + \"|0)\"}).join(\";\"),\n    \"var a=this.shape,b=this.stride;return new \"+className+\"(this.data,\"+tShape.join(\",\")+\",\"+tStride.join(\",\")+\",this.offset)}\")\n\n  //view.pick():\n  code.push(\"proto.pick=function \"+className+\"_pick(\"+args+\"){var a=[],b=[],c=this.offset\")\n  for(var i=0; i<dimension; ++i) {\n    code.push(\"if(typeof i\"+i+\"==='number'&&i\"+i+\">=0){c=(c+this.stride[\"+i+\"]*i\"+i+\")|0}else{a.push(this.shape[\"+i+\"]);b.push(this.stride[\"+i+\"])}\")\n  }\n  code.push(\"var ctor=CTOR_LIST[a.length+1];return ctor(this.data,a,b,c)}\")\n\n  //Add return statement\n  code.push(\"return function construct_\"+className+\"(data,shape,stride,offset){return new \"+className+\"(data,\"+\n    indices.map(function(i) {\n      return \"shape[\"+i+\"]\"\n    }).join(\",\")+\",\"+\n    indices.map(function(i) {\n      return \"stride[\"+i+\"]\"\n    }).join(\",\")+\",offset)}\")\n\n  //Compile procedure\n  var procedure = new Function(\"CTOR_LIST\", \"ORDER\", code.join(\"\\n\"))\n  return procedure(CACHED_CONSTRUCTORS[dtype], order)\n}\n\nfunction arrayDType(data) {\n  if(isBuffer(data)) {\n    return \"buffer\"\n  }\n  if(hasTypedArrays) {\n    switch(Object.prototype.toString.call(data)) {\n      case \"[object Float64Array]\":\n        return \"float64\"\n      case \"[object Float32Array]\":\n        return \"float32\"\n      case \"[object Int8Array]\":\n        return \"int8\"\n      case \"[object Int16Array]\":\n        return \"int16\"\n      case \"[object Int32Array]\":\n        return \"int32\"\n      case \"[object Uint8Array]\":\n        return \"uint8\"\n      case \"[object Uint16Array]\":\n        return \"uint16\"\n      case \"[object Uint32Array]\":\n        return \"uint32\"\n      case \"[object Uint8ClampedArray]\":\n        return \"uint8_clamped\"\n    }\n  }\n  if(Array.isArray(data)) {\n    return \"array\"\n  }\n  return \"generic\"\n}\n\nvar CACHED_CONSTRUCTORS = {\n  \"float32\":[],\n  \"float64\":[],\n  \"int8\":[],\n  \"int16\":[],\n  \"int32\":[],\n  \"uint8\":[],\n  \"uint16\":[],\n  \"uint32\":[],\n  \"array\":[],\n  \"uint8_clamped\":[],\n  \"buffer\":[],\n  \"generic\":[]\n}\n\n;(function() {\n  for(var id in CACHED_CONSTRUCTORS) {\n    CACHED_CONSTRUCTORS[id].push(compileConstructor(id, -1))\n  }\n});\n\nfunction wrappedNDArrayCtor(data, shape, stride, offset) {\n  if(data === undefined) {\n    var ctor = CACHED_CONSTRUCTORS.array[0]\n    return ctor([])\n  } else if(typeof data === \"number\") {\n    data = [data]\n  }\n  if(shape === undefined) {\n    shape = [ data.length ]\n  }\n  var d = shape.length\n  if(stride === undefined) {\n    stride = new Array(d)\n    for(var i=d-1, sz=1; i>=0; --i) {\n      stride[i] = sz\n      sz *= shape[i]\n    }\n  }\n  if(offset === undefined) {\n    offset = 0\n    for(var i=0; i<d; ++i) {\n      if(stride[i] < 0) {\n        offset -= (shape[i]-1)*stride[i]\n      }\n    }\n  }\n  var dtype = arrayDType(data)\n  var ctor_list = CACHED_CONSTRUCTORS[dtype]\n  while(ctor_list.length <= d+1) {\n    ctor_list.push(compileConstructor(dtype, ctor_list.length-1))\n  }\n  var ctor = ctor_list[d+1]\n  return ctor(data, shape, stride, offset)\n}\n\nmodule.exports = wrappedNDArrayCtor\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./node_modules/ndarray/ndarray.js\n// module id = 3\n// module chunks = 0\n\n//# sourceURL=webpack:///./node_modules/ndarray/ndarray.js?");
+module.exports = ["ഽ","ഺ","ൿ","൹"," ","!","\"","%","'","(",")","*","+",",","-",".","/",":",";","=","?","[","]","^","_","`","{","}","~","അ","ആ","ഇ","ഉ","ഋ","ൠ","ഌ","ൡ","എ","ഏ","ഒ","ക","ഖ","ഗ","ഘ","ങ","ച","ഛ","ജ","ഝ","ഞ","ട","ഠ","ഡ","ഢ","ണ","ത","ഥ","ദ","ധ","ന","പ","ഫ","ബ","ഭ","മ","യ","ര","ല","വ","ശ","ഷ","സ","ഹ","ള","ഴ","റ","ൾ","ൽ","ൻ","ർ","ൺ","്","ാ","ി","ീ","ു","ൂ","ൃ","ോ","ൊ","ഈ","ൈ","ഊ","ഓ","ഐ","ൌ","ൎ","ഔ","ഩ","ൢ","ൣ","ൄ","െ","േ","ൗ","ം","ഃ","൦","൧","൨","൩","൪","൫","൬","൭","൮","൯","൰","൱","൲","൳","൴","൵","0","1","2","3","4","5","6","7","8","9","‌","‍"]
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-eval("\n\nfunction iota(n) {\n  var result = new Array(n)\n  for(var i=0; i<n; ++i) {\n    result[i] = i\n  }\n  return result\n}\n\nmodule.exports = iota\n\n//////////////////\n// WEBPACK FOOTER\n// ./node_modules/iota-array/iota.js\n// module id = 4\n// module chunks = 0\n\n//# sourceURL=webpack:///./node_modules/iota-array/iota.js?");
+module.exports = tf;
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-eval("/*!\n * Determine if an object is a Buffer\n *\n * @author   Feross Aboukhadijeh <https://feross.org>\n * @license  MIT\n */\n\n// The _isBuffer check is for Safari 5-7 support, because it's missing\n// Object.prototype.constructor. Remove this eventually\nmodule.exports = function (obj) {\n  return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)\n}\n\nfunction isBuffer (obj) {\n  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)\n}\n\n// For Node v0.10 support. Remove this eventually.\nfunction isSlowBuffer (obj) {\n  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))\n}\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./node_modules/is-buffer/index.js\n// module id = 5\n// module chunks = 0\n\n//# sourceURL=webpack:///./node_modules/is-buffer/index.js?");
+/*!
+ * Cropper v3.1.4
+ * https://github.com/fengyuanchen/cropper
+ *
+ * Copyright (c) 2014-2018 Chen Fengyuan
+ * Released under the MIT license
+ *
+ * Date: 2018-01-13T09:37:52.890Z
+ */
+
+(function (global, factory) {
+	 true ? factory(__webpack_require__(0)) :
+	typeof define === 'function' && define.amd ? define(['jquery'], factory) :
+	(factory(global.jQuery));
+}(this, (function ($) { 'use strict';
+
+$ = $ && $.hasOwnProperty('default') ? $['default'] : $;
+
+var WINDOW = typeof window !== 'undefined' ? window : {};
+var NAMESPACE = 'cropper';
+
+// Actions
+var ACTION_ALL = 'all';
+var ACTION_CROP = 'crop';
+var ACTION_MOVE = 'move';
+var ACTION_ZOOM = 'zoom';
+var ACTION_EAST = 'e';
+var ACTION_WEST = 'w';
+var ACTION_SOUTH = 's';
+var ACTION_NORTH = 'n';
+var ACTION_NORTH_EAST = 'ne';
+var ACTION_NORTH_WEST = 'nw';
+var ACTION_SOUTH_EAST = 'se';
+var ACTION_SOUTH_WEST = 'sw';
+
+// Classes
+var CLASS_CROP = NAMESPACE + '-crop';
+var CLASS_DISABLED = NAMESPACE + '-disabled';
+var CLASS_HIDDEN = NAMESPACE + '-hidden';
+var CLASS_HIDE = NAMESPACE + '-hide';
+var CLASS_INVISIBLE = NAMESPACE + '-invisible';
+var CLASS_MODAL = NAMESPACE + '-modal';
+var CLASS_MOVE = NAMESPACE + '-move';
+
+// Data keys
+var DATA_ACTION = 'action';
+var DATA_PREVIEW = 'preview';
+
+// Drag modes
+var DRAG_MODE_CROP = 'crop';
+var DRAG_MODE_MOVE = 'move';
+var DRAG_MODE_NONE = 'none';
+
+// Events
+var EVENT_CROP = 'crop';
+var EVENT_CROP_END = 'cropend';
+var EVENT_CROP_MOVE = 'cropmove';
+var EVENT_CROP_START = 'cropstart';
+var EVENT_DBLCLICK = 'dblclick';
+var EVENT_ERROR = 'error';
+var EVENT_LOAD = 'load';
+var EVENT_POINTER_DOWN = WINDOW.PointerEvent ? 'pointerdown' : 'touchstart mousedown';
+var EVENT_POINTER_MOVE = WINDOW.PointerEvent ? 'pointermove' : 'touchmove mousemove';
+var EVENT_POINTER_UP = WINDOW.PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';
+var EVENT_READY = 'ready';
+var EVENT_RESIZE = 'resize';
+var EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
+var EVENT_ZOOM = 'zoom';
+
+// RegExps
+var REGEXP_ACTIONS = /^(e|w|s|n|se|sw|ne|nw|all|crop|move|zoom)$/;
+var REGEXP_DATA_URL = /^data:/;
+var REGEXP_DATA_URL_JPEG = /^data:image\/jpeg;base64,/;
+var REGEXP_TAG_NAME = /^(img|canvas)$/i;
+
+var DEFAULTS = {
+  // Define the view mode of the cropper
+  viewMode: 0, // 0, 1, 2, 3
+
+  // Define the dragging mode of the cropper
+  dragMode: DRAG_MODE_CROP, // 'crop', 'move' or 'none'
+
+  // Define the aspect ratio of the crop box
+  aspectRatio: NaN,
+
+  // An object with the previous cropping result data
+  data: null,
+
+  // A selector for adding extra containers to preview
+  preview: '',
+
+  // Re-render the cropper when resize the window
+  responsive: true,
+
+  // Restore the cropped area after resize the window
+  restore: true,
+
+  // Check if the current image is a cross-origin image
+  checkCrossOrigin: true,
+
+  // Check the current image's Exif Orientation information
+  checkOrientation: true,
+
+  // Show the black modal
+  modal: true,
+
+  // Show the dashed lines for guiding
+  guides: true,
+
+  // Show the center indicator for guiding
+  center: true,
+
+  // Show the white modal to highlight the crop box
+  highlight: true,
+
+  // Show the grid background
+  background: true,
+
+  // Enable to crop the image automatically when initialize
+  autoCrop: true,
+
+  // Define the percentage of automatic cropping area when initializes
+  autoCropArea: 0.8,
+
+  // Enable to move the image
+  movable: true,
+
+  // Enable to rotate the image
+  rotatable: true,
+
+  // Enable to scale the image
+  scalable: true,
+
+  // Enable to zoom the image
+  zoomable: true,
+
+  // Enable to zoom the image by dragging touch
+  zoomOnTouch: true,
+
+  // Enable to zoom the image by wheeling mouse
+  zoomOnWheel: true,
+
+  // Define zoom ratio when zoom the image by wheeling mouse
+  wheelZoomRatio: 0.1,
+
+  // Enable to move the crop box
+  cropBoxMovable: true,
+
+  // Enable to resize the crop box
+  cropBoxResizable: true,
+
+  // Toggle drag mode between "crop" and "move" when click twice on the cropper
+  toggleDragModeOnDblclick: true,
+
+  // Size limitation
+  minCanvasWidth: 0,
+  minCanvasHeight: 0,
+  minCropBoxWidth: 0,
+  minCropBoxHeight: 0,
+  minContainerWidth: 200,
+  minContainerHeight: 100,
+
+  // Shortcuts of events
+  ready: null,
+  cropstart: null,
+  cropmove: null,
+  cropend: null,
+  crop: null,
+  zoom: null
+};
+
+var TEMPLATE = '<div class="cropper-container">' + '<div class="cropper-wrap-box">' + '<div class="cropper-canvas"></div>' + '</div>' + '<div class="cropper-drag-box"></div>' + '<div class="cropper-crop-box">' + '<span class="cropper-view-box"></span>' + '<span class="cropper-dashed dashed-h"></span>' + '<span class="cropper-dashed dashed-v"></span>' + '<span class="cropper-center"></span>' + '<span class="cropper-face"></span>' + '<span class="cropper-line line-e" data-action="e"></span>' + '<span class="cropper-line line-n" data-action="n"></span>' + '<span class="cropper-line line-w" data-action="w"></span>' + '<span class="cropper-line line-s" data-action="s"></span>' + '<span class="cropper-point point-e" data-action="e"></span>' + '<span class="cropper-point point-n" data-action="n"></span>' + '<span class="cropper-point point-w" data-action="w"></span>' + '<span class="cropper-point point-s" data-action="s"></span>' + '<span class="cropper-point point-ne" data-action="ne"></span>' + '<span class="cropper-point point-nw" data-action="nw"></span>' + '<span class="cropper-point point-sw" data-action="sw"></span>' + '<span class="cropper-point point-se" data-action="se"></span>' + '</div>' + '</div>';
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var toConsumableArray = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+};
+
+/**
+ * Check if the given value is a string.
+ * @param {*} value - The value to check.
+ * @returns {boolean} Returns `true` if the given value is a string, else `false`.
+ */
+function isString(value) {
+  return typeof value === 'string';
+}
+
+/**
+ * Check if the given value is not a number.
+ */
+var isNaN = Number.isNaN || WINDOW.isNaN;
+
+/**
+ * Check if the given value is a number.
+ * @param {*} value - The value to check.
+ * @returns {boolean} Returns `true` if the given value is a number, else `false`.
+ */
+function isNumber(value) {
+  return typeof value === 'number' && !isNaN(value);
+}
+
+/**
+ * Check if the given value is undefined.
+ * @param {*} value - The value to check.
+ * @returns {boolean} Returns `true` if the given value is undefined, else `false`.
+ */
+function isUndefined(value) {
+  return typeof value === 'undefined';
+}
+
+/**
+ * Takes a function and returns a new one that will always have a particular context.
+ * Custom proxy to avoid jQuery's guid.
+ * @param {Function} fn - The target function.
+ * @param {Object} context - The new context for the function.
+ * @returns {Function} The new function.
+ */
+function proxy(fn, context) {
+  for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    args[_key - 2] = arguments[_key];
+  }
+
+  return function () {
+    for (var _len2 = arguments.length, args2 = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args2[_key2] = arguments[_key2];
+    }
+
+    return fn.apply(context, args.concat(args2));
+  };
+}
+
+/**
+ * Get the own enumerable properties of a given object.
+ * @param {Object} obj - The target object.
+ * @returns {Array} All the own enumerable properties of the given object.
+ */
+var objectKeys = Object.keys || function objectKeys(obj) {
+  var keys = [];
+
+  $.each(obj, function (key) {
+    keys.push(key);
+  });
+
+  return keys;
+};
+
+var REGEXP_DECIMALS = /\.\d*(?:0|9){12}\d*$/i;
+
+/**
+ * Normalize decimal number.
+ * Check out {@link http://0.30000000000000004.com/ }
+ * @param {number} value - The value to normalize.
+ * @param {number} [times=100000000000] - The times for normalizing.
+ * @returns {number} Returns the normalized number.
+ */
+function normalizeDecimalNumber(value) {
+  var times = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100000000000;
+
+  return REGEXP_DECIMALS.test(value) ? Math.round(value * times) / times : value;
+}
+
+var location = WINDOW.location;
+
+var REGEXP_ORIGINS = /^(https?:)\/\/([^:/?#]+):?(\d*)/i;
+
+/**
+ * Check if the given URL is a cross origin URL.
+ * @param {string} url - The target URL.
+ * @returns {boolean} Returns `true` if the given URL is a cross origin URL, else `false`.
+ */
+function isCrossOriginURL(url) {
+  var parts = url.match(REGEXP_ORIGINS);
+
+  return parts && (parts[1] !== location.protocol || parts[2] !== location.hostname || parts[3] !== location.port);
+}
+
+/**
+ * Add timestamp to the given URL.
+ * @param {string} url - The target URL.
+ * @returns {string} The result URL.
+ */
+function addTimestamp(url) {
+  var timestamp = 'timestamp=' + new Date().getTime();
+
+  return url + (url.indexOf('?') === -1 ? '?' : '&') + timestamp;
+}
+
+/**
+ * Get transform values base on the given object.
+ * @param {Object} obj - The target object.
+ * @returns {string} A string contains transform values.
+ */
+function getTransformValues(_ref) {
+  var rotate = _ref.rotate,
+      scaleX = _ref.scaleX,
+      scaleY = _ref.scaleY,
+      translateX = _ref.translateX,
+      translateY = _ref.translateY;
+
+  var values = [];
+
+  if (isNumber(translateX) && translateX !== 0) {
+    values.push('translateX(' + translateX + 'px)');
+  }
+
+  if (isNumber(translateY) && translateY !== 0) {
+    values.push('translateY(' + translateY + 'px)');
+  }
+
+  // Rotate should come first before scale to match orientation transform
+  if (isNumber(rotate) && rotate !== 0) {
+    values.push('rotate(' + rotate + 'deg)');
+  }
+
+  if (isNumber(scaleX) && scaleX !== 1) {
+    values.push('scaleX(' + scaleX + ')');
+  }
+
+  if (isNumber(scaleY) && scaleY !== 1) {
+    values.push('scaleY(' + scaleY + ')');
+  }
+
+  return values.length ? values.join(' ') : 'none';
+}
+
+var navigator = WINDOW.navigator;
+
+var IS_SAFARI_OR_UIWEBVIEW = navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent);
+
+/**
+ * Get an image's natural sizes.
+ * @param {string} image - The target image.
+ * @param {Function} callback - The callback function.
+ */
+function getImageNaturalSizes(image, callback) {
+  // Modern browsers (except Safari)
+  if (image.naturalWidth && !IS_SAFARI_OR_UIWEBVIEW) {
+    callback(image.naturalWidth, image.naturalHeight);
+    return;
+  }
+
+  var newImage = document.createElement('img');
+
+  newImage.onload = function () {
+    callback(newImage.width, newImage.height);
+  };
+
+  newImage.src = image.src;
+}
+
+/**
+ * Get the max ratio of a group of pointers.
+ * @param {string} pointers - The target pointers.
+ * @returns {number} The result ratio.
+ */
+function getMaxZoomRatio(pointers) {
+  var pointers2 = $.extend({}, pointers);
+  var ratios = [];
+
+  $.each(pointers, function (pointerId, pointer) {
+    delete pointers2[pointerId];
+
+    $.each(pointers2, function (pointerId2, pointer2) {
+      var x1 = Math.abs(pointer.startX - pointer2.startX);
+      var y1 = Math.abs(pointer.startY - pointer2.startY);
+      var x2 = Math.abs(pointer.endX - pointer2.endX);
+      var y2 = Math.abs(pointer.endY - pointer2.endY);
+      var z1 = Math.sqrt(x1 * x1 + y1 * y1);
+      var z2 = Math.sqrt(x2 * x2 + y2 * y2);
+      var ratio = (z2 - z1) / z1;
+
+      ratios.push(ratio);
+    });
+  });
+
+  ratios.sort(function (a, b) {
+    return Math.abs(a) < Math.abs(b);
+  });
+
+  return ratios[0];
+}
+
+/**
+ * Get a pointer from an event object.
+ * @param {Object} event - The target event object.
+ * @param {boolean} endOnly - Indicates if only returns the end point coordinate or not.
+ * @returns {Object} The result pointer contains start and/or end point coordinates.
+ */
+function getPointer(_ref2, endOnly) {
+  var pageX = _ref2.pageX,
+      pageY = _ref2.pageY;
+
+  var end = {
+    endX: pageX,
+    endY: pageY
+  };
+
+  if (endOnly) {
+    return end;
+  }
+
+  return $.extend({
+    startX: pageX,
+    startY: pageY
+  }, end);
+}
+
+/**
+ * Get the center point coordinate of a group of pointers.
+ * @param {Object} pointers - The target pointers.
+ * @returns {Object} The center point coordinate.
+ */
+function getPointersCenter(pointers) {
+  var pageX = 0;
+  var pageY = 0;
+  var count = 0;
+
+  $.each(pointers, function (pointerId, _ref3) {
+    var startX = _ref3.startX,
+        startY = _ref3.startY;
+
+    pageX += startX;
+    pageY += startY;
+    count += 1;
+  });
+
+  pageX /= count;
+  pageY /= count;
+
+  return {
+    pageX: pageX,
+    pageY: pageY
+  };
+}
+
+/**
+ * Check if the given value is a finite number.
+ */
+var isFinite = Number.isFinite || WINDOW.isFinite;
+
+/**
+ * Get the max sizes in a rectangle under the given aspect ratio.
+ * @param {Object} data - The original sizes.
+ * @returns {Object} The result sizes.
+ */
+function getContainSizes(_ref4) {
+  var aspectRatio = _ref4.aspectRatio,
+      height = _ref4.height,
+      width = _ref4.width;
+
+  var isValidNumber = function isValidNumber(value) {
+    return isFinite(value) && value > 0;
+  };
+
+  if (isValidNumber(width) && isValidNumber(height)) {
+    if (height * aspectRatio > width) {
+      height = width / aspectRatio;
+    } else {
+      width = height * aspectRatio;
+    }
+  } else if (isValidNumber(width)) {
+    height = width / aspectRatio;
+  } else if (isValidNumber(height)) {
+    width = height * aspectRatio;
+  }
+
+  return {
+    width: width,
+    height: height
+  };
+}
+
+/**
+ * Get the new sizes of a rectangle after rotated.
+ * @param {Object} data - The original sizes.
+ * @returns {Object} The result sizes.
+ */
+function getRotatedSizes(_ref5) {
+  var width = _ref5.width,
+      height = _ref5.height,
+      degree = _ref5.degree;
+
+  degree = Math.abs(degree) % 180;
+
+  if (degree === 90) {
+    return {
+      width: height,
+      height: width
+    };
+  }
+
+  var arc = degree % 90 * Math.PI / 180;
+  var sinArc = Math.sin(arc);
+  var cosArc = Math.cos(arc);
+  var newWidth = width * cosArc + height * sinArc;
+  var newHeight = width * sinArc + height * cosArc;
+
+  return degree > 90 ? {
+    width: newHeight,
+    height: newWidth
+  } : {
+    width: newWidth,
+    height: newHeight
+  };
+}
+
+/**
+ * Get a canvas which drew the given image.
+ * @param {HTMLImageElement} image - The image for drawing.
+ * @param {Object} imageData - The image data.
+ * @param {Object} canvasData - The canvas data.
+ * @param {Object} options - The options.
+ * @returns {HTMLCanvasElement} The result canvas.
+ */
+function getSourceCanvas(image, _ref6, _ref7, _ref8) {
+  var imageNaturalWidth = _ref6.naturalWidth,
+      imageNaturalHeight = _ref6.naturalHeight,
+      _ref6$rotate = _ref6.rotate,
+      rotate = _ref6$rotate === undefined ? 0 : _ref6$rotate,
+      _ref6$scaleX = _ref6.scaleX,
+      scaleX = _ref6$scaleX === undefined ? 1 : _ref6$scaleX,
+      _ref6$scaleY = _ref6.scaleY,
+      scaleY = _ref6$scaleY === undefined ? 1 : _ref6$scaleY;
+  var aspectRatio = _ref7.aspectRatio,
+      naturalWidth = _ref7.naturalWidth,
+      naturalHeight = _ref7.naturalHeight;
+  var _ref8$fillColor = _ref8.fillColor,
+      fillColor = _ref8$fillColor === undefined ? 'transparent' : _ref8$fillColor,
+      _ref8$imageSmoothingE = _ref8.imageSmoothingEnabled,
+      imageSmoothingEnabled = _ref8$imageSmoothingE === undefined ? true : _ref8$imageSmoothingE,
+      _ref8$imageSmoothingQ = _ref8.imageSmoothingQuality,
+      imageSmoothingQuality = _ref8$imageSmoothingQ === undefined ? 'low' : _ref8$imageSmoothingQ,
+      _ref8$maxWidth = _ref8.maxWidth,
+      maxWidth = _ref8$maxWidth === undefined ? Infinity : _ref8$maxWidth,
+      _ref8$maxHeight = _ref8.maxHeight,
+      maxHeight = _ref8$maxHeight === undefined ? Infinity : _ref8$maxHeight,
+      _ref8$minWidth = _ref8.minWidth,
+      minWidth = _ref8$minWidth === undefined ? 0 : _ref8$minWidth,
+      _ref8$minHeight = _ref8.minHeight,
+      minHeight = _ref8$minHeight === undefined ? 0 : _ref8$minHeight;
+
+  var maxSizes = getContainSizes({
+    aspectRatio: aspectRatio,
+    width: maxWidth,
+    height: maxHeight
+  });
+  var minSizes = getContainSizes({
+    aspectRatio: aspectRatio,
+    width: minWidth,
+    height: minHeight
+  });
+  var width = Math.min(maxSizes.width, Math.max(minSizes.width, naturalWidth));
+  var height = Math.min(maxSizes.height, Math.max(minSizes.height, naturalHeight));
+  var canvas = document.createElement('canvas');
+  var context = canvas.getContext('2d');
+  var params = [-imageNaturalWidth / 2, -imageNaturalHeight / 2, imageNaturalWidth, imageNaturalHeight];
+
+  canvas.width = normalizeDecimalNumber(width);
+  canvas.height = normalizeDecimalNumber(height);
+  context.fillStyle = fillColor;
+  context.fillRect(0, 0, width, height);
+  context.save();
+  context.translate(width / 2, height / 2);
+  context.rotate(rotate * Math.PI / 180);
+  context.scale(scaleX, scaleY);
+  context.imageSmoothingEnabled = !!imageSmoothingEnabled;
+  context.imageSmoothingQuality = imageSmoothingQuality;
+  context.drawImage.apply(context, [image].concat(toConsumableArray($.map(params, function (param) {
+    return Math.floor(normalizeDecimalNumber(param));
+  }))));
+  context.restore();
+  return canvas;
+}
+
+var fromCharCode = String.fromCharCode;
+
+/**
+ * Get string from char code in data view.
+ * @param {DataView} dataView - The data view for read.
+ * @param {number} start - The start index.
+ * @param {number} length - The read length.
+ * @returns {string} The read result.
+ */
+
+function getStringFromCharCode(dataView, start, length) {
+  var str = '';
+  var i = void 0;
+
+  length += start;
+
+  for (i = start; i < length; i += 1) {
+    str += fromCharCode(dataView.getUint8(i));
+  }
+
+  return str;
+}
+
+var REGEXP_DATA_URL_HEAD = /^data:.*,/;
+
+/**
+ * Transform Data URL to array buffer.
+ * @param {string} dataURL - The Data URL to transform.
+ * @returns {ArrayBuffer} The result array buffer.
+ */
+function dataURLToArrayBuffer(dataURL) {
+  var base64 = dataURL.replace(REGEXP_DATA_URL_HEAD, '');
+  var binary = atob(base64);
+  var arrayBuffer = new ArrayBuffer(binary.length);
+  var uint8 = new Uint8Array(arrayBuffer);
+
+  $.each(uint8, function (i) {
+    uint8[i] = binary.charCodeAt(i);
+  });
+
+  return arrayBuffer;
+}
+
+/**
+ * Transform array buffer to Data URL.
+ * @param {ArrayBuffer} arrayBuffer - The array buffer to transform.
+ * @param {string} mimeType - The mime type of the Data URL.
+ * @returns {string} The result Data URL.
+ */
+function arrayBufferToDataURL(arrayBuffer, mimeType) {
+  var uint8 = new Uint8Array(arrayBuffer);
+  var data = '';
+
+  // TypedArray.prototype.forEach is not supported in some browsers.
+  $.each(uint8, function (i, value) {
+    data += fromCharCode(value);
+  });
+
+  return 'data:' + mimeType + ';base64,' + btoa(data);
+}
+
+/**
+ * Get orientation value from given array buffer.
+ * @param {ArrayBuffer} arrayBuffer - The array buffer to read.
+ * @returns {number} The read orientation value.
+ */
+function getOrientation(arrayBuffer) {
+  var dataView = new DataView(arrayBuffer);
+  var orientation = void 0;
+  var littleEndian = void 0;
+  var app1Start = void 0;
+  var ifdStart = void 0;
+
+  // Only handle JPEG image (start by 0xFFD8)
+  if (dataView.getUint8(0) === 0xFF && dataView.getUint8(1) === 0xD8) {
+    var length = dataView.byteLength;
+    var offset = 2;
+
+    while (offset < length) {
+      if (dataView.getUint8(offset) === 0xFF && dataView.getUint8(offset + 1) === 0xE1) {
+        app1Start = offset;
+        break;
+      }
+
+      offset += 1;
+    }
+  }
+
+  if (app1Start) {
+    var exifIDCode = app1Start + 4;
+    var tiffOffset = app1Start + 10;
+
+    if (getStringFromCharCode(dataView, exifIDCode, 4) === 'Exif') {
+      var endianness = dataView.getUint16(tiffOffset);
+
+      littleEndian = endianness === 0x4949;
+
+      if (littleEndian || endianness === 0x4D4D /* bigEndian */) {
+          if (dataView.getUint16(tiffOffset + 2, littleEndian) === 0x002A) {
+            var firstIFDOffset = dataView.getUint32(tiffOffset + 4, littleEndian);
+
+            if (firstIFDOffset >= 0x00000008) {
+              ifdStart = tiffOffset + firstIFDOffset;
+            }
+          }
+        }
+    }
+  }
+
+  if (ifdStart) {
+    var _length = dataView.getUint16(ifdStart, littleEndian);
+    var _offset = void 0;
+    var i = void 0;
+
+    for (i = 0; i < _length; i += 1) {
+      _offset = ifdStart + i * 12 + 2;
+
+      if (dataView.getUint16(_offset, littleEndian) === 0x0112 /* Orientation */) {
+          // 8 is the offset of the current tag's value
+          _offset += 8;
+
+          // Get the original orientation value
+          orientation = dataView.getUint16(_offset, littleEndian);
+
+          // Override the orientation with its default value
+          dataView.setUint16(_offset, 1, littleEndian);
+          break;
+        }
+    }
+  }
+
+  return orientation;
+}
+
+/**
+ * Parse Exif Orientation value.
+ * @param {number} orientation - The orientation to parse.
+ * @returns {Object} The parsed result.
+ */
+function parseOrientation(orientation) {
+  var rotate = 0;
+  var scaleX = 1;
+  var scaleY = 1;
+
+  switch (orientation) {
+    // Flip horizontal
+    case 2:
+      scaleX = -1;
+      break;
+
+    // Rotate left 180°
+    case 3:
+      rotate = -180;
+      break;
+
+    // Flip vertical
+    case 4:
+      scaleY = -1;
+      break;
+
+    // Flip vertical and rotate right 90°
+    case 5:
+      rotate = 90;
+      scaleY = -1;
+      break;
+
+    // Rotate right 90°
+    case 6:
+      rotate = 90;
+      break;
+
+    // Flip horizontal and rotate right 90°
+    case 7:
+      rotate = 90;
+      scaleX = -1;
+      break;
+
+    // Rotate left 90°
+    case 8:
+      rotate = -90;
+      break;
+
+    default:
+  }
+
+  return {
+    rotate: rotate,
+    scaleX: scaleX,
+    scaleY: scaleY
+  };
+}
+
+var render = {
+  render: function render() {
+    this.initContainer();
+    this.initCanvas();
+    this.initCropBox();
+    this.renderCanvas();
+
+    if (this.cropped) {
+      this.renderCropBox();
+    }
+  },
+  initContainer: function initContainer() {
+    var $element = this.$element,
+        options = this.options,
+        $container = this.$container,
+        $cropper = this.$cropper;
+
+
+    $cropper.addClass(CLASS_HIDDEN);
+    $element.removeClass(CLASS_HIDDEN);
+
+    $cropper.css(this.container = {
+      width: Math.max($container.width(), Number(options.minContainerWidth) || 200),
+      height: Math.max($container.height(), Number(options.minContainerHeight) || 100)
+    });
+
+    $element.addClass(CLASS_HIDDEN);
+    $cropper.removeClass(CLASS_HIDDEN);
+  },
+
+
+  // Canvas (image wrapper)
+  initCanvas: function initCanvas() {
+    var container = this.container,
+        image = this.image;
+    var viewMode = this.options.viewMode;
+
+    var rotated = Math.abs(image.rotate) % 180 === 90;
+    var naturalWidth = rotated ? image.naturalHeight : image.naturalWidth;
+    var naturalHeight = rotated ? image.naturalWidth : image.naturalHeight;
+    var aspectRatio = naturalWidth / naturalHeight;
+    var canvasWidth = container.width;
+    var canvasHeight = container.height;
+
+    if (container.height * aspectRatio > container.width) {
+      if (viewMode === 3) {
+        canvasWidth = container.height * aspectRatio;
+      } else {
+        canvasHeight = container.width / aspectRatio;
+      }
+    } else if (viewMode === 3) {
+      canvasHeight = container.width / aspectRatio;
+    } else {
+      canvasWidth = container.height * aspectRatio;
+    }
+
+    var canvas = {
+      aspectRatio: aspectRatio,
+      naturalWidth: naturalWidth,
+      naturalHeight: naturalHeight,
+      width: canvasWidth,
+      height: canvasHeight
+    };
+
+    canvas.left = (container.width - canvasWidth) / 2;
+    canvas.top = (container.height - canvasHeight) / 2;
+    canvas.oldLeft = canvas.left;
+    canvas.oldTop = canvas.top;
+
+    this.canvas = canvas;
+    this.limited = viewMode === 1 || viewMode === 2;
+    this.limitCanvas(true, true);
+    this.initialImage = $.extend({}, image);
+    this.initialCanvas = $.extend({}, canvas);
+  },
+  limitCanvas: function limitCanvas(isSizeLimited, isPositionLimited) {
+    var options = this.options,
+        container = this.container,
+        canvas = this.canvas,
+        cropBox = this.cropBox;
+    var viewMode = options.viewMode;
+    var aspectRatio = canvas.aspectRatio;
+
+    var cropped = this.cropped && cropBox;
+
+    if (isSizeLimited) {
+      var minCanvasWidth = Number(options.minCanvasWidth) || 0;
+      var minCanvasHeight = Number(options.minCanvasHeight) || 0;
+
+      if (viewMode > 0) {
+        if (viewMode > 1) {
+          minCanvasWidth = Math.max(minCanvasWidth, container.width);
+          minCanvasHeight = Math.max(minCanvasHeight, container.height);
+
+          if (viewMode === 3) {
+            if (minCanvasHeight * aspectRatio > minCanvasWidth) {
+              minCanvasWidth = minCanvasHeight * aspectRatio;
+            } else {
+              minCanvasHeight = minCanvasWidth / aspectRatio;
+            }
+          }
+        } else if (minCanvasWidth) {
+          minCanvasWidth = Math.max(minCanvasWidth, cropped ? cropBox.width : 0);
+        } else if (minCanvasHeight) {
+          minCanvasHeight = Math.max(minCanvasHeight, cropped ? cropBox.height : 0);
+        } else if (cropped) {
+          minCanvasWidth = cropBox.width;
+          minCanvasHeight = cropBox.height;
+
+          if (minCanvasHeight * aspectRatio > minCanvasWidth) {
+            minCanvasWidth = minCanvasHeight * aspectRatio;
+          } else {
+            minCanvasHeight = minCanvasWidth / aspectRatio;
+          }
+        }
+      }
+
+      var _getContainSizes = getContainSizes({
+        aspectRatio: aspectRatio,
+        width: minCanvasWidth,
+        height: minCanvasHeight
+      });
+
+      minCanvasWidth = _getContainSizes.width;
+      minCanvasHeight = _getContainSizes.height;
+
+
+      canvas.minWidth = minCanvasWidth;
+      canvas.minHeight = minCanvasHeight;
+      canvas.maxWidth = Infinity;
+      canvas.maxHeight = Infinity;
+    }
+
+    if (isPositionLimited) {
+      if (viewMode > 0) {
+        var newCanvasLeft = container.width - canvas.width;
+        var newCanvasTop = container.height - canvas.height;
+
+        canvas.minLeft = Math.min(0, newCanvasLeft);
+        canvas.minTop = Math.min(0, newCanvasTop);
+        canvas.maxLeft = Math.max(0, newCanvasLeft);
+        canvas.maxTop = Math.max(0, newCanvasTop);
+
+        if (cropped && this.limited) {
+          canvas.minLeft = Math.min(cropBox.left, cropBox.left + cropBox.width - canvas.width);
+          canvas.minTop = Math.min(cropBox.top, cropBox.top + cropBox.height - canvas.height);
+          canvas.maxLeft = cropBox.left;
+          canvas.maxTop = cropBox.top;
+
+          if (viewMode === 2) {
+            if (canvas.width >= container.width) {
+              canvas.minLeft = Math.min(0, newCanvasLeft);
+              canvas.maxLeft = Math.max(0, newCanvasLeft);
+            }
+
+            if (canvas.height >= container.height) {
+              canvas.minTop = Math.min(0, newCanvasTop);
+              canvas.maxTop = Math.max(0, newCanvasTop);
+            }
+          }
+        }
+      } else {
+        canvas.minLeft = -canvas.width;
+        canvas.minTop = -canvas.height;
+        canvas.maxLeft = container.width;
+        canvas.maxTop = container.height;
+      }
+    }
+  },
+  renderCanvas: function renderCanvas(changed, transformed) {
+    var canvas = this.canvas,
+        image = this.image;
+
+
+    if (transformed) {
+      var _getRotatedSizes = getRotatedSizes({
+        width: image.naturalWidth * Math.abs(image.scaleX || 1),
+        height: image.naturalHeight * Math.abs(image.scaleY || 1),
+        degree: image.rotate || 0
+      }),
+          naturalWidth = _getRotatedSizes.width,
+          naturalHeight = _getRotatedSizes.height;
+
+      var width = canvas.width * (naturalWidth / canvas.naturalWidth);
+      var height = canvas.height * (naturalHeight / canvas.naturalHeight);
+
+      canvas.left -= (width - canvas.width) / 2;
+      canvas.top -= (height - canvas.height) / 2;
+      canvas.width = width;
+      canvas.height = height;
+      canvas.aspectRatio = naturalWidth / naturalHeight;
+      canvas.naturalWidth = naturalWidth;
+      canvas.naturalHeight = naturalHeight;
+      this.limitCanvas(true, false);
+    }
+
+    if (canvas.width > canvas.maxWidth || canvas.width < canvas.minWidth) {
+      canvas.left = canvas.oldLeft;
+    }
+
+    if (canvas.height > canvas.maxHeight || canvas.height < canvas.minHeight) {
+      canvas.top = canvas.oldTop;
+    }
+
+    canvas.width = Math.min(Math.max(canvas.width, canvas.minWidth), canvas.maxWidth);
+    canvas.height = Math.min(Math.max(canvas.height, canvas.minHeight), canvas.maxHeight);
+
+    this.limitCanvas(false, true);
+
+    canvas.left = Math.min(Math.max(canvas.left, canvas.minLeft), canvas.maxLeft);
+    canvas.top = Math.min(Math.max(canvas.top, canvas.minTop), canvas.maxTop);
+    canvas.oldLeft = canvas.left;
+    canvas.oldTop = canvas.top;
+
+    this.$canvas.css({
+      width: canvas.width,
+      height: canvas.height,
+      transform: getTransformValues({
+        translateX: canvas.left,
+        translateY: canvas.top
+      })
+    });
+
+    this.renderImage(changed);
+
+    if (this.cropped && this.limited) {
+      this.limitCropBox(true, true);
+    }
+  },
+  renderImage: function renderImage(changed) {
+    var canvas = this.canvas,
+        image = this.image;
+
+    var width = image.naturalWidth * (canvas.width / canvas.naturalWidth);
+    var height = image.naturalHeight * (canvas.height / canvas.naturalHeight);
+
+    $.extend(image, {
+      width: width,
+      height: height,
+      left: (canvas.width - width) / 2,
+      top: (canvas.height - height) / 2
+    });
+
+    this.$clone.css({
+      width: image.width,
+      height: image.height,
+      transform: getTransformValues($.extend({
+        translateX: image.left,
+        translateY: image.top
+      }, image))
+    });
+
+    if (changed) {
+      this.output();
+    }
+  },
+  initCropBox: function initCropBox() {
+    var options = this.options,
+        canvas = this.canvas;
+    var aspectRatio = options.aspectRatio;
+
+    var autoCropArea = Number(options.autoCropArea) || 0.8;
+    var cropBox = {
+      width: canvas.width,
+      height: canvas.height
+    };
+
+    if (aspectRatio) {
+      if (canvas.height * aspectRatio > canvas.width) {
+        cropBox.height = cropBox.width / aspectRatio;
+      } else {
+        cropBox.width = cropBox.height * aspectRatio;
+      }
+    }
+
+    this.cropBox = cropBox;
+    this.limitCropBox(true, true);
+
+    // Initialize auto crop area
+    cropBox.width = Math.min(Math.max(cropBox.width, cropBox.minWidth), cropBox.maxWidth);
+    cropBox.height = Math.min(Math.max(cropBox.height, cropBox.minHeight), cropBox.maxHeight);
+
+    // The width of auto crop area must large than "minWidth", and the height too. (#164)
+    cropBox.width = Math.max(cropBox.minWidth, cropBox.width * autoCropArea);
+    cropBox.height = Math.max(cropBox.minHeight, cropBox.height * autoCropArea);
+    cropBox.left = canvas.left + (canvas.width - cropBox.width) / 2;
+    cropBox.top = canvas.top + (canvas.height - cropBox.height) / 2;
+    cropBox.oldLeft = cropBox.left;
+    cropBox.oldTop = cropBox.top;
+
+    this.initialCropBox = $.extend({}, cropBox);
+  },
+  limitCropBox: function limitCropBox(isSizeLimited, isPositionLimited) {
+    var options = this.options,
+        container = this.container,
+        canvas = this.canvas,
+        cropBox = this.cropBox,
+        limited = this.limited;
+    var aspectRatio = options.aspectRatio;
+
+
+    if (isSizeLimited) {
+      var minCropBoxWidth = Number(options.minCropBoxWidth) || 0;
+      var minCropBoxHeight = Number(options.minCropBoxHeight) || 0;
+      var maxCropBoxWidth = Math.min(container.width, limited ? canvas.width : container.width);
+      var maxCropBoxHeight = Math.min(container.height, limited ? canvas.height : container.height);
+
+      // The min/maxCropBoxWidth/Height must be less than container's width/Height
+      minCropBoxWidth = Math.min(minCropBoxWidth, container.width);
+      minCropBoxHeight = Math.min(minCropBoxHeight, container.height);
+
+      if (aspectRatio) {
+        if (minCropBoxWidth && minCropBoxHeight) {
+          if (minCropBoxHeight * aspectRatio > minCropBoxWidth) {
+            minCropBoxHeight = minCropBoxWidth / aspectRatio;
+          } else {
+            minCropBoxWidth = minCropBoxHeight * aspectRatio;
+          }
+        } else if (minCropBoxWidth) {
+          minCropBoxHeight = minCropBoxWidth / aspectRatio;
+        } else if (minCropBoxHeight) {
+          minCropBoxWidth = minCropBoxHeight * aspectRatio;
+        }
+
+        if (maxCropBoxHeight * aspectRatio > maxCropBoxWidth) {
+          maxCropBoxHeight = maxCropBoxWidth / aspectRatio;
+        } else {
+          maxCropBoxWidth = maxCropBoxHeight * aspectRatio;
+        }
+      }
+
+      // The minWidth/Height must be less than maxWidth/Height
+      cropBox.minWidth = Math.min(minCropBoxWidth, maxCropBoxWidth);
+      cropBox.minHeight = Math.min(minCropBoxHeight, maxCropBoxHeight);
+      cropBox.maxWidth = maxCropBoxWidth;
+      cropBox.maxHeight = maxCropBoxHeight;
+    }
+
+    if (isPositionLimited) {
+      if (limited) {
+        cropBox.minLeft = Math.max(0, canvas.left);
+        cropBox.minTop = Math.max(0, canvas.top);
+        cropBox.maxLeft = Math.min(container.width, canvas.left + canvas.width) - cropBox.width;
+        cropBox.maxTop = Math.min(container.height, canvas.top + canvas.height) - cropBox.height;
+      } else {
+        cropBox.minLeft = 0;
+        cropBox.minTop = 0;
+        cropBox.maxLeft = container.width - cropBox.width;
+        cropBox.maxTop = container.height - cropBox.height;
+      }
+    }
+  },
+  renderCropBox: function renderCropBox() {
+    var options = this.options,
+        container = this.container,
+        cropBox = this.cropBox;
+
+
+    if (cropBox.width > cropBox.maxWidth || cropBox.width < cropBox.minWidth) {
+      cropBox.left = cropBox.oldLeft;
+    }
+
+    if (cropBox.height > cropBox.maxHeight || cropBox.height < cropBox.minHeight) {
+      cropBox.top = cropBox.oldTop;
+    }
+
+    cropBox.width = Math.min(Math.max(cropBox.width, cropBox.minWidth), cropBox.maxWidth);
+    cropBox.height = Math.min(Math.max(cropBox.height, cropBox.minHeight), cropBox.maxHeight);
+
+    this.limitCropBox(false, true);
+
+    cropBox.left = Math.min(Math.max(cropBox.left, cropBox.minLeft), cropBox.maxLeft);
+    cropBox.top = Math.min(Math.max(cropBox.top, cropBox.minTop), cropBox.maxTop);
+    cropBox.oldLeft = cropBox.left;
+    cropBox.oldTop = cropBox.top;
+
+    if (options.movable && options.cropBoxMovable) {
+      // Turn to move the canvas when the crop box is equal to the container
+      this.$face.data(DATA_ACTION, cropBox.width >= container.width && cropBox.height >= container.height ? ACTION_MOVE : ACTION_ALL);
+    }
+
+    this.$cropBox.css({
+      width: cropBox.width,
+      height: cropBox.height,
+      transform: getTransformValues({
+        translateX: cropBox.left,
+        translateY: cropBox.top
+      })
+    });
+
+    if (this.cropped && this.limited) {
+      this.limitCanvas(true, true);
+    }
+
+    if (!this.disabled) {
+      this.output();
+    }
+  },
+  output: function output() {
+    this.preview();
+
+    if (this.completed) {
+      this.trigger(EVENT_CROP, this.getData());
+    }
+  }
+};
+
+var preview = {
+  initPreview: function initPreview() {
+    var crossOrigin = this.crossOrigin;
+
+    var url = crossOrigin ? this.crossOriginUrl : this.url;
+    var image = document.createElement('img');
+
+    if (crossOrigin) {
+      image.crossOrigin = crossOrigin;
+    }
+
+    image.src = url;
+
+    var $clone2 = $(image);
+
+    this.$preview = $(this.options.preview);
+    this.$clone2 = $clone2;
+    this.$viewBox.html($clone2);
+    this.$preview.each(function (i, element) {
+      var $element = $(element);
+      var img = document.createElement('img');
+
+      // Save the original size for recover
+      $element.data(DATA_PREVIEW, {
+        width: $element.width(),
+        height: $element.height(),
+        html: $element.html()
+      });
+
+      if (crossOrigin) {
+        img.crossOrigin = crossOrigin;
+      }
+
+      img.src = url;
+
+      /**
+       * Override img element styles
+       * Add `display:block` to avoid margin top issue
+       * Add `height:auto` to override `height` attribute on IE8
+       * (Occur only when margin-top <= -height)
+       */
+      img.style.cssText = 'display:block;' + 'width:100%;' + 'height:auto;' + 'min-width:0!important;' + 'min-height:0!important;' + 'max-width:none!important;' + 'max-height:none!important;' + 'image-orientation:0deg!important;"';
+
+      $element.html(img);
+    });
+  },
+  resetPreview: function resetPreview() {
+    this.$preview.each(function (i, element) {
+      var $element = $(element);
+      var data = $element.data(DATA_PREVIEW);
+
+      $element.css({
+        width: data.width,
+        height: data.height
+      }).html(data.html).removeData(DATA_PREVIEW);
+    });
+  },
+  preview: function preview() {
+    var image = this.image,
+        canvas = this.canvas,
+        cropBox = this.cropBox;
+    var cropBoxWidth = cropBox.width,
+        cropBoxHeight = cropBox.height;
+    var width = image.width,
+        height = image.height;
+
+    var left = cropBox.left - canvas.left - image.left;
+    var top = cropBox.top - canvas.top - image.top;
+
+    if (!this.cropped || this.disabled) {
+      return;
+    }
+
+    this.$clone2.css({
+      width: width,
+      height: height,
+      transform: getTransformValues($.extend({
+        translateX: -left,
+        translateY: -top
+      }, image))
+    });
+
+    this.$preview.each(function (i, element) {
+      var $element = $(element);
+      var data = $element.data(DATA_PREVIEW);
+      var originalWidth = data.width;
+      var originalHeight = data.height;
+      var newWidth = originalWidth;
+      var newHeight = originalHeight;
+      var ratio = 1;
+
+      if (cropBoxWidth) {
+        ratio = originalWidth / cropBoxWidth;
+        newHeight = cropBoxHeight * ratio;
+      }
+
+      if (cropBoxHeight && newHeight > originalHeight) {
+        ratio = originalHeight / cropBoxHeight;
+        newWidth = cropBoxWidth * ratio;
+        newHeight = originalHeight;
+      }
+
+      $element.css({
+        width: newWidth,
+        height: newHeight
+      }).find('img').css({
+        width: width * ratio,
+        height: height * ratio,
+        transform: getTransformValues($.extend({
+          translateX: -left * ratio,
+          translateY: -top * ratio
+        }, image))
+      });
+    });
+  }
+};
+
+var events = {
+  bind: function bind() {
+    var $element = this.$element,
+        options = this.options,
+        $cropper = this.$cropper;
+
+
+    if ($.isFunction(options.cropstart)) {
+      $element.on(EVENT_CROP_START, options.cropstart);
+    }
+
+    if ($.isFunction(options.cropmove)) {
+      $element.on(EVENT_CROP_MOVE, options.cropmove);
+    }
+
+    if ($.isFunction(options.cropend)) {
+      $element.on(EVENT_CROP_END, options.cropend);
+    }
+
+    if ($.isFunction(options.crop)) {
+      $element.on(EVENT_CROP, options.crop);
+    }
+
+    if ($.isFunction(options.zoom)) {
+      $element.on(EVENT_ZOOM, options.zoom);
+    }
+
+    $cropper.on(EVENT_POINTER_DOWN, proxy(this.cropStart, this));
+
+    if (options.zoomable && options.zoomOnWheel) {
+      $cropper.on(EVENT_WHEEL, proxy(this.wheel, this));
+    }
+
+    if (options.toggleDragModeOnDblclick) {
+      $cropper.on(EVENT_DBLCLICK, proxy(this.dblclick, this));
+    }
+
+    $(this.element.ownerDocument).on(EVENT_POINTER_MOVE, this.onCropMove = proxy(this.cropMove, this)).on(EVENT_POINTER_UP, this.onCropEnd = proxy(this.cropEnd, this));
+
+    if (options.responsive) {
+      $(window).on(EVENT_RESIZE, this.onResize = proxy(this.resize, this));
+    }
+  },
+  unbind: function unbind() {
+    var $element = this.$element,
+        options = this.options,
+        $cropper = this.$cropper;
+
+
+    if ($.isFunction(options.cropstart)) {
+      $element.off(EVENT_CROP_START, options.cropstart);
+    }
+
+    if ($.isFunction(options.cropmove)) {
+      $element.off(EVENT_CROP_MOVE, options.cropmove);
+    }
+
+    if ($.isFunction(options.cropend)) {
+      $element.off(EVENT_CROP_END, options.cropend);
+    }
+
+    if ($.isFunction(options.crop)) {
+      $element.off(EVENT_CROP, options.crop);
+    }
+
+    if ($.isFunction(options.zoom)) {
+      $element.off(EVENT_ZOOM, options.zoom);
+    }
+
+    $cropper.off(EVENT_POINTER_DOWN, this.cropStart);
+
+    if (options.zoomable && options.zoomOnWheel) {
+      $cropper.off(EVENT_WHEEL, this.wheel);
+    }
+
+    if (options.toggleDragModeOnDblclick) {
+      $cropper.off(EVENT_DBLCLICK, this.dblclick);
+    }
+
+    $(this.element.ownerDocument).off(EVENT_POINTER_MOVE, this.onCropMove).off(EVENT_POINTER_UP, this.onCropEnd);
+
+    if (options.responsive) {
+      $(window).off(EVENT_RESIZE, this.onResize);
+    }
+  }
+};
+
+var handlers = {
+  resize: function resize() {
+    var options = this.options,
+        $container = this.$container,
+        container = this.container;
+
+    var minContainerWidth = Number(options.minContainerWidth) || 200;
+    var minContainerHeight = Number(options.minContainerHeight) || 100;
+
+    if (this.disabled || container.width <= minContainerWidth || container.height <= minContainerHeight) {
+      return;
+    }
+
+    var ratio = $container.width() / container.width;
+
+    // Resize when width changed or height changed
+    if (ratio !== 1 || $container.height() !== container.height) {
+      var canvasData = void 0;
+      var cropBoxData = void 0;
+
+      if (options.restore) {
+        canvasData = this.getCanvasData();
+        cropBoxData = this.getCropBoxData();
+      }
+
+      this.render();
+
+      if (options.restore) {
+        this.setCanvasData($.each(canvasData, function (i, n) {
+          canvasData[i] = n * ratio;
+        }));
+        this.setCropBoxData($.each(cropBoxData, function (i, n) {
+          cropBoxData[i] = n * ratio;
+        }));
+      }
+    }
+  },
+  dblclick: function dblclick() {
+    if (this.disabled || this.options.dragMode === DRAG_MODE_NONE) {
+      return;
+    }
+
+    this.setDragMode(this.$dragBox.hasClass(CLASS_CROP) ? DRAG_MODE_MOVE : DRAG_MODE_CROP);
+  },
+  wheel: function wheel(event) {
+    var _this = this;
+
+    var e = event.originalEvent || event;
+    var ratio = Number(this.options.wheelZoomRatio) || 0.1;
+
+    if (this.disabled) {
+      return;
+    }
+
+    event.preventDefault();
+
+    // Limit wheel speed to prevent zoom too fast
+    if (this.wheeling) {
+      return;
+    }
+
+    this.wheeling = true;
+
+    setTimeout(function () {
+      _this.wheeling = false;
+    }, 50);
+
+    var delta = 1;
+
+    if (e.deltaY) {
+      delta = e.deltaY > 0 ? 1 : -1;
+    } else if (e.wheelDelta) {
+      delta = -e.wheelDelta / 120;
+    } else if (e.detail) {
+      delta = e.detail > 0 ? 1 : -1;
+    }
+
+    this.zoom(-delta * ratio, event);
+  },
+  cropStart: function cropStart(e) {
+    if (this.disabled) {
+      return;
+    }
+
+    var options = this.options,
+        pointers = this.pointers;
+    var originalEvent = e.originalEvent;
+
+    var action = void 0;
+
+    if (originalEvent && originalEvent.changedTouches) {
+      // Handle touch event
+      $.each(originalEvent.changedTouches, function (i, touch) {
+        pointers[touch.identifier] = getPointer(touch);
+      });
+    } else {
+      // Handle mouse event and pointer event
+      pointers[originalEvent && originalEvent.pointerId || 0] = getPointer(originalEvent || e);
+    }
+
+    if (objectKeys(pointers).length > 1 && options.zoomable && options.zoomOnTouch) {
+      action = ACTION_ZOOM;
+    } else {
+      action = $(e.target).data(DATA_ACTION);
+    }
+
+    if (!REGEXP_ACTIONS.test(action)) {
+      return;
+    }
+
+    if (this.trigger(EVENT_CROP_START, {
+      originalEvent: originalEvent,
+      action: action
+    }).isDefaultPrevented()) {
+      return;
+    }
+
+    e.preventDefault();
+
+    this.action = action;
+    this.cropping = false;
+
+    if (action === ACTION_CROP) {
+      this.cropping = true;
+      this.$dragBox.addClass(CLASS_MODAL);
+    }
+  },
+  cropMove: function cropMove(e) {
+    var action = this.action;
+
+
+    if (this.disabled || !action) {
+      return;
+    }
+
+    var pointers = this.pointers;
+    var originalEvent = e.originalEvent;
+
+
+    e.preventDefault();
+
+    if (this.trigger(EVENT_CROP_MOVE, {
+      originalEvent: originalEvent,
+      action: action
+    }).isDefaultPrevented()) {
+      return;
+    }
+
+    if (originalEvent && originalEvent.changedTouches) {
+      $.each(originalEvent.changedTouches, function (i, touch) {
+        $.extend(pointers[touch.identifier], getPointer(touch, true));
+      });
+    } else {
+      $.extend(pointers[originalEvent && originalEvent.pointerId || 0], getPointer(originalEvent || e, true));
+    }
+
+    this.change(e);
+  },
+  cropEnd: function cropEnd(e) {
+    if (this.disabled) {
+      return;
+    }
+
+    var action = this.action;
+    var pointers = this.pointers;
+    var originalEvent = e.originalEvent;
+
+
+    if (originalEvent && originalEvent.changedTouches) {
+      $.each(originalEvent.changedTouches, function (i, touch) {
+        delete pointers[touch.identifier];
+      });
+    } else {
+      delete pointers[originalEvent && originalEvent.pointerId || 0];
+    }
+
+    if (!action) {
+      return;
+    }
+
+    e.preventDefault();
+
+    if (!objectKeys(pointers).length) {
+      this.action = '';
+    }
+
+    if (this.cropping) {
+      this.cropping = false;
+      this.$dragBox.toggleClass(CLASS_MODAL, this.cropped && this.options.modal);
+    }
+
+    this.trigger(EVENT_CROP_END, {
+      originalEvent: originalEvent,
+      action: action
+    });
+  }
+};
+
+var change = {
+  change: function change(e) {
+    var options = this.options,
+        pointers = this.pointers,
+        container = this.container,
+        canvas = this.canvas,
+        cropBox = this.cropBox;
+    var action = this.action;
+    var aspectRatio = options.aspectRatio;
+    var left = cropBox.left,
+        top = cropBox.top,
+        width = cropBox.width,
+        height = cropBox.height;
+
+    var right = left + width;
+    var bottom = top + height;
+    var minLeft = 0;
+    var minTop = 0;
+    var maxWidth = container.width;
+    var maxHeight = container.height;
+    var renderable = true;
+    var offset = void 0;
+
+    // Locking aspect ratio in "free mode" by holding shift key (#259)
+    if (!aspectRatio && e.shiftKey) {
+      aspectRatio = width && height ? width / height : 1;
+    }
+
+    if (this.limited) {
+      minLeft = cropBox.minLeft;
+      minTop = cropBox.minTop;
+
+      maxWidth = minLeft + Math.min(container.width, canvas.width, canvas.left + canvas.width);
+      maxHeight = minTop + Math.min(container.height, canvas.height, canvas.top + canvas.height);
+    }
+
+    var pointer = pointers[objectKeys(pointers)[0]];
+    var range = {
+      x: pointer.endX - pointer.startX,
+      y: pointer.endY - pointer.startY
+    };
+    var check = function check(side) {
+      switch (side) {
+        case ACTION_EAST:
+          if (right + range.x > maxWidth) {
+            range.x = maxWidth - right;
+          }
+
+          break;
+
+        case ACTION_WEST:
+          if (left + range.x < minLeft) {
+            range.x = minLeft - left;
+          }
+
+          break;
+
+        case ACTION_NORTH:
+          if (top + range.y < minTop) {
+            range.y = minTop - top;
+          }
+
+          break;
+
+        case ACTION_SOUTH:
+          if (bottom + range.y > maxHeight) {
+            range.y = maxHeight - bottom;
+          }
+
+          break;
+
+        default:
+      }
+    };
+
+    switch (action) {
+      // Move crop box
+      case ACTION_ALL:
+        left += range.x;
+        top += range.y;
+        break;
+
+      // Resize crop box
+      case ACTION_EAST:
+        if (range.x >= 0 && (right >= maxWidth || aspectRatio && (top <= minTop || bottom >= maxHeight))) {
+          renderable = false;
+          break;
+        }
+
+        check(ACTION_EAST);
+        width += range.x;
+
+        if (aspectRatio) {
+          height = width / aspectRatio;
+          top -= range.x / aspectRatio / 2;
+        }
+
+        if (width < 0) {
+          action = ACTION_WEST;
+          width = 0;
+        }
+
+        break;
+
+      case ACTION_NORTH:
+        if (range.y <= 0 && (top <= minTop || aspectRatio && (left <= minLeft || right >= maxWidth))) {
+          renderable = false;
+          break;
+        }
+
+        check(ACTION_NORTH);
+        height -= range.y;
+        top += range.y;
+
+        if (aspectRatio) {
+          width = height * aspectRatio;
+          left += range.y * aspectRatio / 2;
+        }
+
+        if (height < 0) {
+          action = ACTION_SOUTH;
+          height = 0;
+        }
+
+        break;
+
+      case ACTION_WEST:
+        if (range.x <= 0 && (left <= minLeft || aspectRatio && (top <= minTop || bottom >= maxHeight))) {
+          renderable = false;
+          break;
+        }
+
+        check(ACTION_WEST);
+        width -= range.x;
+        left += range.x;
+
+        if (aspectRatio) {
+          height = width / aspectRatio;
+          top += range.x / aspectRatio / 2;
+        }
+
+        if (width < 0) {
+          action = ACTION_EAST;
+          width = 0;
+        }
+
+        break;
+
+      case ACTION_SOUTH:
+        if (range.y >= 0 && (bottom >= maxHeight || aspectRatio && (left <= minLeft || right >= maxWidth))) {
+          renderable = false;
+          break;
+        }
+
+        check(ACTION_SOUTH);
+        height += range.y;
+
+        if (aspectRatio) {
+          width = height * aspectRatio;
+          left -= range.y * aspectRatio / 2;
+        }
+
+        if (height < 0) {
+          action = ACTION_NORTH;
+          height = 0;
+        }
+
+        break;
+
+      case ACTION_NORTH_EAST:
+        if (aspectRatio) {
+          if (range.y <= 0 && (top <= minTop || right >= maxWidth)) {
+            renderable = false;
+            break;
+          }
+
+          check(ACTION_NORTH);
+          height -= range.y;
+          top += range.y;
+          width = height * aspectRatio;
+        } else {
+          check(ACTION_NORTH);
+          check(ACTION_EAST);
+
+          if (range.x >= 0) {
+            if (right < maxWidth) {
+              width += range.x;
+            } else if (range.y <= 0 && top <= minTop) {
+              renderable = false;
+            }
+          } else {
+            width += range.x;
+          }
+
+          if (range.y <= 0) {
+            if (top > minTop) {
+              height -= range.y;
+              top += range.y;
+            }
+          } else {
+            height -= range.y;
+            top += range.y;
+          }
+        }
+
+        if (width < 0 && height < 0) {
+          action = ACTION_SOUTH_WEST;
+          height = 0;
+          width = 0;
+        } else if (width < 0) {
+          action = ACTION_NORTH_WEST;
+          width = 0;
+        } else if (height < 0) {
+          action = ACTION_SOUTH_EAST;
+          height = 0;
+        }
+
+        break;
+
+      case ACTION_NORTH_WEST:
+        if (aspectRatio) {
+          if (range.y <= 0 && (top <= minTop || left <= minLeft)) {
+            renderable = false;
+            break;
+          }
+
+          check(ACTION_NORTH);
+          height -= range.y;
+          top += range.y;
+          width = height * aspectRatio;
+          left += range.y * aspectRatio;
+        } else {
+          check(ACTION_NORTH);
+          check(ACTION_WEST);
+
+          if (range.x <= 0) {
+            if (left > minLeft) {
+              width -= range.x;
+              left += range.x;
+            } else if (range.y <= 0 && top <= minTop) {
+              renderable = false;
+            }
+          } else {
+            width -= range.x;
+            left += range.x;
+          }
+
+          if (range.y <= 0) {
+            if (top > minTop) {
+              height -= range.y;
+              top += range.y;
+            }
+          } else {
+            height -= range.y;
+            top += range.y;
+          }
+        }
+
+        if (width < 0 && height < 0) {
+          action = ACTION_SOUTH_EAST;
+          height = 0;
+          width = 0;
+        } else if (width < 0) {
+          action = ACTION_NORTH_EAST;
+          width = 0;
+        } else if (height < 0) {
+          action = ACTION_SOUTH_WEST;
+          height = 0;
+        }
+
+        break;
+
+      case ACTION_SOUTH_WEST:
+        if (aspectRatio) {
+          if (range.x <= 0 && (left <= minLeft || bottom >= maxHeight)) {
+            renderable = false;
+            break;
+          }
+
+          check(ACTION_WEST);
+          width -= range.x;
+          left += range.x;
+          height = width / aspectRatio;
+        } else {
+          check(ACTION_SOUTH);
+          check(ACTION_WEST);
+
+          if (range.x <= 0) {
+            if (left > minLeft) {
+              width -= range.x;
+              left += range.x;
+            } else if (range.y >= 0 && bottom >= maxHeight) {
+              renderable = false;
+            }
+          } else {
+            width -= range.x;
+            left += range.x;
+          }
+
+          if (range.y >= 0) {
+            if (bottom < maxHeight) {
+              height += range.y;
+            }
+          } else {
+            height += range.y;
+          }
+        }
+
+        if (width < 0 && height < 0) {
+          action = ACTION_NORTH_EAST;
+          height = 0;
+          width = 0;
+        } else if (width < 0) {
+          action = ACTION_SOUTH_EAST;
+          width = 0;
+        } else if (height < 0) {
+          action = ACTION_NORTH_WEST;
+          height = 0;
+        }
+
+        break;
+
+      case ACTION_SOUTH_EAST:
+        if (aspectRatio) {
+          if (range.x >= 0 && (right >= maxWidth || bottom >= maxHeight)) {
+            renderable = false;
+            break;
+          }
+
+          check(ACTION_EAST);
+          width += range.x;
+          height = width / aspectRatio;
+        } else {
+          check(ACTION_SOUTH);
+          check(ACTION_EAST);
+
+          if (range.x >= 0) {
+            if (right < maxWidth) {
+              width += range.x;
+            } else if (range.y >= 0 && bottom >= maxHeight) {
+              renderable = false;
+            }
+          } else {
+            width += range.x;
+          }
+
+          if (range.y >= 0) {
+            if (bottom < maxHeight) {
+              height += range.y;
+            }
+          } else {
+            height += range.y;
+          }
+        }
+
+        if (width < 0 && height < 0) {
+          action = ACTION_NORTH_WEST;
+          height = 0;
+          width = 0;
+        } else if (width < 0) {
+          action = ACTION_SOUTH_WEST;
+          width = 0;
+        } else if (height < 0) {
+          action = ACTION_NORTH_EAST;
+          height = 0;
+        }
+
+        break;
+
+      // Move canvas
+      case ACTION_MOVE:
+        this.move(range.x, range.y);
+        renderable = false;
+        break;
+
+      // Zoom canvas
+      case ACTION_ZOOM:
+        this.zoom(getMaxZoomRatio(pointers), e.originalEvent);
+        renderable = false;
+        break;
+
+      // Create crop box
+      case ACTION_CROP:
+        if (!range.x || !range.y) {
+          renderable = false;
+          break;
+        }
+
+        offset = this.$cropper.offset();
+        left = pointer.startX - offset.left;
+        top = pointer.startY - offset.top;
+        width = cropBox.minWidth;
+        height = cropBox.minHeight;
+
+        if (range.x > 0) {
+          action = range.y > 0 ? ACTION_SOUTH_EAST : ACTION_NORTH_EAST;
+        } else if (range.x < 0) {
+          left -= width;
+          action = range.y > 0 ? ACTION_SOUTH_WEST : ACTION_NORTH_WEST;
+        }
+
+        if (range.y < 0) {
+          top -= height;
+        }
+
+        // Show the crop box if is hidden
+        if (!this.cropped) {
+          this.$cropBox.removeClass(CLASS_HIDDEN);
+          this.cropped = true;
+
+          if (this.limited) {
+            this.limitCropBox(true, true);
+          }
+        }
+
+        break;
+
+      default:
+    }
+
+    if (renderable) {
+      cropBox.width = width;
+      cropBox.height = height;
+      cropBox.left = left;
+      cropBox.top = top;
+      this.action = action;
+      this.renderCropBox();
+    }
+
+    // Override
+    $.each(pointers, function (i, p) {
+      p.startX = p.endX;
+      p.startY = p.endY;
+    });
+  }
+};
+
+var methods = {
+  // Show the crop box manually
+  crop: function crop() {
+    if (!this.ready || this.disabled) {
+      return;
+    }
+
+    if (!this.cropped) {
+      this.cropped = true;
+      this.limitCropBox(true, true);
+
+      if (this.options.modal) {
+        this.$dragBox.addClass(CLASS_MODAL);
+      }
+
+      this.$cropBox.removeClass(CLASS_HIDDEN);
+    }
+
+    this.setCropBoxData(this.initialCropBox);
+  },
+
+
+  // Reset the image and crop box to their initial states
+  reset: function reset() {
+    if (!this.ready || this.disabled) {
+      return;
+    }
+
+    this.image = $.extend({}, this.initialImage);
+    this.canvas = $.extend({}, this.initialCanvas);
+    this.cropBox = $.extend({}, this.initialCropBox);
+    this.renderCanvas();
+
+    if (this.cropped) {
+      this.renderCropBox();
+    }
+  },
+
+
+  // Clear the crop box
+  clear: function clear() {
+    if (!this.cropped || this.disabled) {
+      return;
+    }
+
+    $.extend(this.cropBox, {
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0
+    });
+
+    this.cropped = false;
+    this.renderCropBox();
+    this.limitCanvas(true, true);
+
+    // Render canvas after crop box rendered
+    this.renderCanvas();
+    this.$dragBox.removeClass(CLASS_MODAL);
+    this.$cropBox.addClass(CLASS_HIDDEN);
+  },
+
+
+  /**
+   * Replace the image's src and rebuild the cropper
+   * @param {string} url - The new URL.
+   * @param {boolean} [onlyColorChanged] - Indicate if the new image only changed color.
+   */
+  replace: function replace(url, onlyColorChanged) {
+    if (!this.disabled && url) {
+      if (this.isImg) {
+        this.$element.attr('src', url);
+      }
+
+      if (onlyColorChanged) {
+        this.url = url;
+        this.$clone.attr('src', url);
+
+        if (this.ready) {
+          this.$preview.find('img').add(this.$clone2).attr('src', url);
+        }
+      } else {
+        if (this.isImg) {
+          this.replaced = true;
+        }
+
+        // Clear previous data
+        this.options.data = null;
+        this.load(url);
+      }
+    }
+  },
+
+
+  // Enable (unfreeze) the cropper
+  enable: function enable() {
+    if (this.ready) {
+      this.disabled = false;
+      this.$cropper.removeClass(CLASS_DISABLED);
+    }
+  },
+
+
+  // Disable (freeze) the cropper
+  disable: function disable() {
+    if (this.ready) {
+      this.disabled = true;
+      this.$cropper.addClass(CLASS_DISABLED);
+    }
+  },
+
+
+  // Destroy the cropper and remove the instance from the image
+  destroy: function destroy() {
+    var $element = this.$element;
+
+
+    if (this.loaded) {
+      if (this.isImg && this.replaced) {
+        $element.attr('src', this.originalUrl);
+      }
+
+      this.unbuild();
+      $element.removeClass(CLASS_HIDDEN);
+    } else if (this.isImg) {
+      $element.off(EVENT_LOAD, this.start);
+    } else if (this.$clone) {
+      this.$clone.remove();
+    }
+
+    $element.removeData(NAMESPACE);
+  },
+
+
+  /**
+   * Move the canvas with relative offsets
+   * @param {number} offsetX - The relative offset distance on the x-axis.
+   * @param {number} offsetY - The relative offset distance on the y-axis.
+   */
+  move: function move(offsetX, offsetY) {
+    var _canvas = this.canvas,
+        left = _canvas.left,
+        top = _canvas.top;
+
+
+    this.moveTo(isUndefined(offsetX) ? offsetX : left + Number(offsetX), isUndefined(offsetY) ? offsetY : top + Number(offsetY));
+  },
+
+
+  /**
+   * Move the canvas to an absolute point
+   * @param {number} x - The x-axis coordinate.
+   * @param {number} [y=x] - The y-axis coordinate.
+   */
+  moveTo: function moveTo(x, y) {
+    var canvas = this.canvas;
+
+    var changed = false;
+
+    // If "y" is not present, its default value is "x"
+    if (isUndefined(y)) {
+      y = x;
+    }
+
+    x = Number(x);
+    y = Number(y);
+
+    if (this.ready && !this.disabled && this.options.movable) {
+      if (isNumber(x)) {
+        canvas.left = x;
+        changed = true;
+      }
+
+      if (isNumber(y)) {
+        canvas.top = y;
+        changed = true;
+      }
+
+      if (changed) {
+        this.renderCanvas(true);
+      }
+    }
+  },
+
+
+  /**
+   * Zoom the canvas with a relative ratio
+   * @param {Number} ratio - The target ratio.
+   * @param {Event} _event - The related event if any.
+   */
+  zoom: function zoom(ratio, _event) {
+    var canvas = this.canvas;
+
+
+    ratio = Number(ratio);
+
+    if (ratio < 0) {
+      ratio = 1 / (1 - ratio);
+    } else {
+      ratio = 1 + ratio;
+    }
+
+    this.zoomTo(canvas.width * ratio / canvas.naturalWidth, _event);
+  },
+
+
+  /**
+   * Zoom the canvas to an absolute ratio
+   * @param {number} ratio - The target ratio.
+   * @param {Event} _event - The related event if any.
+   */
+  zoomTo: function zoomTo(ratio, _event) {
+    var options = this.options,
+        pointers = this.pointers,
+        canvas = this.canvas;
+    var width = canvas.width,
+        height = canvas.height,
+        naturalWidth = canvas.naturalWidth,
+        naturalHeight = canvas.naturalHeight;
+
+
+    ratio = Number(ratio);
+
+    if (ratio >= 0 && this.ready && !this.disabled && options.zoomable) {
+      var newWidth = naturalWidth * ratio;
+      var newHeight = naturalHeight * ratio;
+      var originalEvent = void 0;
+
+      if (_event) {
+        originalEvent = _event.originalEvent;
+      }
+
+      if (this.trigger(EVENT_ZOOM, {
+        originalEvent: originalEvent,
+        oldRatio: width / naturalWidth,
+        ratio: newWidth / naturalWidth
+      }).isDefaultPrevented()) {
+        return;
+      }
+
+      if (originalEvent) {
+        var offset = this.$cropper.offset();
+        var center = pointers && objectKeys(pointers).length ? getPointersCenter(pointers) : {
+          pageX: _event.pageX || originalEvent.pageX || 0,
+          pageY: _event.pageY || originalEvent.pageY || 0
+        };
+
+        // Zoom from the triggering point of the event
+        canvas.left -= (newWidth - width) * ((center.pageX - offset.left - canvas.left) / width);
+        canvas.top -= (newHeight - height) * ((center.pageY - offset.top - canvas.top) / height);
+      } else {
+        // Zoom from the center of the canvas
+        canvas.left -= (newWidth - width) / 2;
+        canvas.top -= (newHeight - height) / 2;
+      }
+
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+      this.renderCanvas(true);
+    }
+  },
+
+
+  /**
+   * Rotate the canvas with a relative degree
+   * @param {number} degree - The rotate degree.
+   */
+  rotate: function rotate(degree) {
+    this.rotateTo((this.image.rotate || 0) + Number(degree));
+  },
+
+
+  /**
+   * Rotate the canvas to an absolute degree
+   * @param {number} degree - The rotate degree.
+   */
+  rotateTo: function rotateTo(degree) {
+    degree = Number(degree);
+
+    if (isNumber(degree) && this.ready && !this.disabled && this.options.rotatable) {
+      this.image.rotate = degree % 360;
+      this.renderCanvas(true, true);
+    }
+  },
+
+
+  /**
+   * Scale the image on the x-axis.
+   * @param {number} scaleX - The scale ratio on the x-axis.
+   */
+  scaleX: function scaleX(_scaleX) {
+    var scaleY = this.image.scaleY;
+
+
+    this.scale(_scaleX, isNumber(scaleY) ? scaleY : 1);
+  },
+
+
+  /**
+   * Scale the image on the y-axis.
+   * @param {number} scaleY - The scale ratio on the y-axis.
+   */
+  scaleY: function scaleY(_scaleY) {
+    var scaleX = this.image.scaleX;
+
+
+    this.scale(isNumber(scaleX) ? scaleX : 1, _scaleY);
+  },
+
+
+  /**
+   * Scale the image
+   * @param {number} scaleX - The scale ratio on the x-axis.
+   * @param {number} [scaleY=scaleX] - The scale ratio on the y-axis.
+   */
+  scale: function scale(scaleX) {
+    var scaleY = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : scaleX;
+    var image = this.image;
+
+    var transformed = false;
+
+    scaleX = Number(scaleX);
+    scaleY = Number(scaleY);
+
+    if (this.ready && !this.disabled && this.options.scalable) {
+      if (isNumber(scaleX)) {
+        image.scaleX = scaleX;
+        transformed = true;
+      }
+
+      if (isNumber(scaleY)) {
+        image.scaleY = scaleY;
+        transformed = true;
+      }
+
+      if (transformed) {
+        this.renderCanvas(true, true);
+      }
+    }
+  },
+
+
+  /**
+   * Get the cropped area position and size data (base on the original image)
+   * @param {boolean} [rounded=false] - Indicate if round the data values or not.
+   * @returns {Object} The result cropped data.
+   */
+  getData: function getData() {
+    var rounded = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+    var options = this.options,
+        image = this.image,
+        canvas = this.canvas,
+        cropBox = this.cropBox;
+
+    var data = void 0;
+
+    if (this.ready && this.cropped) {
+      data = {
+        x: cropBox.left - canvas.left,
+        y: cropBox.top - canvas.top,
+        width: cropBox.width,
+        height: cropBox.height
+      };
+
+      var ratio = image.width / image.naturalWidth;
+
+      $.each(data, function (i, n) {
+        n /= ratio;
+        data[i] = rounded ? Math.round(n) : n;
+      });
+    } else {
+      data = {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
+      };
+    }
+
+    if (options.rotatable) {
+      data.rotate = image.rotate || 0;
+    }
+
+    if (options.scalable) {
+      data.scaleX = image.scaleX || 1;
+      data.scaleY = image.scaleY || 1;
+    }
+
+    return data;
+  },
+
+
+  /**
+   * Set the cropped area position and size with new data
+   * @param {Object} data - The new data.
+   */
+  setData: function setData(data) {
+    var options = this.options,
+        image = this.image,
+        canvas = this.canvas;
+
+    var cropBoxData = {};
+
+    if ($.isFunction(data)) {
+      data = data.call(this.element);
+    }
+
+    if (this.ready && !this.disabled && $.isPlainObject(data)) {
+      var transformed = false;
+
+      if (options.rotatable) {
+        if (isNumber(data.rotate) && data.rotate !== image.rotate) {
+          image.rotate = data.rotate;
+          transformed = true;
+        }
+      }
+
+      if (options.scalable) {
+        if (isNumber(data.scaleX) && data.scaleX !== image.scaleX) {
+          image.scaleX = data.scaleX;
+          transformed = true;
+        }
+
+        if (isNumber(data.scaleY) && data.scaleY !== image.scaleY) {
+          image.scaleY = data.scaleY;
+          transformed = true;
+        }
+      }
+
+      if (transformed) {
+        this.renderCanvas(true, true);
+      }
+
+      var ratio = image.width / image.naturalWidth;
+
+      if (isNumber(data.x)) {
+        cropBoxData.left = data.x * ratio + canvas.left;
+      }
+
+      if (isNumber(data.y)) {
+        cropBoxData.top = data.y * ratio + canvas.top;
+      }
+
+      if (isNumber(data.width)) {
+        cropBoxData.width = data.width * ratio;
+      }
+
+      if (isNumber(data.height)) {
+        cropBoxData.height = data.height * ratio;
+      }
+
+      this.setCropBoxData(cropBoxData);
+    }
+  },
+
+
+  /**
+   * Get the container size data.
+   * @returns {Object} The result container data.
+   */
+  getContainerData: function getContainerData() {
+    return this.ready ? $.extend({}, this.container) : {};
+  },
+
+
+  /**
+   * Get the image position and size data.
+   * @returns {Object} The result image data.
+   */
+  getImageData: function getImageData() {
+    return this.loaded ? $.extend({}, this.image) : {};
+  },
+
+
+  /**
+   * Get the canvas position and size data.
+   * @returns {Object} The result canvas data.
+   */
+  getCanvasData: function getCanvasData() {
+    var canvas = this.canvas;
+
+    var data = {};
+
+    if (this.ready) {
+      $.each(['left', 'top', 'width', 'height', 'naturalWidth', 'naturalHeight'], function (i, n) {
+        data[n] = canvas[n];
+      });
+    }
+
+    return data;
+  },
+
+
+  /**
+   * Set the canvas position and size with new data.
+   * @param {Object} data - The new canvas data.
+   */
+  setCanvasData: function setCanvasData(data) {
+    var canvas = this.canvas;
+    var aspectRatio = canvas.aspectRatio;
+
+
+    if ($.isFunction(data)) {
+      data = data.call(this.$element);
+    }
+
+    if (this.ready && !this.disabled && $.isPlainObject(data)) {
+      if (isNumber(data.left)) {
+        canvas.left = data.left;
+      }
+
+      if (isNumber(data.top)) {
+        canvas.top = data.top;
+      }
+
+      if (isNumber(data.width)) {
+        canvas.width = data.width;
+        canvas.height = data.width / aspectRatio;
+      } else if (isNumber(data.height)) {
+        canvas.height = data.height;
+        canvas.width = data.height * aspectRatio;
+      }
+
+      this.renderCanvas(true);
+    }
+  },
+
+
+  /**
+   * Get the crop box position and size data.
+   * @returns {Object} The result crop box data.
+   */
+  getCropBoxData: function getCropBoxData() {
+    var cropBox = this.cropBox;
+
+
+    return this.ready && this.cropped ? {
+      left: cropBox.left,
+      top: cropBox.top,
+      width: cropBox.width,
+      height: cropBox.height
+    } : {};
+  },
+
+
+  /**
+   * Set the crop box position and size with new data.
+   * @param {Object} data - The new crop box data.
+   */
+  setCropBoxData: function setCropBoxData(data) {
+    var cropBox = this.cropBox;
+    var aspectRatio = this.options.aspectRatio;
+
+    var widthChanged = void 0;
+    var heightChanged = void 0;
+
+    if ($.isFunction(data)) {
+      data = data.call(this.$element);
+    }
+
+    if (this.ready && this.cropped && !this.disabled && $.isPlainObject(data)) {
+      if (isNumber(data.left)) {
+        cropBox.left = data.left;
+      }
+
+      if (isNumber(data.top)) {
+        cropBox.top = data.top;
+      }
+
+      if (isNumber(data.width) && data.width !== cropBox.width) {
+        widthChanged = true;
+        cropBox.width = data.width;
+      }
+
+      if (isNumber(data.height) && data.height !== cropBox.height) {
+        heightChanged = true;
+        cropBox.height = data.height;
+      }
+
+      if (aspectRatio) {
+        if (widthChanged) {
+          cropBox.height = cropBox.width / aspectRatio;
+        } else if (heightChanged) {
+          cropBox.width = cropBox.height * aspectRatio;
+        }
+      }
+
+      this.renderCropBox();
+    }
+  },
+
+
+  /**
+   * Get a canvas drawn the cropped image.
+   * @param {Object} [options={}] - The config options.
+   * @returns {HTMLCanvasElement} - The result canvas.
+   */
+  getCroppedCanvas: function getCroppedCanvas() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    if (!this.ready || !window.HTMLCanvasElement) {
+      return null;
+    }
+
+    var canvasData = this.canvas;
+
+    var source = getSourceCanvas(this.$clone[0], this.image, canvasData, options);
+
+    // Returns the source canvas if it is not cropped.
+    if (!this.cropped) {
+      return source;
+    }
+
+    var _getData = this.getData(),
+        x = _getData.x,
+        y = _getData.y,
+        initialWidth = _getData.width,
+        initialHeight = _getData.height;
+
+    var aspectRatio = initialWidth / initialHeight;
+    var maxSizes = getContainSizes({
+      aspectRatio: aspectRatio,
+      width: options.maxWidth || Infinity,
+      height: options.maxHeight || Infinity
+    });
+    var minSizes = getContainSizes({
+      aspectRatio: aspectRatio,
+      width: options.minWidth || 0,
+      height: options.minHeight || 0
+    });
+
+    var _getContainSizes = getContainSizes({
+      aspectRatio: aspectRatio,
+      width: options.width || initialWidth,
+      height: options.height || initialHeight
+    }),
+        width = _getContainSizes.width,
+        height = _getContainSizes.height;
+
+    width = Math.min(maxSizes.width, Math.max(minSizes.width, width));
+    height = Math.min(maxSizes.height, Math.max(minSizes.height, height));
+
+    var canvas = document.createElement('canvas');
+    var context = canvas.getContext('2d');
+
+    canvas.width = normalizeDecimalNumber(width);
+    canvas.height = normalizeDecimalNumber(height);
+    context.fillStyle = options.fillColor || 'transparent';
+    context.fillRect(0, 0, width, height);
+
+    var _options$imageSmoothi = options.imageSmoothingEnabled,
+        imageSmoothingEnabled = _options$imageSmoothi === undefined ? true : _options$imageSmoothi,
+        imageSmoothingQuality = options.imageSmoothingQuality;
+
+
+    context.imageSmoothingEnabled = imageSmoothingEnabled;
+
+    if (imageSmoothingQuality) {
+      context.imageSmoothingQuality = imageSmoothingQuality;
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D.drawImage
+    var sourceWidth = source.width;
+    var sourceHeight = source.height;
+
+    // Source canvas parameters
+    var srcX = x;
+    var srcY = y;
+    var srcWidth = void 0;
+    var srcHeight = void 0;
+
+    // Destination canvas parameters
+    var dstX = void 0;
+    var dstY = void 0;
+    var dstWidth = void 0;
+    var dstHeight = void 0;
+
+    if (srcX <= -initialWidth || srcX > sourceWidth) {
+      srcX = 0;
+      srcWidth = 0;
+      dstX = 0;
+      dstWidth = 0;
+    } else if (srcX <= 0) {
+      dstX = -srcX;
+      srcX = 0;
+      srcWidth = Math.min(sourceWidth, initialWidth + srcX);
+      dstWidth = srcWidth;
+    } else if (srcX <= sourceWidth) {
+      dstX = 0;
+      srcWidth = Math.min(initialWidth, sourceWidth - srcX);
+      dstWidth = srcWidth;
+    }
+
+    if (srcWidth <= 0 || srcY <= -initialHeight || srcY > sourceHeight) {
+      srcY = 0;
+      srcHeight = 0;
+      dstY = 0;
+      dstHeight = 0;
+    } else if (srcY <= 0) {
+      dstY = -srcY;
+      srcY = 0;
+      srcHeight = Math.min(sourceHeight, initialHeight + srcY);
+      dstHeight = srcHeight;
+    } else if (srcY <= sourceHeight) {
+      dstY = 0;
+      srcHeight = Math.min(initialHeight, sourceHeight - srcY);
+      dstHeight = srcHeight;
+    }
+
+    // All the numerical parameters should be integer for `drawImage`
+    // https://github.com/fengyuanchen/cropper/issues/476
+    var params = [srcX, srcY, srcWidth, srcHeight];
+
+    // Avoid "IndexSizeError"
+    if (dstWidth > 0 && dstHeight > 0) {
+      var scale = width / initialWidth;
+
+      params.push(dstX * scale, dstY * scale, dstWidth * scale, dstHeight * scale);
+    }
+
+    context.drawImage.apply(context, [source].concat(toConsumableArray($.map(params, function (param) {
+      return Math.floor(normalizeDecimalNumber(param));
+    }))));
+    return canvas;
+  },
+
+
+  /**
+   * Change the aspect ratio of the crop box.
+   * @param {number} aspectRatio - The new aspect ratio.
+   */
+  setAspectRatio: function setAspectRatio(aspectRatio) {
+    var options = this.options;
+
+
+    if (!this.disabled && !isUndefined(aspectRatio)) {
+      // 0 -> NaN
+      options.aspectRatio = Math.max(0, aspectRatio) || NaN;
+
+      if (this.ready) {
+        this.initCropBox();
+
+        if (this.cropped) {
+          this.renderCropBox();
+        }
+      }
+    }
+  },
+
+
+  /**
+   * Change the drag mode.
+   * @param {string} mode - The new drag mode.
+   */
+  setDragMode: function setDragMode(mode) {
+    var options = this.options;
+
+    var croppable = void 0;
+    var movable = void 0;
+
+    if (this.loaded && !this.disabled) {
+      croppable = mode === DRAG_MODE_CROP;
+      movable = options.movable && mode === DRAG_MODE_MOVE;
+      mode = croppable || movable ? mode : DRAG_MODE_NONE;
+
+      this.$dragBox.data(DATA_ACTION, mode).toggleClass(CLASS_CROP, croppable).toggleClass(CLASS_MOVE, movable);
+
+      if (!options.cropBoxMovable) {
+        // Sync drag mode to crop box when it is not movable(#300)
+        this.$face.data(DATA_ACTION, mode).toggleClass(CLASS_CROP, croppable).toggleClass(CLASS_MOVE, movable);
+      }
+    }
+  }
+};
+
+var Cropper = function () {
+  /**
+   * Create a new Cropper.
+   * @param {Element} element - The target element for cropping.
+   * @param {Object} [options={}] - The configuration options.
+   */
+  function Cropper(element) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    classCallCheck(this, Cropper);
+
+    if (!element || !REGEXP_TAG_NAME.test(element.tagName)) {
+      throw new Error('The first argument is required and must be an <img> or <canvas> element.');
+    }
+
+    this.element = element;
+    this.$element = $(element);
+    this.options = $.extend({}, DEFAULTS, $.isPlainObject(options) && options);
+    this.completed = false;
+    this.cropped = false;
+    this.disabled = false;
+    this.isImg = false;
+    this.limited = false;
+    this.loaded = false;
+    this.ready = false;
+    this.replaced = false;
+    this.wheeling = false;
+    this.originalUrl = '';
+    this.canvas = null;
+    this.cropBox = null;
+    this.pointers = {};
+    this.init();
+  }
+
+  createClass(Cropper, [{
+    key: 'init',
+    value: function init() {
+      var $element = this.$element;
+
+      var url = void 0;
+
+      if ($element.is('img')) {
+        this.isImg = true;
+
+        // Should use `$.fn.attr` here. e.g.: "img/picture.jpg"
+        url = $element.attr('src') || '';
+        this.originalUrl = url;
+
+        // Stop when it's a blank image
+        if (!url) {
+          return;
+        }
+
+        // Should use `$.fn.prop` here. e.g.: "http://example.com/img/picture.jpg"
+        url = $element.prop('src');
+      } else if ($element.is('canvas') && window.HTMLCanvasElement) {
+        url = $element[0].toDataURL();
+      }
+
+      this.load(url);
+    }
+
+    // A shortcut for triggering custom events
+
+  }, {
+    key: 'trigger',
+    value: function trigger(type, data) {
+      var e = $.Event(type, data);
+
+      this.$element.trigger(e);
+
+      return e;
+    }
+  }, {
+    key: 'load',
+    value: function load(url) {
+      var _this = this;
+
+      if (!url) {
+        return;
+      }
+
+      this.url = url;
+      this.image = {};
+
+      var $element = this.$element,
+          options = this.options;
+
+
+      if (!options.checkOrientation || !window.ArrayBuffer) {
+        this.clone();
+        return;
+      }
+
+      // XMLHttpRequest disallows to open a Data URL in some browsers like IE11 and Safari
+      if (REGEXP_DATA_URL.test(url)) {
+        if (REGEXP_DATA_URL_JPEG.test(url)) {
+          this.read(dataURLToArrayBuffer(url));
+        } else {
+          this.clone();
+        }
+
+        return;
+      }
+
+      var xhr = new XMLHttpRequest();
+
+      xhr.onerror = function () {
+        _this.clone();
+      };
+
+      xhr.onload = function () {
+        _this.read(xhr.response);
+      };
+
+      // Bust cache when there is a "crossOrigin" property
+      if (options.checkCrossOrigin && isCrossOriginURL(url) && !$element.prop('crossOrigin')) {
+        url = addTimestamp(url);
+      }
+
+      xhr.open('get', url);
+      xhr.responseType = 'arraybuffer';
+      xhr.withCredentials = $element.prop('crossOrigin') === 'use-credentials';
+      xhr.send();
+    }
+  }, {
+    key: 'read',
+    value: function read(arrayBuffer) {
+      var options = this.options,
+          image = this.image;
+
+      var orientation = getOrientation(arrayBuffer);
+      var rotate = 0;
+      var scaleX = 1;
+      var scaleY = 1;
+
+      if (orientation > 1) {
+        this.url = arrayBufferToDataURL(arrayBuffer, 'image/jpeg');
+
+        var _parseOrientation = parseOrientation(orientation);
+
+        rotate = _parseOrientation.rotate;
+        scaleX = _parseOrientation.scaleX;
+        scaleY = _parseOrientation.scaleY;
+      }
+
+      if (options.rotatable) {
+        image.rotate = rotate;
+      }
+
+      if (options.scalable) {
+        image.scaleX = scaleX;
+        image.scaleY = scaleY;
+      }
+
+      this.clone();
+    }
+  }, {
+    key: 'clone',
+    value: function clone() {
+      var $element = this.$element,
+          options = this.options,
+          url = this.url;
+
+      var crossOrigin = '';
+      var crossOriginUrl = void 0;
+
+      if (options.checkCrossOrigin && isCrossOriginURL(url)) {
+        crossOrigin = $element.prop('crossOrigin');
+
+        if (crossOrigin) {
+          crossOriginUrl = url;
+        } else {
+          crossOrigin = 'anonymous';
+
+          // Bust cache (#148) when there is not a "crossOrigin" property
+          crossOriginUrl = addTimestamp(url);
+        }
+      }
+
+      this.crossOrigin = crossOrigin;
+      this.crossOriginUrl = crossOriginUrl;
+
+      var image = document.createElement('img');
+
+      if (crossOrigin) {
+        image.crossOrigin = crossOrigin;
+      }
+
+      image.src = crossOriginUrl || url;
+
+      var $clone = $(image);
+
+      this.$clone = $clone;
+
+      if (this.isImg) {
+        if (this.element.complete) {
+          this.start();
+        } else {
+          $element.one(EVENT_LOAD, $.proxy(this.start, this));
+        }
+      } else {
+        $clone.one(EVENT_LOAD, $.proxy(this.start, this)).one(EVENT_ERROR, $.proxy(this.stop, this)).addClass(CLASS_HIDE).insertAfter($element);
+      }
+    }
+  }, {
+    key: 'start',
+    value: function start() {
+      var _this2 = this;
+
+      var $clone = this.$clone;
+
+      var $image = this.$element;
+
+      if (!this.isImg) {
+        $clone.off(EVENT_ERROR, this.stop);
+        $image = $clone;
+      }
+
+      getImageNaturalSizes($image[0], function (naturalWidth, naturalHeight) {
+        $.extend(_this2.image, {
+          naturalWidth: naturalWidth,
+          naturalHeight: naturalHeight,
+          aspectRatio: naturalWidth / naturalHeight
+        });
+
+        _this2.loaded = true;
+        _this2.build();
+      });
+    }
+  }, {
+    key: 'stop',
+    value: function stop() {
+      this.$clone.remove();
+      this.$clone = null;
+    }
+  }, {
+    key: 'build',
+    value: function build() {
+      var _this3 = this;
+
+      if (!this.loaded) {
+        return;
+      }
+
+      // Unbuild first when replace
+      if (this.ready) {
+        this.unbuild();
+      }
+
+      var $element = this.$element,
+          options = this.options,
+          $clone = this.$clone;
+
+      var $cropper = $(TEMPLATE);
+      var $cropBox = $cropper.find('.' + NAMESPACE + '-crop-box');
+      var $face = $cropBox.find('.' + NAMESPACE + '-face');
+
+      // Create cropper elements
+      this.$container = $element.parent();
+      this.$cropper = $cropper;
+      this.$canvas = $cropper.find('.' + NAMESPACE + '-canvas').append($clone);
+      this.$dragBox = $cropper.find('.' + NAMESPACE + '-drag-box');
+      this.$cropBox = $cropBox;
+      this.$viewBox = $cropper.find('.' + NAMESPACE + '-view-box');
+      this.$face = $face;
+
+      // Hide the original image
+      $element.addClass(CLASS_HIDDEN).after($cropper);
+
+      // Show the clone image if is hidden
+      if (!this.isImg) {
+        $clone.removeClass(CLASS_HIDE);
+      }
+
+      this.initPreview();
+      this.bind();
+
+      options.aspectRatio = Math.max(0, options.aspectRatio) || NaN;
+      options.viewMode = Math.max(0, Math.min(3, Math.round(options.viewMode))) || 0;
+
+      this.cropped = options.autoCrop;
+
+      if (options.autoCrop) {
+        if (options.modal) {
+          this.$dragBox.addClass(CLASS_MODAL);
+        }
+      } else {
+        $cropBox.addClass(CLASS_HIDDEN);
+      }
+
+      if (!options.guides) {
+        $cropBox.find('.' + NAMESPACE + '-dashed').addClass(CLASS_HIDDEN);
+      }
+
+      if (!options.center) {
+        $cropBox.find('.' + NAMESPACE + '-center').addClass(CLASS_HIDDEN);
+      }
+
+      if (options.cropBoxMovable) {
+        $face.addClass(CLASS_MOVE).data(DATA_ACTION, ACTION_ALL);
+      }
+
+      if (!options.highlight) {
+        $face.addClass(CLASS_INVISIBLE);
+      }
+
+      if (options.background) {
+        $cropper.addClass(NAMESPACE + '-bg');
+      }
+
+      if (!options.cropBoxResizable) {
+        $cropBox.find('.' + NAMESPACE + '-line,.' + NAMESPACE + '-point').addClass(CLASS_HIDDEN);
+      }
+
+      this.setDragMode(options.dragMode);
+      this.render();
+      this.ready = true;
+      this.setData(options.data);
+
+      // Trigger the ready event asynchronously to keep `data('cropper')` is defined
+      this.completing = setTimeout(function () {
+        if ($.isFunction(options.ready)) {
+          $element.one(EVENT_READY, options.ready);
+        }
+
+        _this3.trigger(EVENT_READY);
+        _this3.trigger(EVENT_CROP, _this3.getData());
+        _this3.completed = true;
+      }, 0);
+    }
+  }, {
+    key: 'unbuild',
+    value: function unbuild() {
+      if (!this.ready) {
+        return;
+      }
+
+      if (!this.completed) {
+        clearTimeout(this.completing);
+      }
+
+      this.ready = false;
+      this.completed = false;
+      this.initialImage = null;
+
+      // Clear `initialCanvas` is necessary when replace
+      this.initialCanvas = null;
+      this.initialCropBox = null;
+      this.container = null;
+      this.canvas = null;
+
+      // Clear `cropBox` is necessary when replace
+      this.cropBox = null;
+      this.unbind();
+
+      this.resetPreview();
+      this.$preview = null;
+
+      this.$viewBox = null;
+      this.$cropBox = null;
+      this.$dragBox = null;
+      this.$canvas = null;
+      this.$container = null;
+
+      this.$cropper.remove();
+      this.$cropper = null;
+    }
+
+    /**
+     * Change the default options.
+     * @param {Object} options - The new default options.
+     */
+
+  }], [{
+    key: 'setDefaults',
+    value: function setDefaults(options) {
+      $.extend(DEFAULTS, $.isPlainObject(options) && options);
+    }
+  }]);
+  return Cropper;
+}();
+
+if ($.extend) {
+  $.extend(Cropper.prototype, render, preview, events, handlers, change, methods);
+}
+
+if ($.fn) {
+  var AnotherCropper = $.fn.cropper;
+
+  $.fn.cropper = function jQueryCropper(option) {
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    var result = void 0;
+
+    this.each(function (i, element) {
+      var $element = $(element);
+      var data = $element.data(NAMESPACE);
+
+      if (!data) {
+        if (/destroy/.test(option)) {
+          return;
+        }
+
+        var options = $.extend({}, $element.data(), $.isPlainObject(option) && option);
+
+        data = new Cropper(element, options);
+        $element.data(NAMESPACE, data);
+      }
+
+      if (isString(option)) {
+        var fn = data[option];
+
+        if ($.isFunction(fn)) {
+          result = fn.apply(data, args);
+        }
+      }
+    });
+
+    return isUndefined(result) ? this : result;
+  };
+
+  $.fn.cropper.Constructor = Cropper;
+  $.fn.cropper.setDefaults = Cropper.setDefaults;
+  $.fn.cropper.noConflict = function noConflict() {
+    $.fn.cropper = AnotherCropper;
+    return this;
+  };
+}
+
+})));
+
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-eval("\n\nvar compile = __webpack_require__(7)\n\nvar EmptyProc = {\n  body: \"\",\n  args: [],\n  thisVars: [],\n  localVars: []\n}\n\nfunction fixup(x) {\n  if(!x) {\n    return EmptyProc\n  }\n  for(var i=0; i<x.args.length; ++i) {\n    var a = x.args[i]\n    if(i === 0) {\n      x.args[i] = {name: a, lvalue:true, rvalue: !!x.rvalue, count:x.count||1 }\n    } else {\n      x.args[i] = {name: a, lvalue:false, rvalue:true, count: 1}\n    }\n  }\n  if(!x.thisVars) {\n    x.thisVars = []\n  }\n  if(!x.localVars) {\n    x.localVars = []\n  }\n  return x\n}\n\nfunction pcompile(user_args) {\n  return compile({\n    args:     user_args.args,\n    pre:      fixup(user_args.pre),\n    body:     fixup(user_args.body),\n    post:     fixup(user_args.proc),\n    funcName: user_args.funcName\n  })\n}\n\nfunction makeOp(user_args) {\n  var args = []\n  for(var i=0; i<user_args.args.length; ++i) {\n    args.push(\"a\"+i)\n  }\n  var wrapper = new Function(\"P\", [\n    \"return function \", user_args.funcName, \"_ndarrayops(\", args.join(\",\"), \") {P(\", args.join(\",\"), \");return a0}\"\n  ].join(\"\"))\n  return wrapper(pcompile(user_args))\n}\n\nvar assign_ops = {\n  add:  \"+\",\n  sub:  \"-\",\n  mul:  \"*\",\n  div:  \"/\",\n  mod:  \"%\",\n  band: \"&\",\n  bor:  \"|\",\n  bxor: \"^\",\n  lshift: \"<<\",\n  rshift: \">>\",\n  rrshift: \">>>\"\n}\n;(function(){\n  for(var id in assign_ops) {\n    var op = assign_ops[id]\n    exports[id] = makeOp({\n      args: [\"array\",\"array\",\"array\"],\n      body: {args:[\"a\",\"b\",\"c\"],\n             body: \"a=b\"+op+\"c\"},\n      funcName: id\n    })\n    exports[id+\"eq\"] = makeOp({\n      args: [\"array\",\"array\"],\n      body: {args:[\"a\",\"b\"],\n             body:\"a\"+op+\"=b\"},\n      rvalue: true,\n      funcName: id+\"eq\"\n    })\n    exports[id+\"s\"] = makeOp({\n      args: [\"array\", \"array\", \"scalar\"],\n      body: {args:[\"a\",\"b\",\"s\"],\n             body:\"a=b\"+op+\"s\"},\n      funcName: id+\"s\"\n    })\n    exports[id+\"seq\"] = makeOp({\n      args: [\"array\",\"scalar\"],\n      body: {args:[\"a\",\"s\"],\n             body:\"a\"+op+\"=s\"},\n      rvalue: true,\n      funcName: id+\"seq\"\n    })\n  }\n})();\n\nvar unary_ops = {\n  not: \"!\",\n  bnot: \"~\",\n  neg: \"-\",\n  recip: \"1.0/\"\n}\n;(function(){\n  for(var id in unary_ops) {\n    var op = unary_ops[id]\n    exports[id] = makeOp({\n      args: [\"array\", \"array\"],\n      body: {args:[\"a\",\"b\"],\n             body:\"a=\"+op+\"b\"},\n      funcName: id\n    })\n    exports[id+\"eq\"] = makeOp({\n      args: [\"array\"],\n      body: {args:[\"a\"],\n             body:\"a=\"+op+\"a\"},\n      rvalue: true,\n      count: 2,\n      funcName: id+\"eq\"\n    })\n  }\n})();\n\nvar binary_ops = {\n  and: \"&&\",\n  or: \"||\",\n  eq: \"===\",\n  neq: \"!==\",\n  lt: \"<\",\n  gt: \">\",\n  leq: \"<=\",\n  geq: \">=\"\n}\n;(function() {\n  for(var id in binary_ops) {\n    var op = binary_ops[id]\n    exports[id] = makeOp({\n      args: [\"array\",\"array\",\"array\"],\n      body: {args:[\"a\", \"b\", \"c\"],\n             body:\"a=b\"+op+\"c\"},\n      funcName: id\n    })\n    exports[id+\"s\"] = makeOp({\n      args: [\"array\",\"array\",\"scalar\"],\n      body: {args:[\"a\", \"b\", \"s\"],\n             body:\"a=b\"+op+\"s\"},\n      funcName: id+\"s\"\n    })\n    exports[id+\"eq\"] = makeOp({\n      args: [\"array\", \"array\"],\n      body: {args:[\"a\", \"b\"],\n             body:\"a=a\"+op+\"b\"},\n      rvalue:true,\n      count:2,\n      funcName: id+\"eq\"\n    })\n    exports[id+\"seq\"] = makeOp({\n      args: [\"array\", \"scalar\"],\n      body: {args:[\"a\",\"s\"],\n             body:\"a=a\"+op+\"s\"},\n      rvalue:true,\n      count:2,\n      funcName: id+\"seq\"\n    })\n  }\n})();\n\nvar math_unary = [\n  \"abs\",\n  \"acos\",\n  \"asin\",\n  \"atan\",\n  \"ceil\",\n  \"cos\",\n  \"exp\",\n  \"floor\",\n  \"log\",\n  \"round\",\n  \"sin\",\n  \"sqrt\",\n  \"tan\"\n]\n;(function() {\n  for(var i=0; i<math_unary.length; ++i) {\n    var f = math_unary[i]\n    exports[f] = makeOp({\n                    args: [\"array\", \"array\"],\n                    pre: {args:[], body:\"this_f=Math.\"+f, thisVars:[\"this_f\"]},\n                    body: {args:[\"a\",\"b\"], body:\"a=this_f(b)\", thisVars:[\"this_f\"]},\n                    funcName: f\n                  })\n    exports[f+\"eq\"] = makeOp({\n                      args: [\"array\"],\n                      pre: {args:[], body:\"this_f=Math.\"+f, thisVars:[\"this_f\"]},\n                      body: {args: [\"a\"], body:\"a=this_f(a)\", thisVars:[\"this_f\"]},\n                      rvalue: true,\n                      count: 2,\n                      funcName: f+\"eq\"\n                    })\n  }\n})();\n\nvar math_comm = [\n  \"max\",\n  \"min\",\n  \"atan2\",\n  \"pow\"\n]\n;(function(){\n  for(var i=0; i<math_comm.length; ++i) {\n    var f= math_comm[i]\n    exports[f] = makeOp({\n                  args:[\"array\", \"array\", \"array\"],\n                  pre: {args:[], body:\"this_f=Math.\"+f, thisVars:[\"this_f\"]},\n                  body: {args:[\"a\",\"b\",\"c\"], body:\"a=this_f(b,c)\", thisVars:[\"this_f\"]},\n                  funcName: f\n                })\n    exports[f+\"s\"] = makeOp({\n                  args:[\"array\", \"array\", \"scalar\"],\n                  pre: {args:[], body:\"this_f=Math.\"+f, thisVars:[\"this_f\"]},\n                  body: {args:[\"a\",\"b\",\"c\"], body:\"a=this_f(b,c)\", thisVars:[\"this_f\"]},\n                  funcName: f+\"s\"\n                  })\n    exports[f+\"eq\"] = makeOp({ args:[\"array\", \"array\"],\n                  pre: {args:[], body:\"this_f=Math.\"+f, thisVars:[\"this_f\"]},\n                  body: {args:[\"a\",\"b\"], body:\"a=this_f(a,b)\", thisVars:[\"this_f\"]},\n                  rvalue: true,\n                  count: 2,\n                  funcName: f+\"eq\"\n                  })\n    exports[f+\"seq\"] = makeOp({ args:[\"array\", \"scalar\"],\n                  pre: {args:[], body:\"this_f=Math.\"+f, thisVars:[\"this_f\"]},\n                  body: {args:[\"a\",\"b\"], body:\"a=this_f(a,b)\", thisVars:[\"this_f\"]},\n                  rvalue:true,\n                  count:2,\n                  funcName: f+\"seq\"\n                  })\n  }\n})();\n\nvar math_noncomm = [\n  \"atan2\",\n  \"pow\"\n]\n;(function(){\n  for(var i=0; i<math_noncomm.length; ++i) {\n    var f= math_noncomm[i]\n    exports[f+\"op\"] = makeOp({\n                  args:[\"array\", \"array\", \"array\"],\n                  pre: {args:[], body:\"this_f=Math.\"+f, thisVars:[\"this_f\"]},\n                  body: {args:[\"a\",\"b\",\"c\"], body:\"a=this_f(c,b)\", thisVars:[\"this_f\"]},\n                  funcName: f+\"op\"\n                })\n    exports[f+\"ops\"] = makeOp({\n                  args:[\"array\", \"array\", \"scalar\"],\n                  pre: {args:[], body:\"this_f=Math.\"+f, thisVars:[\"this_f\"]},\n                  body: {args:[\"a\",\"b\",\"c\"], body:\"a=this_f(c,b)\", thisVars:[\"this_f\"]},\n                  funcName: f+\"ops\"\n                  })\n    exports[f+\"opeq\"] = makeOp({ args:[\"array\", \"array\"],\n                  pre: {args:[], body:\"this_f=Math.\"+f, thisVars:[\"this_f\"]},\n                  body: {args:[\"a\",\"b\"], body:\"a=this_f(b,a)\", thisVars:[\"this_f\"]},\n                  rvalue: true,\n                  count: 2,\n                  funcName: f+\"opeq\"\n                  })\n    exports[f+\"opseq\"] = makeOp({ args:[\"array\", \"scalar\"],\n                  pre: {args:[], body:\"this_f=Math.\"+f, thisVars:[\"this_f\"]},\n                  body: {args:[\"a\",\"b\"], body:\"a=this_f(b,a)\", thisVars:[\"this_f\"]},\n                  rvalue:true,\n                  count:2,\n                  funcName: f+\"opseq\"\n                  })\n  }\n})();\n\nexports.any = compile({\n  args:[\"array\"],\n  pre: EmptyProc,\n  body: {args:[{name:\"a\", lvalue:false, rvalue:true, count:1}], body: \"if(a){return true}\", localVars: [], thisVars: []},\n  post: {args:[], localVars:[], thisVars:[], body:\"return false\"},\n  funcName: \"any\"\n})\n\nexports.all = compile({\n  args:[\"array\"],\n  pre: EmptyProc,\n  body: {args:[{name:\"x\", lvalue:false, rvalue:true, count:1}], body: \"if(!x){return false}\", localVars: [], thisVars: []},\n  post: {args:[], localVars:[], thisVars:[], body:\"return true\"},\n  funcName: \"all\"\n})\n\nexports.sum = compile({\n  args:[\"array\"],\n  pre: {args:[], localVars:[], thisVars:[\"this_s\"], body:\"this_s=0\"},\n  body: {args:[{name:\"a\", lvalue:false, rvalue:true, count:1}], body: \"this_s+=a\", localVars: [], thisVars: [\"this_s\"]},\n  post: {args:[], localVars:[], thisVars:[\"this_s\"], body:\"return this_s\"},\n  funcName: \"sum\"\n})\n\nexports.prod = compile({\n  args:[\"array\"],\n  pre: {args:[], localVars:[], thisVars:[\"this_s\"], body:\"this_s=1\"},\n  body: {args:[{name:\"a\", lvalue:false, rvalue:true, count:1}], body: \"this_s*=a\", localVars: [], thisVars: [\"this_s\"]},\n  post: {args:[], localVars:[], thisVars:[\"this_s\"], body:\"return this_s\"},\n  funcName: \"prod\"\n})\n\nexports.norm2squared = compile({\n  args:[\"array\"],\n  pre: {args:[], localVars:[], thisVars:[\"this_s\"], body:\"this_s=0\"},\n  body: {args:[{name:\"a\", lvalue:false, rvalue:true, count:2}], body: \"this_s+=a*a\", localVars: [], thisVars: [\"this_s\"]},\n  post: {args:[], localVars:[], thisVars:[\"this_s\"], body:\"return this_s\"},\n  funcName: \"norm2squared\"\n})\n  \nexports.norm2 = compile({\n  args:[\"array\"],\n  pre: {args:[], localVars:[], thisVars:[\"this_s\"], body:\"this_s=0\"},\n  body: {args:[{name:\"a\", lvalue:false, rvalue:true, count:2}], body: \"this_s+=a*a\", localVars: [], thisVars: [\"this_s\"]},\n  post: {args:[], localVars:[], thisVars:[\"this_s\"], body:\"return Math.sqrt(this_s)\"},\n  funcName: \"norm2\"\n})\n  \n\nexports.norminf = compile({\n  args:[\"array\"],\n  pre: {args:[], localVars:[], thisVars:[\"this_s\"], body:\"this_s=0\"},\n  body: {args:[{name:\"a\", lvalue:false, rvalue:true, count:4}], body:\"if(-a>this_s){this_s=-a}else if(a>this_s){this_s=a}\", localVars: [], thisVars: [\"this_s\"]},\n  post: {args:[], localVars:[], thisVars:[\"this_s\"], body:\"return this_s\"},\n  funcName: \"norminf\"\n})\n\nexports.norm1 = compile({\n  args:[\"array\"],\n  pre: {args:[], localVars:[], thisVars:[\"this_s\"], body:\"this_s=0\"},\n  body: {args:[{name:\"a\", lvalue:false, rvalue:true, count:3}], body: \"this_s+=a<0?-a:a\", localVars: [], thisVars: [\"this_s\"]},\n  post: {args:[], localVars:[], thisVars:[\"this_s\"], body:\"return this_s\"},\n  funcName: \"norm1\"\n})\n\nexports.sup = compile({\n  args: [ \"array\" ],\n  pre:\n   { body: \"this_h=-Infinity\",\n     args: [],\n     thisVars: [ \"this_h\" ],\n     localVars: [] },\n  body:\n   { body: \"if(_inline_1_arg0_>this_h)this_h=_inline_1_arg0_\",\n     args: [{\"name\":\"_inline_1_arg0_\",\"lvalue\":false,\"rvalue\":true,\"count\":2} ],\n     thisVars: [ \"this_h\" ],\n     localVars: [] },\n  post:\n   { body: \"return this_h\",\n     args: [],\n     thisVars: [ \"this_h\" ],\n     localVars: [] }\n })\n\nexports.inf = compile({\n  args: [ \"array\" ],\n  pre:\n   { body: \"this_h=Infinity\",\n     args: [],\n     thisVars: [ \"this_h\" ],\n     localVars: [] },\n  body:\n   { body: \"if(_inline_1_arg0_<this_h)this_h=_inline_1_arg0_\",\n     args: [{\"name\":\"_inline_1_arg0_\",\"lvalue\":false,\"rvalue\":true,\"count\":2} ],\n     thisVars: [ \"this_h\" ],\n     localVars: [] },\n  post:\n   { body: \"return this_h\",\n     args: [],\n     thisVars: [ \"this_h\" ],\n     localVars: [] }\n })\n\nexports.argmin = compile({\n  args:[\"index\",\"array\",\"shape\"],\n  pre:{\n    body:\"{this_v=Infinity;this_i=_inline_0_arg2_.slice(0)}\",\n    args:[\n      {name:\"_inline_0_arg0_\",lvalue:false,rvalue:false,count:0},\n      {name:\"_inline_0_arg1_\",lvalue:false,rvalue:false,count:0},\n      {name:\"_inline_0_arg2_\",lvalue:false,rvalue:true,count:1}\n      ],\n    thisVars:[\"this_i\",\"this_v\"],\n    localVars:[]},\n  body:{\n    body:\"{if(_inline_1_arg1_<this_v){this_v=_inline_1_arg1_;for(var _inline_1_k=0;_inline_1_k<_inline_1_arg0_.length;++_inline_1_k){this_i[_inline_1_k]=_inline_1_arg0_[_inline_1_k]}}}\",\n    args:[\n      {name:\"_inline_1_arg0_\",lvalue:false,rvalue:true,count:2},\n      {name:\"_inline_1_arg1_\",lvalue:false,rvalue:true,count:2}],\n    thisVars:[\"this_i\",\"this_v\"],\n    localVars:[\"_inline_1_k\"]},\n  post:{\n    body:\"{return this_i}\",\n    args:[],\n    thisVars:[\"this_i\"],\n    localVars:[]}\n})\n\nexports.argmax = compile({\n  args:[\"index\",\"array\",\"shape\"],\n  pre:{\n    body:\"{this_v=-Infinity;this_i=_inline_0_arg2_.slice(0)}\",\n    args:[\n      {name:\"_inline_0_arg0_\",lvalue:false,rvalue:false,count:0},\n      {name:\"_inline_0_arg1_\",lvalue:false,rvalue:false,count:0},\n      {name:\"_inline_0_arg2_\",lvalue:false,rvalue:true,count:1}\n      ],\n    thisVars:[\"this_i\",\"this_v\"],\n    localVars:[]},\n  body:{\n    body:\"{if(_inline_1_arg1_>this_v){this_v=_inline_1_arg1_;for(var _inline_1_k=0;_inline_1_k<_inline_1_arg0_.length;++_inline_1_k){this_i[_inline_1_k]=_inline_1_arg0_[_inline_1_k]}}}\",\n    args:[\n      {name:\"_inline_1_arg0_\",lvalue:false,rvalue:true,count:2},\n      {name:\"_inline_1_arg1_\",lvalue:false,rvalue:true,count:2}],\n    thisVars:[\"this_i\",\"this_v\"],\n    localVars:[\"_inline_1_k\"]},\n  post:{\n    body:\"{return this_i}\",\n    args:[],\n    thisVars:[\"this_i\"],\n    localVars:[]}\n})  \n\nexports.random = makeOp({\n  args: [\"array\"],\n  pre: {args:[], body:\"this_f=Math.random\", thisVars:[\"this_f\"]},\n  body: {args: [\"a\"], body:\"a=this_f()\", thisVars:[\"this_f\"]},\n  funcName: \"random\"\n})\n\nexports.assign = makeOp({\n  args:[\"array\", \"array\"],\n  body: {args:[\"a\", \"b\"], body:\"a=b\"},\n  funcName: \"assign\" })\n\nexports.assigns = makeOp({\n  args:[\"array\", \"scalar\"],\n  body: {args:[\"a\", \"b\"], body:\"a=b\"},\n  funcName: \"assigns\" })\n\n\nexports.equals = compile({\n  args:[\"array\", \"array\"],\n  pre: EmptyProc,\n  body: {args:[{name:\"x\", lvalue:false, rvalue:true, count:1},\n               {name:\"y\", lvalue:false, rvalue:true, count:1}], \n        body: \"if(x!==y){return false}\", \n        localVars: [], \n        thisVars: []},\n  post: {args:[], localVars:[], thisVars:[], body:\"return true\"},\n  funcName: \"equals\"\n})\n\n\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./node_modules/ndarray-ops/ndarray-ops.js\n// module id = 6\n// module chunks = 0\n\n//# sourceURL=webpack:///./node_modules/ndarray-ops/ndarray-ops.js?");
+module.exports = tfvis;
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\n\nvar createThunk = __webpack_require__(8)\n\nfunction Procedure() {\n  this.argTypes = []\n  this.shimArgs = []\n  this.arrayArgs = []\n  this.arrayBlockIndices = []\n  this.scalarArgs = []\n  this.offsetArgs = []\n  this.offsetArgIndex = []\n  this.indexArgs = []\n  this.shapeArgs = []\n  this.funcName = \"\"\n  this.pre = null\n  this.body = null\n  this.post = null\n  this.debug = false\n}\n\nfunction compileCwise(user_args) {\n  //Create procedure\n  var proc = new Procedure()\n  \n  //Parse blocks\n  proc.pre    = user_args.pre\n  proc.body   = user_args.body\n  proc.post   = user_args.post\n\n  //Parse arguments\n  var proc_args = user_args.args.slice(0)\n  proc.argTypes = proc_args\n  for(var i=0; i<proc_args.length; ++i) {\n    var arg_type = proc_args[i]\n    if(arg_type === \"array\" || (typeof arg_type === \"object\" && arg_type.blockIndices)) {\n      proc.argTypes[i] = \"array\"\n      proc.arrayArgs.push(i)\n      proc.arrayBlockIndices.push(arg_type.blockIndices ? arg_type.blockIndices : 0)\n      proc.shimArgs.push(\"array\" + i)\n      if(i < proc.pre.args.length && proc.pre.args[i].count>0) {\n        throw new Error(\"cwise: pre() block may not reference array args\")\n      }\n      if(i < proc.post.args.length && proc.post.args[i].count>0) {\n        throw new Error(\"cwise: post() block may not reference array args\")\n      }\n    } else if(arg_type === \"scalar\") {\n      proc.scalarArgs.push(i)\n      proc.shimArgs.push(\"scalar\" + i)\n    } else if(arg_type === \"index\") {\n      proc.indexArgs.push(i)\n      if(i < proc.pre.args.length && proc.pre.args[i].count > 0) {\n        throw new Error(\"cwise: pre() block may not reference array index\")\n      }\n      if(i < proc.body.args.length && proc.body.args[i].lvalue) {\n        throw new Error(\"cwise: body() block may not write to array index\")\n      }\n      if(i < proc.post.args.length && proc.post.args[i].count > 0) {\n        throw new Error(\"cwise: post() block may not reference array index\")\n      }\n    } else if(arg_type === \"shape\") {\n      proc.shapeArgs.push(i)\n      if(i < proc.pre.args.length && proc.pre.args[i].lvalue) {\n        throw new Error(\"cwise: pre() block may not write to array shape\")\n      }\n      if(i < proc.body.args.length && proc.body.args[i].lvalue) {\n        throw new Error(\"cwise: body() block may not write to array shape\")\n      }\n      if(i < proc.post.args.length && proc.post.args[i].lvalue) {\n        throw new Error(\"cwise: post() block may not write to array shape\")\n      }\n    } else if(typeof arg_type === \"object\" && arg_type.offset) {\n      proc.argTypes[i] = \"offset\"\n      proc.offsetArgs.push({ array: arg_type.array, offset:arg_type.offset })\n      proc.offsetArgIndex.push(i)\n    } else {\n      throw new Error(\"cwise: Unknown argument type \" + proc_args[i])\n    }\n  }\n  \n  //Make sure at least one array argument was specified\n  if(proc.arrayArgs.length <= 0) {\n    throw new Error(\"cwise: No array arguments specified\")\n  }\n  \n  //Make sure arguments are correct\n  if(proc.pre.args.length > proc_args.length) {\n    throw new Error(\"cwise: Too many arguments in pre() block\")\n  }\n  if(proc.body.args.length > proc_args.length) {\n    throw new Error(\"cwise: Too many arguments in body() block\")\n  }\n  if(proc.post.args.length > proc_args.length) {\n    throw new Error(\"cwise: Too many arguments in post() block\")\n  }\n\n  //Check debug flag\n  proc.debug = !!user_args.printCode || !!user_args.debug\n  \n  //Retrieve name\n  proc.funcName = user_args.funcName || \"cwise\"\n  \n  //Read in block size\n  proc.blockSize = user_args.blockSize || 64\n\n  return createThunk(proc)\n}\n\nmodule.exports = compileCwise\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./node_modules/cwise-compiler/compiler.js\n// module id = 7\n// module chunks = 0\n\n//# sourceURL=webpack:///./node_modules/cwise-compiler/compiler.js?");
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\n\n// The function below is called when constructing a cwise function object, and does the following:\n// A function object is constructed which accepts as argument a compilation function and returns another function.\n// It is this other function that is eventually returned by createThunk, and this function is the one that actually\n// checks whether a certain pattern of arguments has already been used before and compiles new loops as needed.\n// The compilation passed to the first function object is used for compiling new functions.\n// Once this function object is created, it is called with compile as argument, where the first argument of compile\n// is bound to \"proc\" (essentially containing a preprocessed version of the user arguments to cwise).\n// So createThunk roughly works like this:\n// function createThunk(proc) {\n//   var thunk = function(compileBound) {\n//     var CACHED = {}\n//     return function(arrays and scalars) {\n//       if (dtype and order of arrays in CACHED) {\n//         var func = CACHED[dtype and order of arrays]\n//       } else {\n//         var func = CACHED[dtype and order of arrays] = compileBound(dtype and order of arrays)\n//       }\n//       return func(arrays and scalars)\n//     }\n//   }\n//   return thunk(compile.bind1(proc))\n// }\n\nvar compile = __webpack_require__(9)\n\nfunction createThunk(proc) {\n  var code = [\"'use strict'\", \"var CACHED={}\"]\n  var vars = []\n  var thunkName = proc.funcName + \"_cwise_thunk\"\n  \n  //Build thunk\n  code.push([\"return function \", thunkName, \"(\", proc.shimArgs.join(\",\"), \"){\"].join(\"\"))\n  var typesig = []\n  var string_typesig = []\n  var proc_args = [[\"array\",proc.arrayArgs[0],\".shape.slice(\", // Slice shape so that we only retain the shape over which we iterate (which gets passed to the cwise operator as SS).\n                    Math.max(0,proc.arrayBlockIndices[0]),proc.arrayBlockIndices[0]<0?(\",\"+proc.arrayBlockIndices[0]+\")\"):\")\"].join(\"\")]\n  var shapeLengthConditions = [], shapeConditions = []\n  // Process array arguments\n  for(var i=0; i<proc.arrayArgs.length; ++i) {\n    var j = proc.arrayArgs[i]\n    vars.push([\"t\", j, \"=array\", j, \".dtype,\",\n               \"r\", j, \"=array\", j, \".order\"].join(\"\"))\n    typesig.push(\"t\" + j)\n    typesig.push(\"r\" + j)\n    string_typesig.push(\"t\"+j)\n    string_typesig.push(\"r\"+j+\".join()\")\n    proc_args.push(\"array\" + j + \".data\")\n    proc_args.push(\"array\" + j + \".stride\")\n    proc_args.push(\"array\" + j + \".offset|0\")\n    if (i>0) { // Gather conditions to check for shape equality (ignoring block indices)\n      shapeLengthConditions.push(\"array\" + proc.arrayArgs[0] + \".shape.length===array\" + j + \".shape.length+\" + (Math.abs(proc.arrayBlockIndices[0])-Math.abs(proc.arrayBlockIndices[i])))\n      shapeConditions.push(\"array\" + proc.arrayArgs[0] + \".shape[shapeIndex+\" + Math.max(0,proc.arrayBlockIndices[0]) + \"]===array\" + j + \".shape[shapeIndex+\" + Math.max(0,proc.arrayBlockIndices[i]) + \"]\")\n    }\n  }\n  // Check for shape equality\n  if (proc.arrayArgs.length > 1) {\n    code.push(\"if (!(\" + shapeLengthConditions.join(\" && \") + \")) throw new Error('cwise: Arrays do not all have the same dimensionality!')\")\n    code.push(\"for(var shapeIndex=array\" + proc.arrayArgs[0] + \".shape.length-\" + Math.abs(proc.arrayBlockIndices[0]) + \"; shapeIndex-->0;) {\")\n    code.push(\"if (!(\" + shapeConditions.join(\" && \") + \")) throw new Error('cwise: Arrays do not all have the same shape!')\")\n    code.push(\"}\")\n  }\n  // Process scalar arguments\n  for(var i=0; i<proc.scalarArgs.length; ++i) {\n    proc_args.push(\"scalar\" + proc.scalarArgs[i])\n  }\n  // Check for cached function (and if not present, generate it)\n  vars.push([\"type=[\", string_typesig.join(\",\"), \"].join()\"].join(\"\"))\n  vars.push(\"proc=CACHED[type]\")\n  code.push(\"var \" + vars.join(\",\"))\n  \n  code.push([\"if(!proc){\",\n             \"CACHED[type]=proc=compile([\", typesig.join(\",\"), \"])}\",\n             \"return proc(\", proc_args.join(\",\"), \")}\"].join(\"\"))\n\n  if(proc.debug) {\n    console.log(\"-----Generated thunk:\\n\" + code.join(\"\\n\") + \"\\n----------\")\n  }\n  \n  //Compile thunk\n  var thunk = new Function(\"compile\", code.join(\"\\n\"))\n  return thunk(compile.bind(undefined, proc))\n}\n\nmodule.exports = createThunk\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./node_modules/cwise-compiler/lib/thunk.js\n// module id = 8\n// module chunks = 0\n\n//# sourceURL=webpack:///./node_modules/cwise-compiler/lib/thunk.js?");
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\n\nvar uniq = __webpack_require__(10)\n\n// This function generates very simple loops analogous to how you typically traverse arrays (the outermost loop corresponds to the slowest changing index, the innermost loop to the fastest changing index)\n// TODO: If two arrays have the same strides (and offsets) there is potential for decreasing the number of \"pointers\" and related variables. The drawback is that the type signature would become more specific and that there would thus be less potential for caching, but it might still be worth it, especially when dealing with large numbers of arguments.\nfunction innerFill(order, proc, body) {\n  var dimension = order.length\n    , nargs = proc.arrayArgs.length\n    , has_index = proc.indexArgs.length>0\n    , code = []\n    , vars = []\n    , idx=0, pidx=0, i, j\n  for(i=0; i<dimension; ++i) { // Iteration variables\n    vars.push([\"i\",i,\"=0\"].join(\"\"))\n  }\n  //Compute scan deltas\n  for(j=0; j<nargs; ++j) {\n    for(i=0; i<dimension; ++i) {\n      pidx = idx\n      idx = order[i]\n      if(i === 0) { // The innermost/fastest dimension's delta is simply its stride\n        vars.push([\"d\",j,\"s\",i,\"=t\",j,\"p\",idx].join(\"\"))\n      } else { // For other dimensions the delta is basically the stride minus something which essentially \"rewinds\" the previous (more inner) dimension\n        vars.push([\"d\",j,\"s\",i,\"=(t\",j,\"p\",idx,\"-s\",pidx,\"*t\",j,\"p\",pidx,\")\"].join(\"\"))\n      }\n    }\n  }\n  if (vars.length > 0) {\n    code.push(\"var \" + vars.join(\",\"))\n  }  \n  //Scan loop\n  for(i=dimension-1; i>=0; --i) { // Start at largest stride and work your way inwards\n    idx = order[i]\n    code.push([\"for(i\",i,\"=0;i\",i,\"<s\",idx,\";++i\",i,\"){\"].join(\"\"))\n  }\n  //Push body of inner loop\n  code.push(body)\n  //Advance scan pointers\n  for(i=0; i<dimension; ++i) {\n    pidx = idx\n    idx = order[i]\n    for(j=0; j<nargs; ++j) {\n      code.push([\"p\",j,\"+=d\",j,\"s\",i].join(\"\"))\n    }\n    if(has_index) {\n      if(i > 0) {\n        code.push([\"index[\",pidx,\"]-=s\",pidx].join(\"\"))\n      }\n      code.push([\"++index[\",idx,\"]\"].join(\"\"))\n    }\n    code.push(\"}\")\n  }\n  return code.join(\"\\n\")\n}\n\n// Generate \"outer\" loops that loop over blocks of data, applying \"inner\" loops to the blocks by manipulating the local variables in such a way that the inner loop only \"sees\" the current block.\n// TODO: If this is used, then the previous declaration (done by generateCwiseOp) of s* is essentially unnecessary.\n//       I believe the s* are not used elsewhere (in particular, I don't think they're used in the pre/post parts and \"shape\" is defined independently), so it would be possible to make defining the s* dependent on what loop method is being used.\nfunction outerFill(matched, order, proc, body) {\n  var dimension = order.length\n    , nargs = proc.arrayArgs.length\n    , blockSize = proc.blockSize\n    , has_index = proc.indexArgs.length > 0\n    , code = []\n  for(var i=0; i<nargs; ++i) {\n    code.push([\"var offset\",i,\"=p\",i].join(\"\"))\n  }\n  //Generate loops for unmatched dimensions\n  // The order in which these dimensions are traversed is fairly arbitrary (from small stride to large stride, for the first argument)\n  // TODO: It would be nice if the order in which these loops are placed would also be somehow \"optimal\" (at the very least we should check that it really doesn't hurt us if they're not).\n  for(var i=matched; i<dimension; ++i) {\n    code.push([\"for(var j\"+i+\"=SS[\", order[i], \"]|0;j\", i, \">0;){\"].join(\"\")) // Iterate back to front\n    code.push([\"if(j\",i,\"<\",blockSize,\"){\"].join(\"\")) // Either decrease j by blockSize (s = blockSize), or set it to zero (after setting s = j).\n    code.push([\"s\",order[i],\"=j\",i].join(\"\"))\n    code.push([\"j\",i,\"=0\"].join(\"\"))\n    code.push([\"}else{s\",order[i],\"=\",blockSize].join(\"\"))\n    code.push([\"j\",i,\"-=\",blockSize,\"}\"].join(\"\"))\n    if(has_index) {\n      code.push([\"index[\",order[i],\"]=j\",i].join(\"\"))\n    }\n  }\n  for(var i=0; i<nargs; ++i) {\n    var indexStr = [\"offset\"+i]\n    for(var j=matched; j<dimension; ++j) {\n      indexStr.push([\"j\",j,\"*t\",i,\"p\",order[j]].join(\"\"))\n    }\n    code.push([\"p\",i,\"=(\",indexStr.join(\"+\"),\")\"].join(\"\"))\n  }\n  code.push(innerFill(order, proc, body))\n  for(var i=matched; i<dimension; ++i) {\n    code.push(\"}\")\n  }\n  return code.join(\"\\n\")\n}\n\n//Count the number of compatible inner orders\n// This is the length of the longest common prefix of the arrays in orders.\n// Each array in orders lists the dimensions of the correspond ndarray in order of increasing stride.\n// This is thus the maximum number of dimensions that can be efficiently traversed by simple nested loops for all arrays.\nfunction countMatches(orders) {\n  var matched = 0, dimension = orders[0].length\n  while(matched < dimension) {\n    for(var j=1; j<orders.length; ++j) {\n      if(orders[j][matched] !== orders[0][matched]) {\n        return matched\n      }\n    }\n    ++matched\n  }\n  return matched\n}\n\n//Processes a block according to the given data types\n// Replaces variable names by different ones, either \"local\" ones (that are then ferried in and out of the given array) or ones matching the arguments that the function performing the ultimate loop will accept.\nfunction processBlock(block, proc, dtypes) {\n  var code = block.body\n  var pre = []\n  var post = []\n  for(var i=0; i<block.args.length; ++i) {\n    var carg = block.args[i]\n    if(carg.count <= 0) {\n      continue\n    }\n    var re = new RegExp(carg.name, \"g\")\n    var ptrStr = \"\"\n    var arrNum = proc.arrayArgs.indexOf(i)\n    switch(proc.argTypes[i]) {\n      case \"offset\":\n        var offArgIndex = proc.offsetArgIndex.indexOf(i)\n        var offArg = proc.offsetArgs[offArgIndex]\n        arrNum = offArg.array\n        ptrStr = \"+q\" + offArgIndex // Adds offset to the \"pointer\" in the array\n      case \"array\":\n        ptrStr = \"p\" + arrNum + ptrStr\n        var localStr = \"l\" + i\n        var arrStr = \"a\" + arrNum\n        if (proc.arrayBlockIndices[arrNum] === 0) { // Argument to body is just a single value from this array\n          if(carg.count === 1) { // Argument/array used only once(?)\n            if(dtypes[arrNum] === \"generic\") {\n              if(carg.lvalue) {\n                pre.push([\"var \", localStr, \"=\", arrStr, \".get(\", ptrStr, \")\"].join(\"\")) // Is this necessary if the argument is ONLY used as an lvalue? (keep in mind that we can have a += something, so we would actually need to check carg.rvalue)\n                code = code.replace(re, localStr)\n                post.push([arrStr, \".set(\", ptrStr, \",\", localStr,\")\"].join(\"\"))\n              } else {\n                code = code.replace(re, [arrStr, \".get(\", ptrStr, \")\"].join(\"\"))\n              }\n            } else {\n              code = code.replace(re, [arrStr, \"[\", ptrStr, \"]\"].join(\"\"))\n            }\n          } else if(dtypes[arrNum] === \"generic\") {\n            pre.push([\"var \", localStr, \"=\", arrStr, \".get(\", ptrStr, \")\"].join(\"\")) // TODO: Could we optimize by checking for carg.rvalue?\n            code = code.replace(re, localStr)\n            if(carg.lvalue) {\n              post.push([arrStr, \".set(\", ptrStr, \",\", localStr,\")\"].join(\"\"))\n            }\n          } else {\n            pre.push([\"var \", localStr, \"=\", arrStr, \"[\", ptrStr, \"]\"].join(\"\")) // TODO: Could we optimize by checking for carg.rvalue?\n            code = code.replace(re, localStr)\n            if(carg.lvalue) {\n              post.push([arrStr, \"[\", ptrStr, \"]=\", localStr].join(\"\"))\n            }\n          }\n        } else { // Argument to body is a \"block\"\n          var reStrArr = [carg.name], ptrStrArr = [ptrStr]\n          for(var j=0; j<Math.abs(proc.arrayBlockIndices[arrNum]); j++) {\n            reStrArr.push(\"\\\\s*\\\\[([^\\\\]]+)\\\\]\")\n            ptrStrArr.push(\"$\" + (j+1) + \"*t\" + arrNum + \"b\" + j) // Matched index times stride\n          }\n          re = new RegExp(reStrArr.join(\"\"), \"g\")\n          ptrStr = ptrStrArr.join(\"+\")\n          if(dtypes[arrNum] === \"generic\") {\n            /*if(carg.lvalue) {\n              pre.push([\"var \", localStr, \"=\", arrStr, \".get(\", ptrStr, \")\"].join(\"\")) // Is this necessary if the argument is ONLY used as an lvalue? (keep in mind that we can have a += something, so we would actually need to check carg.rvalue)\n              code = code.replace(re, localStr)\n              post.push([arrStr, \".set(\", ptrStr, \",\", localStr,\")\"].join(\"\"))\n            } else {\n              code = code.replace(re, [arrStr, \".get(\", ptrStr, \")\"].join(\"\"))\n            }*/\n            throw new Error(\"cwise: Generic arrays not supported in combination with blocks!\")\n          } else {\n            // This does not produce any local variables, even if variables are used multiple times. It would be possible to do so, but it would complicate things quite a bit.\n            code = code.replace(re, [arrStr, \"[\", ptrStr, \"]\"].join(\"\"))\n          }\n        }\n      break\n      case \"scalar\":\n        code = code.replace(re, \"Y\" + proc.scalarArgs.indexOf(i))\n      break\n      case \"index\":\n        code = code.replace(re, \"index\")\n      break\n      case \"shape\":\n        code = code.replace(re, \"shape\")\n      break\n    }\n  }\n  return [pre.join(\"\\n\"), code, post.join(\"\\n\")].join(\"\\n\").trim()\n}\n\nfunction typeSummary(dtypes) {\n  var summary = new Array(dtypes.length)\n  var allEqual = true\n  for(var i=0; i<dtypes.length; ++i) {\n    var t = dtypes[i]\n    var digits = t.match(/\\d+/)\n    if(!digits) {\n      digits = \"\"\n    } else {\n      digits = digits[0]\n    }\n    if(t.charAt(0) === 0) {\n      summary[i] = \"u\" + t.charAt(1) + digits\n    } else {\n      summary[i] = t.charAt(0) + digits\n    }\n    if(i > 0) {\n      allEqual = allEqual && summary[i] === summary[i-1]\n    }\n  }\n  if(allEqual) {\n    return summary[0]\n  }\n  return summary.join(\"\")\n}\n\n//Generates a cwise operator\nfunction generateCWiseOp(proc, typesig) {\n\n  //Compute dimension\n  // Arrays get put first in typesig, and there are two entries per array (dtype and order), so this gets the number of dimensions in the first array arg.\n  var dimension = (typesig[1].length - Math.abs(proc.arrayBlockIndices[0]))|0\n  var orders = new Array(proc.arrayArgs.length)\n  var dtypes = new Array(proc.arrayArgs.length)\n  for(var i=0; i<proc.arrayArgs.length; ++i) {\n    dtypes[i] = typesig[2*i]\n    orders[i] = typesig[2*i+1]\n  }\n  \n  //Determine where block and loop indices start and end\n  var blockBegin = [], blockEnd = [] // These indices are exposed as blocks\n  var loopBegin = [], loopEnd = [] // These indices are iterated over\n  var loopOrders = [] // orders restricted to the loop indices\n  for(var i=0; i<proc.arrayArgs.length; ++i) {\n    if (proc.arrayBlockIndices[i]<0) {\n      loopBegin.push(0)\n      loopEnd.push(dimension)\n      blockBegin.push(dimension)\n      blockEnd.push(dimension+proc.arrayBlockIndices[i])\n    } else {\n      loopBegin.push(proc.arrayBlockIndices[i]) // Non-negative\n      loopEnd.push(proc.arrayBlockIndices[i]+dimension)\n      blockBegin.push(0)\n      blockEnd.push(proc.arrayBlockIndices[i])\n    }\n    var newOrder = []\n    for(var j=0; j<orders[i].length; j++) {\n      if (loopBegin[i]<=orders[i][j] && orders[i][j]<loopEnd[i]) {\n        newOrder.push(orders[i][j]-loopBegin[i]) // If this is a loop index, put it in newOrder, subtracting loopBegin, to make sure that all loopOrders are using a common set of indices.\n      }\n    }\n    loopOrders.push(newOrder)\n  }\n\n  //First create arguments for procedure\n  var arglist = [\"SS\"] // SS is the overall shape over which we iterate\n  var code = [\"'use strict'\"]\n  var vars = []\n  \n  for(var j=0; j<dimension; ++j) {\n    vars.push([\"s\", j, \"=SS[\", j, \"]\"].join(\"\")) // The limits for each dimension.\n  }\n  for(var i=0; i<proc.arrayArgs.length; ++i) {\n    arglist.push(\"a\"+i) // Actual data array\n    arglist.push(\"t\"+i) // Strides\n    arglist.push(\"p\"+i) // Offset in the array at which the data starts (also used for iterating over the data)\n    \n    for(var j=0; j<dimension; ++j) { // Unpack the strides into vars for looping\n      vars.push([\"t\",i,\"p\",j,\"=t\",i,\"[\",loopBegin[i]+j,\"]\"].join(\"\"))\n    }\n    \n    for(var j=0; j<Math.abs(proc.arrayBlockIndices[i]); ++j) { // Unpack the strides into vars for block iteration\n      vars.push([\"t\",i,\"b\",j,\"=t\",i,\"[\",blockBegin[i]+j,\"]\"].join(\"\"))\n    }\n  }\n  for(var i=0; i<proc.scalarArgs.length; ++i) {\n    arglist.push(\"Y\" + i)\n  }\n  if(proc.shapeArgs.length > 0) {\n    vars.push(\"shape=SS.slice(0)\") // Makes the shape over which we iterate available to the user defined functions (so you can use width/height for example)\n  }\n  if(proc.indexArgs.length > 0) {\n    // Prepare an array to keep track of the (logical) indices, initialized to dimension zeroes.\n    var zeros = new Array(dimension)\n    for(var i=0; i<dimension; ++i) {\n      zeros[i] = \"0\"\n    }\n    vars.push([\"index=[\", zeros.join(\",\"), \"]\"].join(\"\"))\n  }\n  for(var i=0; i<proc.offsetArgs.length; ++i) { // Offset arguments used for stencil operations\n    var off_arg = proc.offsetArgs[i]\n    var init_string = []\n    for(var j=0; j<off_arg.offset.length; ++j) {\n      if(off_arg.offset[j] === 0) {\n        continue\n      } else if(off_arg.offset[j] === 1) {\n        init_string.push([\"t\", off_arg.array, \"p\", j].join(\"\"))      \n      } else {\n        init_string.push([off_arg.offset[j], \"*t\", off_arg.array, \"p\", j].join(\"\"))\n      }\n    }\n    if(init_string.length === 0) {\n      vars.push(\"q\" + i + \"=0\")\n    } else {\n      vars.push([\"q\", i, \"=\", init_string.join(\"+\")].join(\"\"))\n    }\n  }\n\n  //Prepare this variables\n  var thisVars = uniq([].concat(proc.pre.thisVars)\n                      .concat(proc.body.thisVars)\n                      .concat(proc.post.thisVars))\n  vars = vars.concat(thisVars)\n  if (vars.length > 0) {\n    code.push(\"var \" + vars.join(\",\"))\n  }\n  for(var i=0; i<proc.arrayArgs.length; ++i) {\n    code.push(\"p\"+i+\"|=0\")\n  }\n  \n  //Inline prelude\n  if(proc.pre.body.length > 3) {\n    code.push(processBlock(proc.pre, proc, dtypes))\n  }\n\n  //Process body\n  var body = processBlock(proc.body, proc, dtypes)\n  var matched = countMatches(loopOrders)\n  if(matched < dimension) {\n    code.push(outerFill(matched, loopOrders[0], proc, body)) // TODO: Rather than passing loopOrders[0], it might be interesting to look at passing an order that represents the majority of the arguments for example.\n  } else {\n    code.push(innerFill(loopOrders[0], proc, body))\n  }\n\n  //Inline epilog\n  if(proc.post.body.length > 3) {\n    code.push(processBlock(proc.post, proc, dtypes))\n  }\n  \n  if(proc.debug) {\n    console.log(\"-----Generated cwise routine for \", typesig, \":\\n\" + code.join(\"\\n\") + \"\\n----------\")\n  }\n  \n  var loopName = [(proc.funcName||\"unnamed\"), \"_cwise_loop_\", orders[0].join(\"s\"),\"m\",matched,typeSummary(dtypes)].join(\"\")\n  var f = new Function([\"function \",loopName,\"(\", arglist.join(\",\"),\"){\", code.join(\"\\n\"),\"} return \", loopName].join(\"\"))\n  return f()\n}\nmodule.exports = generateCWiseOp\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./node_modules/cwise-compiler/lib/compile.js\n// module id = 9\n// module chunks = 0\n\n//# sourceURL=webpack:///./node_modules/cwise-compiler/lib/compile.js?");
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\n\nfunction unique_pred(list, compare) {\n  var ptr = 1\n    , len = list.length\n    , a=list[0], b=list[0]\n  for(var i=1; i<len; ++i) {\n    b = a\n    a = list[i]\n    if(compare(a, b)) {\n      if(i === ptr) {\n        ptr++\n        continue\n      }\n      list[ptr++] = a\n    }\n  }\n  list.length = ptr\n  return list\n}\n\nfunction unique_eq(list) {\n  var ptr = 1\n    , len = list.length\n    , a=list[0], b = list[0]\n  for(var i=1; i<len; ++i, b=a) {\n    b = a\n    a = list[i]\n    if(a !== b) {\n      if(i === ptr) {\n        ptr++\n        continue\n      }\n      list[ptr++] = a\n    }\n  }\n  list.length = ptr\n  return list\n}\n\nfunction unique(list, compare, sorted) {\n  if(list.length === 0) {\n    return list\n  }\n  if(compare) {\n    if(!sorted) {\n      list.sort(compare)\n    }\n    return unique_pred(list, compare)\n  }\n  if(!sorted) {\n    list.sort()\n  }\n  return unique_eq(list)\n}\n\nmodule.exports = unique\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./node_modules/uniq/uniq.js\n// module id = 10\n// module chunks = 0\n\n//# sourceURL=webpack:///./node_modules/uniq/uniq.js?");
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("/*!\n * Cropper v3.1.4\n * https://github.com/fengyuanchen/cropper\n *\n * Copyright (c) 2014-2018 Chen Fengyuan\n * Released under the MIT license\n *\n * Date: 2018-01-13T09:37:52.890Z\n */\n\n(function (global, factory) {\n\t true ? factory(__webpack_require__(0)) :\n\ttypeof define === 'function' && define.amd ? define(['jquery'], factory) :\n\t(factory(global.jQuery));\n}(this, (function ($) { 'use strict';\n\n$ = $ && $.hasOwnProperty('default') ? $['default'] : $;\n\nvar WINDOW = typeof window !== 'undefined' ? window : {};\nvar NAMESPACE = 'cropper';\n\n// Actions\nvar ACTION_ALL = 'all';\nvar ACTION_CROP = 'crop';\nvar ACTION_MOVE = 'move';\nvar ACTION_ZOOM = 'zoom';\nvar ACTION_EAST = 'e';\nvar ACTION_WEST = 'w';\nvar ACTION_SOUTH = 's';\nvar ACTION_NORTH = 'n';\nvar ACTION_NORTH_EAST = 'ne';\nvar ACTION_NORTH_WEST = 'nw';\nvar ACTION_SOUTH_EAST = 'se';\nvar ACTION_SOUTH_WEST = 'sw';\n\n// Classes\nvar CLASS_CROP = NAMESPACE + '-crop';\nvar CLASS_DISABLED = NAMESPACE + '-disabled';\nvar CLASS_HIDDEN = NAMESPACE + '-hidden';\nvar CLASS_HIDE = NAMESPACE + '-hide';\nvar CLASS_INVISIBLE = NAMESPACE + '-invisible';\nvar CLASS_MODAL = NAMESPACE + '-modal';\nvar CLASS_MOVE = NAMESPACE + '-move';\n\n// Data keys\nvar DATA_ACTION = 'action';\nvar DATA_PREVIEW = 'preview';\n\n// Drag modes\nvar DRAG_MODE_CROP = 'crop';\nvar DRAG_MODE_MOVE = 'move';\nvar DRAG_MODE_NONE = 'none';\n\n// Events\nvar EVENT_CROP = 'crop';\nvar EVENT_CROP_END = 'cropend';\nvar EVENT_CROP_MOVE = 'cropmove';\nvar EVENT_CROP_START = 'cropstart';\nvar EVENT_DBLCLICK = 'dblclick';\nvar EVENT_ERROR = 'error';\nvar EVENT_LOAD = 'load';\nvar EVENT_POINTER_DOWN = WINDOW.PointerEvent ? 'pointerdown' : 'touchstart mousedown';\nvar EVENT_POINTER_MOVE = WINDOW.PointerEvent ? 'pointermove' : 'touchmove mousemove';\nvar EVENT_POINTER_UP = WINDOW.PointerEvent ? 'pointerup pointercancel' : 'touchend touchcancel mouseup';\nvar EVENT_READY = 'ready';\nvar EVENT_RESIZE = 'resize';\nvar EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';\nvar EVENT_ZOOM = 'zoom';\n\n// RegExps\nvar REGEXP_ACTIONS = /^(e|w|s|n|se|sw|ne|nw|all|crop|move|zoom)$/;\nvar REGEXP_DATA_URL = /^data:/;\nvar REGEXP_DATA_URL_JPEG = /^data:image\\/jpeg;base64,/;\nvar REGEXP_TAG_NAME = /^(img|canvas)$/i;\n\nvar DEFAULTS = {\n  // Define the view mode of the cropper\n  viewMode: 0, // 0, 1, 2, 3\n\n  // Define the dragging mode of the cropper\n  dragMode: DRAG_MODE_CROP, // 'crop', 'move' or 'none'\n\n  // Define the aspect ratio of the crop box\n  aspectRatio: NaN,\n\n  // An object with the previous cropping result data\n  data: null,\n\n  // A selector for adding extra containers to preview\n  preview: '',\n\n  // Re-render the cropper when resize the window\n  responsive: true,\n\n  // Restore the cropped area after resize the window\n  restore: true,\n\n  // Check if the current image is a cross-origin image\n  checkCrossOrigin: true,\n\n  // Check the current image's Exif Orientation information\n  checkOrientation: true,\n\n  // Show the black modal\n  modal: true,\n\n  // Show the dashed lines for guiding\n  guides: true,\n\n  // Show the center indicator for guiding\n  center: true,\n\n  // Show the white modal to highlight the crop box\n  highlight: true,\n\n  // Show the grid background\n  background: true,\n\n  // Enable to crop the image automatically when initialize\n  autoCrop: true,\n\n  // Define the percentage of automatic cropping area when initializes\n  autoCropArea: 0.8,\n\n  // Enable to move the image\n  movable: true,\n\n  // Enable to rotate the image\n  rotatable: true,\n\n  // Enable to scale the image\n  scalable: true,\n\n  // Enable to zoom the image\n  zoomable: true,\n\n  // Enable to zoom the image by dragging touch\n  zoomOnTouch: true,\n\n  // Enable to zoom the image by wheeling mouse\n  zoomOnWheel: true,\n\n  // Define zoom ratio when zoom the image by wheeling mouse\n  wheelZoomRatio: 0.1,\n\n  // Enable to move the crop box\n  cropBoxMovable: true,\n\n  // Enable to resize the crop box\n  cropBoxResizable: true,\n\n  // Toggle drag mode between \"crop\" and \"move\" when click twice on the cropper\n  toggleDragModeOnDblclick: true,\n\n  // Size limitation\n  minCanvasWidth: 0,\n  minCanvasHeight: 0,\n  minCropBoxWidth: 0,\n  minCropBoxHeight: 0,\n  minContainerWidth: 200,\n  minContainerHeight: 100,\n\n  // Shortcuts of events\n  ready: null,\n  cropstart: null,\n  cropmove: null,\n  cropend: null,\n  crop: null,\n  zoom: null\n};\n\nvar TEMPLATE = '<div class=\"cropper-container\">' + '<div class=\"cropper-wrap-box\">' + '<div class=\"cropper-canvas\"></div>' + '</div>' + '<div class=\"cropper-drag-box\"></div>' + '<div class=\"cropper-crop-box\">' + '<span class=\"cropper-view-box\"></span>' + '<span class=\"cropper-dashed dashed-h\"></span>' + '<span class=\"cropper-dashed dashed-v\"></span>' + '<span class=\"cropper-center\"></span>' + '<span class=\"cropper-face\"></span>' + '<span class=\"cropper-line line-e\" data-action=\"e\"></span>' + '<span class=\"cropper-line line-n\" data-action=\"n\"></span>' + '<span class=\"cropper-line line-w\" data-action=\"w\"></span>' + '<span class=\"cropper-line line-s\" data-action=\"s\"></span>' + '<span class=\"cropper-point point-e\" data-action=\"e\"></span>' + '<span class=\"cropper-point point-n\" data-action=\"n\"></span>' + '<span class=\"cropper-point point-w\" data-action=\"w\"></span>' + '<span class=\"cropper-point point-s\" data-action=\"s\"></span>' + '<span class=\"cropper-point point-ne\" data-action=\"ne\"></span>' + '<span class=\"cropper-point point-nw\" data-action=\"nw\"></span>' + '<span class=\"cropper-point point-sw\" data-action=\"sw\"></span>' + '<span class=\"cropper-point point-se\" data-action=\"se\"></span>' + '</div>' + '</div>';\n\nvar classCallCheck = function (instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n};\n\nvar createClass = function () {\n  function defineProperties(target, props) {\n    for (var i = 0; i < props.length; i++) {\n      var descriptor = props[i];\n      descriptor.enumerable = descriptor.enumerable || false;\n      descriptor.configurable = true;\n      if (\"value\" in descriptor) descriptor.writable = true;\n      Object.defineProperty(target, descriptor.key, descriptor);\n    }\n  }\n\n  return function (Constructor, protoProps, staticProps) {\n    if (protoProps) defineProperties(Constructor.prototype, protoProps);\n    if (staticProps) defineProperties(Constructor, staticProps);\n    return Constructor;\n  };\n}();\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nvar toConsumableArray = function (arr) {\n  if (Array.isArray(arr)) {\n    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];\n\n    return arr2;\n  } else {\n    return Array.from(arr);\n  }\n};\n\n/**\n * Check if the given value is a string.\n * @param {*} value - The value to check.\n * @returns {boolean} Returns `true` if the given value is a string, else `false`.\n */\nfunction isString(value) {\n  return typeof value === 'string';\n}\n\n/**\n * Check if the given value is not a number.\n */\nvar isNaN = Number.isNaN || WINDOW.isNaN;\n\n/**\n * Check if the given value is a number.\n * @param {*} value - The value to check.\n * @returns {boolean} Returns `true` if the given value is a number, else `false`.\n */\nfunction isNumber(value) {\n  return typeof value === 'number' && !isNaN(value);\n}\n\n/**\n * Check if the given value is undefined.\n * @param {*} value - The value to check.\n * @returns {boolean} Returns `true` if the given value is undefined, else `false`.\n */\nfunction isUndefined(value) {\n  return typeof value === 'undefined';\n}\n\n/**\n * Takes a function and returns a new one that will always have a particular context.\n * Custom proxy to avoid jQuery's guid.\n * @param {Function} fn - The target function.\n * @param {Object} context - The new context for the function.\n * @returns {Function} The new function.\n */\nfunction proxy(fn, context) {\n  for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {\n    args[_key - 2] = arguments[_key];\n  }\n\n  return function () {\n    for (var _len2 = arguments.length, args2 = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {\n      args2[_key2] = arguments[_key2];\n    }\n\n    return fn.apply(context, args.concat(args2));\n  };\n}\n\n/**\n * Get the own enumerable properties of a given object.\n * @param {Object} obj - The target object.\n * @returns {Array} All the own enumerable properties of the given object.\n */\nvar objectKeys = Object.keys || function objectKeys(obj) {\n  var keys = [];\n\n  $.each(obj, function (key) {\n    keys.push(key);\n  });\n\n  return keys;\n};\n\nvar REGEXP_DECIMALS = /\\.\\d*(?:0|9){12}\\d*$/i;\n\n/**\n * Normalize decimal number.\n * Check out {@link http://0.30000000000000004.com/ }\n * @param {number} value - The value to normalize.\n * @param {number} [times=100000000000] - The times for normalizing.\n * @returns {number} Returns the normalized number.\n */\nfunction normalizeDecimalNumber(value) {\n  var times = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100000000000;\n\n  return REGEXP_DECIMALS.test(value) ? Math.round(value * times) / times : value;\n}\n\nvar location = WINDOW.location;\n\nvar REGEXP_ORIGINS = /^(https?:)\\/\\/([^:/?#]+):?(\\d*)/i;\n\n/**\n * Check if the given URL is a cross origin URL.\n * @param {string} url - The target URL.\n * @returns {boolean} Returns `true` if the given URL is a cross origin URL, else `false`.\n */\nfunction isCrossOriginURL(url) {\n  var parts = url.match(REGEXP_ORIGINS);\n\n  return parts && (parts[1] !== location.protocol || parts[2] !== location.hostname || parts[3] !== location.port);\n}\n\n/**\n * Add timestamp to the given URL.\n * @param {string} url - The target URL.\n * @returns {string} The result URL.\n */\nfunction addTimestamp(url) {\n  var timestamp = 'timestamp=' + new Date().getTime();\n\n  return url + (url.indexOf('?') === -1 ? '?' : '&') + timestamp;\n}\n\n/**\n * Get transform values base on the given object.\n * @param {Object} obj - The target object.\n * @returns {string} A string contains transform values.\n */\nfunction getTransformValues(_ref) {\n  var rotate = _ref.rotate,\n      scaleX = _ref.scaleX,\n      scaleY = _ref.scaleY,\n      translateX = _ref.translateX,\n      translateY = _ref.translateY;\n\n  var values = [];\n\n  if (isNumber(translateX) && translateX !== 0) {\n    values.push('translateX(' + translateX + 'px)');\n  }\n\n  if (isNumber(translateY) && translateY !== 0) {\n    values.push('translateY(' + translateY + 'px)');\n  }\n\n  // Rotate should come first before scale to match orientation transform\n  if (isNumber(rotate) && rotate !== 0) {\n    values.push('rotate(' + rotate + 'deg)');\n  }\n\n  if (isNumber(scaleX) && scaleX !== 1) {\n    values.push('scaleX(' + scaleX + ')');\n  }\n\n  if (isNumber(scaleY) && scaleY !== 1) {\n    values.push('scaleY(' + scaleY + ')');\n  }\n\n  return values.length ? values.join(' ') : 'none';\n}\n\nvar navigator = WINDOW.navigator;\n\nvar IS_SAFARI_OR_UIWEBVIEW = navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent);\n\n/**\n * Get an image's natural sizes.\n * @param {string} image - The target image.\n * @param {Function} callback - The callback function.\n */\nfunction getImageNaturalSizes(image, callback) {\n  // Modern browsers (except Safari)\n  if (image.naturalWidth && !IS_SAFARI_OR_UIWEBVIEW) {\n    callback(image.naturalWidth, image.naturalHeight);\n    return;\n  }\n\n  var newImage = document.createElement('img');\n\n  newImage.onload = function () {\n    callback(newImage.width, newImage.height);\n  };\n\n  newImage.src = image.src;\n}\n\n/**\n * Get the max ratio of a group of pointers.\n * @param {string} pointers - The target pointers.\n * @returns {number} The result ratio.\n */\nfunction getMaxZoomRatio(pointers) {\n  var pointers2 = $.extend({}, pointers);\n  var ratios = [];\n\n  $.each(pointers, function (pointerId, pointer) {\n    delete pointers2[pointerId];\n\n    $.each(pointers2, function (pointerId2, pointer2) {\n      var x1 = Math.abs(pointer.startX - pointer2.startX);\n      var y1 = Math.abs(pointer.startY - pointer2.startY);\n      var x2 = Math.abs(pointer.endX - pointer2.endX);\n      var y2 = Math.abs(pointer.endY - pointer2.endY);\n      var z1 = Math.sqrt(x1 * x1 + y1 * y1);\n      var z2 = Math.sqrt(x2 * x2 + y2 * y2);\n      var ratio = (z2 - z1) / z1;\n\n      ratios.push(ratio);\n    });\n  });\n\n  ratios.sort(function (a, b) {\n    return Math.abs(a) < Math.abs(b);\n  });\n\n  return ratios[0];\n}\n\n/**\n * Get a pointer from an event object.\n * @param {Object} event - The target event object.\n * @param {boolean} endOnly - Indicates if only returns the end point coordinate or not.\n * @returns {Object} The result pointer contains start and/or end point coordinates.\n */\nfunction getPointer(_ref2, endOnly) {\n  var pageX = _ref2.pageX,\n      pageY = _ref2.pageY;\n\n  var end = {\n    endX: pageX,\n    endY: pageY\n  };\n\n  if (endOnly) {\n    return end;\n  }\n\n  return $.extend({\n    startX: pageX,\n    startY: pageY\n  }, end);\n}\n\n/**\n * Get the center point coordinate of a group of pointers.\n * @param {Object} pointers - The target pointers.\n * @returns {Object} The center point coordinate.\n */\nfunction getPointersCenter(pointers) {\n  var pageX = 0;\n  var pageY = 0;\n  var count = 0;\n\n  $.each(pointers, function (pointerId, _ref3) {\n    var startX = _ref3.startX,\n        startY = _ref3.startY;\n\n    pageX += startX;\n    pageY += startY;\n    count += 1;\n  });\n\n  pageX /= count;\n  pageY /= count;\n\n  return {\n    pageX: pageX,\n    pageY: pageY\n  };\n}\n\n/**\n * Check if the given value is a finite number.\n */\nvar isFinite = Number.isFinite || WINDOW.isFinite;\n\n/**\n * Get the max sizes in a rectangle under the given aspect ratio.\n * @param {Object} data - The original sizes.\n * @returns {Object} The result sizes.\n */\nfunction getContainSizes(_ref4) {\n  var aspectRatio = _ref4.aspectRatio,\n      height = _ref4.height,\n      width = _ref4.width;\n\n  var isValidNumber = function isValidNumber(value) {\n    return isFinite(value) && value > 0;\n  };\n\n  if (isValidNumber(width) && isValidNumber(height)) {\n    if (height * aspectRatio > width) {\n      height = width / aspectRatio;\n    } else {\n      width = height * aspectRatio;\n    }\n  } else if (isValidNumber(width)) {\n    height = width / aspectRatio;\n  } else if (isValidNumber(height)) {\n    width = height * aspectRatio;\n  }\n\n  return {\n    width: width,\n    height: height\n  };\n}\n\n/**\n * Get the new sizes of a rectangle after rotated.\n * @param {Object} data - The original sizes.\n * @returns {Object} The result sizes.\n */\nfunction getRotatedSizes(_ref5) {\n  var width = _ref5.width,\n      height = _ref5.height,\n      degree = _ref5.degree;\n\n  degree = Math.abs(degree) % 180;\n\n  if (degree === 90) {\n    return {\n      width: height,\n      height: width\n    };\n  }\n\n  var arc = degree % 90 * Math.PI / 180;\n  var sinArc = Math.sin(arc);\n  var cosArc = Math.cos(arc);\n  var newWidth = width * cosArc + height * sinArc;\n  var newHeight = width * sinArc + height * cosArc;\n\n  return degree > 90 ? {\n    width: newHeight,\n    height: newWidth\n  } : {\n    width: newWidth,\n    height: newHeight\n  };\n}\n\n/**\n * Get a canvas which drew the given image.\n * @param {HTMLImageElement} image - The image for drawing.\n * @param {Object} imageData - The image data.\n * @param {Object} canvasData - The canvas data.\n * @param {Object} options - The options.\n * @returns {HTMLCanvasElement} The result canvas.\n */\nfunction getSourceCanvas(image, _ref6, _ref7, _ref8) {\n  var imageNaturalWidth = _ref6.naturalWidth,\n      imageNaturalHeight = _ref6.naturalHeight,\n      _ref6$rotate = _ref6.rotate,\n      rotate = _ref6$rotate === undefined ? 0 : _ref6$rotate,\n      _ref6$scaleX = _ref6.scaleX,\n      scaleX = _ref6$scaleX === undefined ? 1 : _ref6$scaleX,\n      _ref6$scaleY = _ref6.scaleY,\n      scaleY = _ref6$scaleY === undefined ? 1 : _ref6$scaleY;\n  var aspectRatio = _ref7.aspectRatio,\n      naturalWidth = _ref7.naturalWidth,\n      naturalHeight = _ref7.naturalHeight;\n  var _ref8$fillColor = _ref8.fillColor,\n      fillColor = _ref8$fillColor === undefined ? 'transparent' : _ref8$fillColor,\n      _ref8$imageSmoothingE = _ref8.imageSmoothingEnabled,\n      imageSmoothingEnabled = _ref8$imageSmoothingE === undefined ? true : _ref8$imageSmoothingE,\n      _ref8$imageSmoothingQ = _ref8.imageSmoothingQuality,\n      imageSmoothingQuality = _ref8$imageSmoothingQ === undefined ? 'low' : _ref8$imageSmoothingQ,\n      _ref8$maxWidth = _ref8.maxWidth,\n      maxWidth = _ref8$maxWidth === undefined ? Infinity : _ref8$maxWidth,\n      _ref8$maxHeight = _ref8.maxHeight,\n      maxHeight = _ref8$maxHeight === undefined ? Infinity : _ref8$maxHeight,\n      _ref8$minWidth = _ref8.minWidth,\n      minWidth = _ref8$minWidth === undefined ? 0 : _ref8$minWidth,\n      _ref8$minHeight = _ref8.minHeight,\n      minHeight = _ref8$minHeight === undefined ? 0 : _ref8$minHeight;\n\n  var maxSizes = getContainSizes({\n    aspectRatio: aspectRatio,\n    width: maxWidth,\n    height: maxHeight\n  });\n  var minSizes = getContainSizes({\n    aspectRatio: aspectRatio,\n    width: minWidth,\n    height: minHeight\n  });\n  var width = Math.min(maxSizes.width, Math.max(minSizes.width, naturalWidth));\n  var height = Math.min(maxSizes.height, Math.max(minSizes.height, naturalHeight));\n  var canvas = document.createElement('canvas');\n  var context = canvas.getContext('2d');\n  var params = [-imageNaturalWidth / 2, -imageNaturalHeight / 2, imageNaturalWidth, imageNaturalHeight];\n\n  canvas.width = normalizeDecimalNumber(width);\n  canvas.height = normalizeDecimalNumber(height);\n  context.fillStyle = fillColor;\n  context.fillRect(0, 0, width, height);\n  context.save();\n  context.translate(width / 2, height / 2);\n  context.rotate(rotate * Math.PI / 180);\n  context.scale(scaleX, scaleY);\n  context.imageSmoothingEnabled = !!imageSmoothingEnabled;\n  context.imageSmoothingQuality = imageSmoothingQuality;\n  context.drawImage.apply(context, [image].concat(toConsumableArray($.map(params, function (param) {\n    return Math.floor(normalizeDecimalNumber(param));\n  }))));\n  context.restore();\n  return canvas;\n}\n\nvar fromCharCode = String.fromCharCode;\n\n/**\n * Get string from char code in data view.\n * @param {DataView} dataView - The data view for read.\n * @param {number} start - The start index.\n * @param {number} length - The read length.\n * @returns {string} The read result.\n */\n\nfunction getStringFromCharCode(dataView, start, length) {\n  var str = '';\n  var i = void 0;\n\n  length += start;\n\n  for (i = start; i < length; i += 1) {\n    str += fromCharCode(dataView.getUint8(i));\n  }\n\n  return str;\n}\n\nvar REGEXP_DATA_URL_HEAD = /^data:.*,/;\n\n/**\n * Transform Data URL to array buffer.\n * @param {string} dataURL - The Data URL to transform.\n * @returns {ArrayBuffer} The result array buffer.\n */\nfunction dataURLToArrayBuffer(dataURL) {\n  var base64 = dataURL.replace(REGEXP_DATA_URL_HEAD, '');\n  var binary = atob(base64);\n  var arrayBuffer = new ArrayBuffer(binary.length);\n  var uint8 = new Uint8Array(arrayBuffer);\n\n  $.each(uint8, function (i) {\n    uint8[i] = binary.charCodeAt(i);\n  });\n\n  return arrayBuffer;\n}\n\n/**\n * Transform array buffer to Data URL.\n * @param {ArrayBuffer} arrayBuffer - The array buffer to transform.\n * @param {string} mimeType - The mime type of the Data URL.\n * @returns {string} The result Data URL.\n */\nfunction arrayBufferToDataURL(arrayBuffer, mimeType) {\n  var uint8 = new Uint8Array(arrayBuffer);\n  var data = '';\n\n  // TypedArray.prototype.forEach is not supported in some browsers.\n  $.each(uint8, function (i, value) {\n    data += fromCharCode(value);\n  });\n\n  return 'data:' + mimeType + ';base64,' + btoa(data);\n}\n\n/**\n * Get orientation value from given array buffer.\n * @param {ArrayBuffer} arrayBuffer - The array buffer to read.\n * @returns {number} The read orientation value.\n */\nfunction getOrientation(arrayBuffer) {\n  var dataView = new DataView(arrayBuffer);\n  var orientation = void 0;\n  var littleEndian = void 0;\n  var app1Start = void 0;\n  var ifdStart = void 0;\n\n  // Only handle JPEG image (start by 0xFFD8)\n  if (dataView.getUint8(0) === 0xFF && dataView.getUint8(1) === 0xD8) {\n    var length = dataView.byteLength;\n    var offset = 2;\n\n    while (offset < length) {\n      if (dataView.getUint8(offset) === 0xFF && dataView.getUint8(offset + 1) === 0xE1) {\n        app1Start = offset;\n        break;\n      }\n\n      offset += 1;\n    }\n  }\n\n  if (app1Start) {\n    var exifIDCode = app1Start + 4;\n    var tiffOffset = app1Start + 10;\n\n    if (getStringFromCharCode(dataView, exifIDCode, 4) === 'Exif') {\n      var endianness = dataView.getUint16(tiffOffset);\n\n      littleEndian = endianness === 0x4949;\n\n      if (littleEndian || endianness === 0x4D4D /* bigEndian */) {\n          if (dataView.getUint16(tiffOffset + 2, littleEndian) === 0x002A) {\n            var firstIFDOffset = dataView.getUint32(tiffOffset + 4, littleEndian);\n\n            if (firstIFDOffset >= 0x00000008) {\n              ifdStart = tiffOffset + firstIFDOffset;\n            }\n          }\n        }\n    }\n  }\n\n  if (ifdStart) {\n    var _length = dataView.getUint16(ifdStart, littleEndian);\n    var _offset = void 0;\n    var i = void 0;\n\n    for (i = 0; i < _length; i += 1) {\n      _offset = ifdStart + i * 12 + 2;\n\n      if (dataView.getUint16(_offset, littleEndian) === 0x0112 /* Orientation */) {\n          // 8 is the offset of the current tag's value\n          _offset += 8;\n\n          // Get the original orientation value\n          orientation = dataView.getUint16(_offset, littleEndian);\n\n          // Override the orientation with its default value\n          dataView.setUint16(_offset, 1, littleEndian);\n          break;\n        }\n    }\n  }\n\n  return orientation;\n}\n\n/**\n * Parse Exif Orientation value.\n * @param {number} orientation - The orientation to parse.\n * @returns {Object} The parsed result.\n */\nfunction parseOrientation(orientation) {\n  var rotate = 0;\n  var scaleX = 1;\n  var scaleY = 1;\n\n  switch (orientation) {\n    // Flip horizontal\n    case 2:\n      scaleX = -1;\n      break;\n\n    // Rotate left 180°\n    case 3:\n      rotate = -180;\n      break;\n\n    // Flip vertical\n    case 4:\n      scaleY = -1;\n      break;\n\n    // Flip vertical and rotate right 90°\n    case 5:\n      rotate = 90;\n      scaleY = -1;\n      break;\n\n    // Rotate right 90°\n    case 6:\n      rotate = 90;\n      break;\n\n    // Flip horizontal and rotate right 90°\n    case 7:\n      rotate = 90;\n      scaleX = -1;\n      break;\n\n    // Rotate left 90°\n    case 8:\n      rotate = -90;\n      break;\n\n    default:\n  }\n\n  return {\n    rotate: rotate,\n    scaleX: scaleX,\n    scaleY: scaleY\n  };\n}\n\nvar render = {\n  render: function render() {\n    this.initContainer();\n    this.initCanvas();\n    this.initCropBox();\n    this.renderCanvas();\n\n    if (this.cropped) {\n      this.renderCropBox();\n    }\n  },\n  initContainer: function initContainer() {\n    var $element = this.$element,\n        options = this.options,\n        $container = this.$container,\n        $cropper = this.$cropper;\n\n\n    $cropper.addClass(CLASS_HIDDEN);\n    $element.removeClass(CLASS_HIDDEN);\n\n    $cropper.css(this.container = {\n      width: Math.max($container.width(), Number(options.minContainerWidth) || 200),\n      height: Math.max($container.height(), Number(options.minContainerHeight) || 100)\n    });\n\n    $element.addClass(CLASS_HIDDEN);\n    $cropper.removeClass(CLASS_HIDDEN);\n  },\n\n\n  // Canvas (image wrapper)\n  initCanvas: function initCanvas() {\n    var container = this.container,\n        image = this.image;\n    var viewMode = this.options.viewMode;\n\n    var rotated = Math.abs(image.rotate) % 180 === 90;\n    var naturalWidth = rotated ? image.naturalHeight : image.naturalWidth;\n    var naturalHeight = rotated ? image.naturalWidth : image.naturalHeight;\n    var aspectRatio = naturalWidth / naturalHeight;\n    var canvasWidth = container.width;\n    var canvasHeight = container.height;\n\n    if (container.height * aspectRatio > container.width) {\n      if (viewMode === 3) {\n        canvasWidth = container.height * aspectRatio;\n      } else {\n        canvasHeight = container.width / aspectRatio;\n      }\n    } else if (viewMode === 3) {\n      canvasHeight = container.width / aspectRatio;\n    } else {\n      canvasWidth = container.height * aspectRatio;\n    }\n\n    var canvas = {\n      aspectRatio: aspectRatio,\n      naturalWidth: naturalWidth,\n      naturalHeight: naturalHeight,\n      width: canvasWidth,\n      height: canvasHeight\n    };\n\n    canvas.left = (container.width - canvasWidth) / 2;\n    canvas.top = (container.height - canvasHeight) / 2;\n    canvas.oldLeft = canvas.left;\n    canvas.oldTop = canvas.top;\n\n    this.canvas = canvas;\n    this.limited = viewMode === 1 || viewMode === 2;\n    this.limitCanvas(true, true);\n    this.initialImage = $.extend({}, image);\n    this.initialCanvas = $.extend({}, canvas);\n  },\n  limitCanvas: function limitCanvas(isSizeLimited, isPositionLimited) {\n    var options = this.options,\n        container = this.container,\n        canvas = this.canvas,\n        cropBox = this.cropBox;\n    var viewMode = options.viewMode;\n    var aspectRatio = canvas.aspectRatio;\n\n    var cropped = this.cropped && cropBox;\n\n    if (isSizeLimited) {\n      var minCanvasWidth = Number(options.minCanvasWidth) || 0;\n      var minCanvasHeight = Number(options.minCanvasHeight) || 0;\n\n      if (viewMode > 0) {\n        if (viewMode > 1) {\n          minCanvasWidth = Math.max(minCanvasWidth, container.width);\n          minCanvasHeight = Math.max(minCanvasHeight, container.height);\n\n          if (viewMode === 3) {\n            if (minCanvasHeight * aspectRatio > minCanvasWidth) {\n              minCanvasWidth = minCanvasHeight * aspectRatio;\n            } else {\n              minCanvasHeight = minCanvasWidth / aspectRatio;\n            }\n          }\n        } else if (minCanvasWidth) {\n          minCanvasWidth = Math.max(minCanvasWidth, cropped ? cropBox.width : 0);\n        } else if (minCanvasHeight) {\n          minCanvasHeight = Math.max(minCanvasHeight, cropped ? cropBox.height : 0);\n        } else if (cropped) {\n          minCanvasWidth = cropBox.width;\n          minCanvasHeight = cropBox.height;\n\n          if (minCanvasHeight * aspectRatio > minCanvasWidth) {\n            minCanvasWidth = minCanvasHeight * aspectRatio;\n          } else {\n            minCanvasHeight = minCanvasWidth / aspectRatio;\n          }\n        }\n      }\n\n      var _getContainSizes = getContainSizes({\n        aspectRatio: aspectRatio,\n        width: minCanvasWidth,\n        height: minCanvasHeight\n      });\n\n      minCanvasWidth = _getContainSizes.width;\n      minCanvasHeight = _getContainSizes.height;\n\n\n      canvas.minWidth = minCanvasWidth;\n      canvas.minHeight = minCanvasHeight;\n      canvas.maxWidth = Infinity;\n      canvas.maxHeight = Infinity;\n    }\n\n    if (isPositionLimited) {\n      if (viewMode > 0) {\n        var newCanvasLeft = container.width - canvas.width;\n        var newCanvasTop = container.height - canvas.height;\n\n        canvas.minLeft = Math.min(0, newCanvasLeft);\n        canvas.minTop = Math.min(0, newCanvasTop);\n        canvas.maxLeft = Math.max(0, newCanvasLeft);\n        canvas.maxTop = Math.max(0, newCanvasTop);\n\n        if (cropped && this.limited) {\n          canvas.minLeft = Math.min(cropBox.left, cropBox.left + cropBox.width - canvas.width);\n          canvas.minTop = Math.min(cropBox.top, cropBox.top + cropBox.height - canvas.height);\n          canvas.maxLeft = cropBox.left;\n          canvas.maxTop = cropBox.top;\n\n          if (viewMode === 2) {\n            if (canvas.width >= container.width) {\n              canvas.minLeft = Math.min(0, newCanvasLeft);\n              canvas.maxLeft = Math.max(0, newCanvasLeft);\n            }\n\n            if (canvas.height >= container.height) {\n              canvas.minTop = Math.min(0, newCanvasTop);\n              canvas.maxTop = Math.max(0, newCanvasTop);\n            }\n          }\n        }\n      } else {\n        canvas.minLeft = -canvas.width;\n        canvas.minTop = -canvas.height;\n        canvas.maxLeft = container.width;\n        canvas.maxTop = container.height;\n      }\n    }\n  },\n  renderCanvas: function renderCanvas(changed, transformed) {\n    var canvas = this.canvas,\n        image = this.image;\n\n\n    if (transformed) {\n      var _getRotatedSizes = getRotatedSizes({\n        width: image.naturalWidth * Math.abs(image.scaleX || 1),\n        height: image.naturalHeight * Math.abs(image.scaleY || 1),\n        degree: image.rotate || 0\n      }),\n          naturalWidth = _getRotatedSizes.width,\n          naturalHeight = _getRotatedSizes.height;\n\n      var width = canvas.width * (naturalWidth / canvas.naturalWidth);\n      var height = canvas.height * (naturalHeight / canvas.naturalHeight);\n\n      canvas.left -= (width - canvas.width) / 2;\n      canvas.top -= (height - canvas.height) / 2;\n      canvas.width = width;\n      canvas.height = height;\n      canvas.aspectRatio = naturalWidth / naturalHeight;\n      canvas.naturalWidth = naturalWidth;\n      canvas.naturalHeight = naturalHeight;\n      this.limitCanvas(true, false);\n    }\n\n    if (canvas.width > canvas.maxWidth || canvas.width < canvas.minWidth) {\n      canvas.left = canvas.oldLeft;\n    }\n\n    if (canvas.height > canvas.maxHeight || canvas.height < canvas.minHeight) {\n      canvas.top = canvas.oldTop;\n    }\n\n    canvas.width = Math.min(Math.max(canvas.width, canvas.minWidth), canvas.maxWidth);\n    canvas.height = Math.min(Math.max(canvas.height, canvas.minHeight), canvas.maxHeight);\n\n    this.limitCanvas(false, true);\n\n    canvas.left = Math.min(Math.max(canvas.left, canvas.minLeft), canvas.maxLeft);\n    canvas.top = Math.min(Math.max(canvas.top, canvas.minTop), canvas.maxTop);\n    canvas.oldLeft = canvas.left;\n    canvas.oldTop = canvas.top;\n\n    this.$canvas.css({\n      width: canvas.width,\n      height: canvas.height,\n      transform: getTransformValues({\n        translateX: canvas.left,\n        translateY: canvas.top\n      })\n    });\n\n    this.renderImage(changed);\n\n    if (this.cropped && this.limited) {\n      this.limitCropBox(true, true);\n    }\n  },\n  renderImage: function renderImage(changed) {\n    var canvas = this.canvas,\n        image = this.image;\n\n    var width = image.naturalWidth * (canvas.width / canvas.naturalWidth);\n    var height = image.naturalHeight * (canvas.height / canvas.naturalHeight);\n\n    $.extend(image, {\n      width: width,\n      height: height,\n      left: (canvas.width - width) / 2,\n      top: (canvas.height - height) / 2\n    });\n\n    this.$clone.css({\n      width: image.width,\n      height: image.height,\n      transform: getTransformValues($.extend({\n        translateX: image.left,\n        translateY: image.top\n      }, image))\n    });\n\n    if (changed) {\n      this.output();\n    }\n  },\n  initCropBox: function initCropBox() {\n    var options = this.options,\n        canvas = this.canvas;\n    var aspectRatio = options.aspectRatio;\n\n    var autoCropArea = Number(options.autoCropArea) || 0.8;\n    var cropBox = {\n      width: canvas.width,\n      height: canvas.height\n    };\n\n    if (aspectRatio) {\n      if (canvas.height * aspectRatio > canvas.width) {\n        cropBox.height = cropBox.width / aspectRatio;\n      } else {\n        cropBox.width = cropBox.height * aspectRatio;\n      }\n    }\n\n    this.cropBox = cropBox;\n    this.limitCropBox(true, true);\n\n    // Initialize auto crop area\n    cropBox.width = Math.min(Math.max(cropBox.width, cropBox.minWidth), cropBox.maxWidth);\n    cropBox.height = Math.min(Math.max(cropBox.height, cropBox.minHeight), cropBox.maxHeight);\n\n    // The width of auto crop area must large than \"minWidth\", and the height too. (#164)\n    cropBox.width = Math.max(cropBox.minWidth, cropBox.width * autoCropArea);\n    cropBox.height = Math.max(cropBox.minHeight, cropBox.height * autoCropArea);\n    cropBox.left = canvas.left + (canvas.width - cropBox.width) / 2;\n    cropBox.top = canvas.top + (canvas.height - cropBox.height) / 2;\n    cropBox.oldLeft = cropBox.left;\n    cropBox.oldTop = cropBox.top;\n\n    this.initialCropBox = $.extend({}, cropBox);\n  },\n  limitCropBox: function limitCropBox(isSizeLimited, isPositionLimited) {\n    var options = this.options,\n        container = this.container,\n        canvas = this.canvas,\n        cropBox = this.cropBox,\n        limited = this.limited;\n    var aspectRatio = options.aspectRatio;\n\n\n    if (isSizeLimited) {\n      var minCropBoxWidth = Number(options.minCropBoxWidth) || 0;\n      var minCropBoxHeight = Number(options.minCropBoxHeight) || 0;\n      var maxCropBoxWidth = Math.min(container.width, limited ? canvas.width : container.width);\n      var maxCropBoxHeight = Math.min(container.height, limited ? canvas.height : container.height);\n\n      // The min/maxCropBoxWidth/Height must be less than container's width/Height\n      minCropBoxWidth = Math.min(minCropBoxWidth, container.width);\n      minCropBoxHeight = Math.min(minCropBoxHeight, container.height);\n\n      if (aspectRatio) {\n        if (minCropBoxWidth && minCropBoxHeight) {\n          if (minCropBoxHeight * aspectRatio > minCropBoxWidth) {\n            minCropBoxHeight = minCropBoxWidth / aspectRatio;\n          } else {\n            minCropBoxWidth = minCropBoxHeight * aspectRatio;\n          }\n        } else if (minCropBoxWidth) {\n          minCropBoxHeight = minCropBoxWidth / aspectRatio;\n        } else if (minCropBoxHeight) {\n          minCropBoxWidth = minCropBoxHeight * aspectRatio;\n        }\n\n        if (maxCropBoxHeight * aspectRatio > maxCropBoxWidth) {\n          maxCropBoxHeight = maxCropBoxWidth / aspectRatio;\n        } else {\n          maxCropBoxWidth = maxCropBoxHeight * aspectRatio;\n        }\n      }\n\n      // The minWidth/Height must be less than maxWidth/Height\n      cropBox.minWidth = Math.min(minCropBoxWidth, maxCropBoxWidth);\n      cropBox.minHeight = Math.min(minCropBoxHeight, maxCropBoxHeight);\n      cropBox.maxWidth = maxCropBoxWidth;\n      cropBox.maxHeight = maxCropBoxHeight;\n    }\n\n    if (isPositionLimited) {\n      if (limited) {\n        cropBox.minLeft = Math.max(0, canvas.left);\n        cropBox.minTop = Math.max(0, canvas.top);\n        cropBox.maxLeft = Math.min(container.width, canvas.left + canvas.width) - cropBox.width;\n        cropBox.maxTop = Math.min(container.height, canvas.top + canvas.height) - cropBox.height;\n      } else {\n        cropBox.minLeft = 0;\n        cropBox.minTop = 0;\n        cropBox.maxLeft = container.width - cropBox.width;\n        cropBox.maxTop = container.height - cropBox.height;\n      }\n    }\n  },\n  renderCropBox: function renderCropBox() {\n    var options = this.options,\n        container = this.container,\n        cropBox = this.cropBox;\n\n\n    if (cropBox.width > cropBox.maxWidth || cropBox.width < cropBox.minWidth) {\n      cropBox.left = cropBox.oldLeft;\n    }\n\n    if (cropBox.height > cropBox.maxHeight || cropBox.height < cropBox.minHeight) {\n      cropBox.top = cropBox.oldTop;\n    }\n\n    cropBox.width = Math.min(Math.max(cropBox.width, cropBox.minWidth), cropBox.maxWidth);\n    cropBox.height = Math.min(Math.max(cropBox.height, cropBox.minHeight), cropBox.maxHeight);\n\n    this.limitCropBox(false, true);\n\n    cropBox.left = Math.min(Math.max(cropBox.left, cropBox.minLeft), cropBox.maxLeft);\n    cropBox.top = Math.min(Math.max(cropBox.top, cropBox.minTop), cropBox.maxTop);\n    cropBox.oldLeft = cropBox.left;\n    cropBox.oldTop = cropBox.top;\n\n    if (options.movable && options.cropBoxMovable) {\n      // Turn to move the canvas when the crop box is equal to the container\n      this.$face.data(DATA_ACTION, cropBox.width >= container.width && cropBox.height >= container.height ? ACTION_MOVE : ACTION_ALL);\n    }\n\n    this.$cropBox.css({\n      width: cropBox.width,\n      height: cropBox.height,\n      transform: getTransformValues({\n        translateX: cropBox.left,\n        translateY: cropBox.top\n      })\n    });\n\n    if (this.cropped && this.limited) {\n      this.limitCanvas(true, true);\n    }\n\n    if (!this.disabled) {\n      this.output();\n    }\n  },\n  output: function output() {\n    this.preview();\n\n    if (this.completed) {\n      this.trigger(EVENT_CROP, this.getData());\n    }\n  }\n};\n\nvar preview = {\n  initPreview: function initPreview() {\n    var crossOrigin = this.crossOrigin;\n\n    var url = crossOrigin ? this.crossOriginUrl : this.url;\n    var image = document.createElement('img');\n\n    if (crossOrigin) {\n      image.crossOrigin = crossOrigin;\n    }\n\n    image.src = url;\n\n    var $clone2 = $(image);\n\n    this.$preview = $(this.options.preview);\n    this.$clone2 = $clone2;\n    this.$viewBox.html($clone2);\n    this.$preview.each(function (i, element) {\n      var $element = $(element);\n      var img = document.createElement('img');\n\n      // Save the original size for recover\n      $element.data(DATA_PREVIEW, {\n        width: $element.width(),\n        height: $element.height(),\n        html: $element.html()\n      });\n\n      if (crossOrigin) {\n        img.crossOrigin = crossOrigin;\n      }\n\n      img.src = url;\n\n      /**\n       * Override img element styles\n       * Add `display:block` to avoid margin top issue\n       * Add `height:auto` to override `height` attribute on IE8\n       * (Occur only when margin-top <= -height)\n       */\n      img.style.cssText = 'display:block;' + 'width:100%;' + 'height:auto;' + 'min-width:0!important;' + 'min-height:0!important;' + 'max-width:none!important;' + 'max-height:none!important;' + 'image-orientation:0deg!important;\"';\n\n      $element.html(img);\n    });\n  },\n  resetPreview: function resetPreview() {\n    this.$preview.each(function (i, element) {\n      var $element = $(element);\n      var data = $element.data(DATA_PREVIEW);\n\n      $element.css({\n        width: data.width,\n        height: data.height\n      }).html(data.html).removeData(DATA_PREVIEW);\n    });\n  },\n  preview: function preview() {\n    var image = this.image,\n        canvas = this.canvas,\n        cropBox = this.cropBox;\n    var cropBoxWidth = cropBox.width,\n        cropBoxHeight = cropBox.height;\n    var width = image.width,\n        height = image.height;\n\n    var left = cropBox.left - canvas.left - image.left;\n    var top = cropBox.top - canvas.top - image.top;\n\n    if (!this.cropped || this.disabled) {\n      return;\n    }\n\n    this.$clone2.css({\n      width: width,\n      height: height,\n      transform: getTransformValues($.extend({\n        translateX: -left,\n        translateY: -top\n      }, image))\n    });\n\n    this.$preview.each(function (i, element) {\n      var $element = $(element);\n      var data = $element.data(DATA_PREVIEW);\n      var originalWidth = data.width;\n      var originalHeight = data.height;\n      var newWidth = originalWidth;\n      var newHeight = originalHeight;\n      var ratio = 1;\n\n      if (cropBoxWidth) {\n        ratio = originalWidth / cropBoxWidth;\n        newHeight = cropBoxHeight * ratio;\n      }\n\n      if (cropBoxHeight && newHeight > originalHeight) {\n        ratio = originalHeight / cropBoxHeight;\n        newWidth = cropBoxWidth * ratio;\n        newHeight = originalHeight;\n      }\n\n      $element.css({\n        width: newWidth,\n        height: newHeight\n      }).find('img').css({\n        width: width * ratio,\n        height: height * ratio,\n        transform: getTransformValues($.extend({\n          translateX: -left * ratio,\n          translateY: -top * ratio\n        }, image))\n      });\n    });\n  }\n};\n\nvar events = {\n  bind: function bind() {\n    var $element = this.$element,\n        options = this.options,\n        $cropper = this.$cropper;\n\n\n    if ($.isFunction(options.cropstart)) {\n      $element.on(EVENT_CROP_START, options.cropstart);\n    }\n\n    if ($.isFunction(options.cropmove)) {\n      $element.on(EVENT_CROP_MOVE, options.cropmove);\n    }\n\n    if ($.isFunction(options.cropend)) {\n      $element.on(EVENT_CROP_END, options.cropend);\n    }\n\n    if ($.isFunction(options.crop)) {\n      $element.on(EVENT_CROP, options.crop);\n    }\n\n    if ($.isFunction(options.zoom)) {\n      $element.on(EVENT_ZOOM, options.zoom);\n    }\n\n    $cropper.on(EVENT_POINTER_DOWN, proxy(this.cropStart, this));\n\n    if (options.zoomable && options.zoomOnWheel) {\n      $cropper.on(EVENT_WHEEL, proxy(this.wheel, this));\n    }\n\n    if (options.toggleDragModeOnDblclick) {\n      $cropper.on(EVENT_DBLCLICK, proxy(this.dblclick, this));\n    }\n\n    $(this.element.ownerDocument).on(EVENT_POINTER_MOVE, this.onCropMove = proxy(this.cropMove, this)).on(EVENT_POINTER_UP, this.onCropEnd = proxy(this.cropEnd, this));\n\n    if (options.responsive) {\n      $(window).on(EVENT_RESIZE, this.onResize = proxy(this.resize, this));\n    }\n  },\n  unbind: function unbind() {\n    var $element = this.$element,\n        options = this.options,\n        $cropper = this.$cropper;\n\n\n    if ($.isFunction(options.cropstart)) {\n      $element.off(EVENT_CROP_START, options.cropstart);\n    }\n\n    if ($.isFunction(options.cropmove)) {\n      $element.off(EVENT_CROP_MOVE, options.cropmove);\n    }\n\n    if ($.isFunction(options.cropend)) {\n      $element.off(EVENT_CROP_END, options.cropend);\n    }\n\n    if ($.isFunction(options.crop)) {\n      $element.off(EVENT_CROP, options.crop);\n    }\n\n    if ($.isFunction(options.zoom)) {\n      $element.off(EVENT_ZOOM, options.zoom);\n    }\n\n    $cropper.off(EVENT_POINTER_DOWN, this.cropStart);\n\n    if (options.zoomable && options.zoomOnWheel) {\n      $cropper.off(EVENT_WHEEL, this.wheel);\n    }\n\n    if (options.toggleDragModeOnDblclick) {\n      $cropper.off(EVENT_DBLCLICK, this.dblclick);\n    }\n\n    $(this.element.ownerDocument).off(EVENT_POINTER_MOVE, this.onCropMove).off(EVENT_POINTER_UP, this.onCropEnd);\n\n    if (options.responsive) {\n      $(window).off(EVENT_RESIZE, this.onResize);\n    }\n  }\n};\n\nvar handlers = {\n  resize: function resize() {\n    var options = this.options,\n        $container = this.$container,\n        container = this.container;\n\n    var minContainerWidth = Number(options.minContainerWidth) || 200;\n    var minContainerHeight = Number(options.minContainerHeight) || 100;\n\n    if (this.disabled || container.width <= minContainerWidth || container.height <= minContainerHeight) {\n      return;\n    }\n\n    var ratio = $container.width() / container.width;\n\n    // Resize when width changed or height changed\n    if (ratio !== 1 || $container.height() !== container.height) {\n      var canvasData = void 0;\n      var cropBoxData = void 0;\n\n      if (options.restore) {\n        canvasData = this.getCanvasData();\n        cropBoxData = this.getCropBoxData();\n      }\n\n      this.render();\n\n      if (options.restore) {\n        this.setCanvasData($.each(canvasData, function (i, n) {\n          canvasData[i] = n * ratio;\n        }));\n        this.setCropBoxData($.each(cropBoxData, function (i, n) {\n          cropBoxData[i] = n * ratio;\n        }));\n      }\n    }\n  },\n  dblclick: function dblclick() {\n    if (this.disabled || this.options.dragMode === DRAG_MODE_NONE) {\n      return;\n    }\n\n    this.setDragMode(this.$dragBox.hasClass(CLASS_CROP) ? DRAG_MODE_MOVE : DRAG_MODE_CROP);\n  },\n  wheel: function wheel(event) {\n    var _this = this;\n\n    var e = event.originalEvent || event;\n    var ratio = Number(this.options.wheelZoomRatio) || 0.1;\n\n    if (this.disabled) {\n      return;\n    }\n\n    event.preventDefault();\n\n    // Limit wheel speed to prevent zoom too fast\n    if (this.wheeling) {\n      return;\n    }\n\n    this.wheeling = true;\n\n    setTimeout(function () {\n      _this.wheeling = false;\n    }, 50);\n\n    var delta = 1;\n\n    if (e.deltaY) {\n      delta = e.deltaY > 0 ? 1 : -1;\n    } else if (e.wheelDelta) {\n      delta = -e.wheelDelta / 120;\n    } else if (e.detail) {\n      delta = e.detail > 0 ? 1 : -1;\n    }\n\n    this.zoom(-delta * ratio, event);\n  },\n  cropStart: function cropStart(e) {\n    if (this.disabled) {\n      return;\n    }\n\n    var options = this.options,\n        pointers = this.pointers;\n    var originalEvent = e.originalEvent;\n\n    var action = void 0;\n\n    if (originalEvent && originalEvent.changedTouches) {\n      // Handle touch event\n      $.each(originalEvent.changedTouches, function (i, touch) {\n        pointers[touch.identifier] = getPointer(touch);\n      });\n    } else {\n      // Handle mouse event and pointer event\n      pointers[originalEvent && originalEvent.pointerId || 0] = getPointer(originalEvent || e);\n    }\n\n    if (objectKeys(pointers).length > 1 && options.zoomable && options.zoomOnTouch) {\n      action = ACTION_ZOOM;\n    } else {\n      action = $(e.target).data(DATA_ACTION);\n    }\n\n    if (!REGEXP_ACTIONS.test(action)) {\n      return;\n    }\n\n    if (this.trigger(EVENT_CROP_START, {\n      originalEvent: originalEvent,\n      action: action\n    }).isDefaultPrevented()) {\n      return;\n    }\n\n    e.preventDefault();\n\n    this.action = action;\n    this.cropping = false;\n\n    if (action === ACTION_CROP) {\n      this.cropping = true;\n      this.$dragBox.addClass(CLASS_MODAL);\n    }\n  },\n  cropMove: function cropMove(e) {\n    var action = this.action;\n\n\n    if (this.disabled || !action) {\n      return;\n    }\n\n    var pointers = this.pointers;\n    var originalEvent = e.originalEvent;\n\n\n    e.preventDefault();\n\n    if (this.trigger(EVENT_CROP_MOVE, {\n      originalEvent: originalEvent,\n      action: action\n    }).isDefaultPrevented()) {\n      return;\n    }\n\n    if (originalEvent && originalEvent.changedTouches) {\n      $.each(originalEvent.changedTouches, function (i, touch) {\n        $.extend(pointers[touch.identifier], getPointer(touch, true));\n      });\n    } else {\n      $.extend(pointers[originalEvent && originalEvent.pointerId || 0], getPointer(originalEvent || e, true));\n    }\n\n    this.change(e);\n  },\n  cropEnd: function cropEnd(e) {\n    if (this.disabled) {\n      return;\n    }\n\n    var action = this.action;\n    var pointers = this.pointers;\n    var originalEvent = e.originalEvent;\n\n\n    if (originalEvent && originalEvent.changedTouches) {\n      $.each(originalEvent.changedTouches, function (i, touch) {\n        delete pointers[touch.identifier];\n      });\n    } else {\n      delete pointers[originalEvent && originalEvent.pointerId || 0];\n    }\n\n    if (!action) {\n      return;\n    }\n\n    e.preventDefault();\n\n    if (!objectKeys(pointers).length) {\n      this.action = '';\n    }\n\n    if (this.cropping) {\n      this.cropping = false;\n      this.$dragBox.toggleClass(CLASS_MODAL, this.cropped && this.options.modal);\n    }\n\n    this.trigger(EVENT_CROP_END, {\n      originalEvent: originalEvent,\n      action: action\n    });\n  }\n};\n\nvar change = {\n  change: function change(e) {\n    var options = this.options,\n        pointers = this.pointers,\n        container = this.container,\n        canvas = this.canvas,\n        cropBox = this.cropBox;\n    var action = this.action;\n    var aspectRatio = options.aspectRatio;\n    var left = cropBox.left,\n        top = cropBox.top,\n        width = cropBox.width,\n        height = cropBox.height;\n\n    var right = left + width;\n    var bottom = top + height;\n    var minLeft = 0;\n    var minTop = 0;\n    var maxWidth = container.width;\n    var maxHeight = container.height;\n    var renderable = true;\n    var offset = void 0;\n\n    // Locking aspect ratio in \"free mode\" by holding shift key (#259)\n    if (!aspectRatio && e.shiftKey) {\n      aspectRatio = width && height ? width / height : 1;\n    }\n\n    if (this.limited) {\n      minLeft = cropBox.minLeft;\n      minTop = cropBox.minTop;\n\n      maxWidth = minLeft + Math.min(container.width, canvas.width, canvas.left + canvas.width);\n      maxHeight = minTop + Math.min(container.height, canvas.height, canvas.top + canvas.height);\n    }\n\n    var pointer = pointers[objectKeys(pointers)[0]];\n    var range = {\n      x: pointer.endX - pointer.startX,\n      y: pointer.endY - pointer.startY\n    };\n    var check = function check(side) {\n      switch (side) {\n        case ACTION_EAST:\n          if (right + range.x > maxWidth) {\n            range.x = maxWidth - right;\n          }\n\n          break;\n\n        case ACTION_WEST:\n          if (left + range.x < minLeft) {\n            range.x = minLeft - left;\n          }\n\n          break;\n\n        case ACTION_NORTH:\n          if (top + range.y < minTop) {\n            range.y = minTop - top;\n          }\n\n          break;\n\n        case ACTION_SOUTH:\n          if (bottom + range.y > maxHeight) {\n            range.y = maxHeight - bottom;\n          }\n\n          break;\n\n        default:\n      }\n    };\n\n    switch (action) {\n      // Move crop box\n      case ACTION_ALL:\n        left += range.x;\n        top += range.y;\n        break;\n\n      // Resize crop box\n      case ACTION_EAST:\n        if (range.x >= 0 && (right >= maxWidth || aspectRatio && (top <= minTop || bottom >= maxHeight))) {\n          renderable = false;\n          break;\n        }\n\n        check(ACTION_EAST);\n        width += range.x;\n\n        if (aspectRatio) {\n          height = width / aspectRatio;\n          top -= range.x / aspectRatio / 2;\n        }\n\n        if (width < 0) {\n          action = ACTION_WEST;\n          width = 0;\n        }\n\n        break;\n\n      case ACTION_NORTH:\n        if (range.y <= 0 && (top <= minTop || aspectRatio && (left <= minLeft || right >= maxWidth))) {\n          renderable = false;\n          break;\n        }\n\n        check(ACTION_NORTH);\n        height -= range.y;\n        top += range.y;\n\n        if (aspectRatio) {\n          width = height * aspectRatio;\n          left += range.y * aspectRatio / 2;\n        }\n\n        if (height < 0) {\n          action = ACTION_SOUTH;\n          height = 0;\n        }\n\n        break;\n\n      case ACTION_WEST:\n        if (range.x <= 0 && (left <= minLeft || aspectRatio && (top <= minTop || bottom >= maxHeight))) {\n          renderable = false;\n          break;\n        }\n\n        check(ACTION_WEST);\n        width -= range.x;\n        left += range.x;\n\n        if (aspectRatio) {\n          height = width / aspectRatio;\n          top += range.x / aspectRatio / 2;\n        }\n\n        if (width < 0) {\n          action = ACTION_EAST;\n          width = 0;\n        }\n\n        break;\n\n      case ACTION_SOUTH:\n        if (range.y >= 0 && (bottom >= maxHeight || aspectRatio && (left <= minLeft || right >= maxWidth))) {\n          renderable = false;\n          break;\n        }\n\n        check(ACTION_SOUTH);\n        height += range.y;\n\n        if (aspectRatio) {\n          width = height * aspectRatio;\n          left -= range.y * aspectRatio / 2;\n        }\n\n        if (height < 0) {\n          action = ACTION_NORTH;\n          height = 0;\n        }\n\n        break;\n\n      case ACTION_NORTH_EAST:\n        if (aspectRatio) {\n          if (range.y <= 0 && (top <= minTop || right >= maxWidth)) {\n            renderable = false;\n            break;\n          }\n\n          check(ACTION_NORTH);\n          height -= range.y;\n          top += range.y;\n          width = height * aspectRatio;\n        } else {\n          check(ACTION_NORTH);\n          check(ACTION_EAST);\n\n          if (range.x >= 0) {\n            if (right < maxWidth) {\n              width += range.x;\n            } else if (range.y <= 0 && top <= minTop) {\n              renderable = false;\n            }\n          } else {\n            width += range.x;\n          }\n\n          if (range.y <= 0) {\n            if (top > minTop) {\n              height -= range.y;\n              top += range.y;\n            }\n          } else {\n            height -= range.y;\n            top += range.y;\n          }\n        }\n\n        if (width < 0 && height < 0) {\n          action = ACTION_SOUTH_WEST;\n          height = 0;\n          width = 0;\n        } else if (width < 0) {\n          action = ACTION_NORTH_WEST;\n          width = 0;\n        } else if (height < 0) {\n          action = ACTION_SOUTH_EAST;\n          height = 0;\n        }\n\n        break;\n\n      case ACTION_NORTH_WEST:\n        if (aspectRatio) {\n          if (range.y <= 0 && (top <= minTop || left <= minLeft)) {\n            renderable = false;\n            break;\n          }\n\n          check(ACTION_NORTH);\n          height -= range.y;\n          top += range.y;\n          width = height * aspectRatio;\n          left += range.y * aspectRatio;\n        } else {\n          check(ACTION_NORTH);\n          check(ACTION_WEST);\n\n          if (range.x <= 0) {\n            if (left > minLeft) {\n              width -= range.x;\n              left += range.x;\n            } else if (range.y <= 0 && top <= minTop) {\n              renderable = false;\n            }\n          } else {\n            width -= range.x;\n            left += range.x;\n          }\n\n          if (range.y <= 0) {\n            if (top > minTop) {\n              height -= range.y;\n              top += range.y;\n            }\n          } else {\n            height -= range.y;\n            top += range.y;\n          }\n        }\n\n        if (width < 0 && height < 0) {\n          action = ACTION_SOUTH_EAST;\n          height = 0;\n          width = 0;\n        } else if (width < 0) {\n          action = ACTION_NORTH_EAST;\n          width = 0;\n        } else if (height < 0) {\n          action = ACTION_SOUTH_WEST;\n          height = 0;\n        }\n\n        break;\n\n      case ACTION_SOUTH_WEST:\n        if (aspectRatio) {\n          if (range.x <= 0 && (left <= minLeft || bottom >= maxHeight)) {\n            renderable = false;\n            break;\n          }\n\n          check(ACTION_WEST);\n          width -= range.x;\n          left += range.x;\n          height = width / aspectRatio;\n        } else {\n          check(ACTION_SOUTH);\n          check(ACTION_WEST);\n\n          if (range.x <= 0) {\n            if (left > minLeft) {\n              width -= range.x;\n              left += range.x;\n            } else if (range.y >= 0 && bottom >= maxHeight) {\n              renderable = false;\n            }\n          } else {\n            width -= range.x;\n            left += range.x;\n          }\n\n          if (range.y >= 0) {\n            if (bottom < maxHeight) {\n              height += range.y;\n            }\n          } else {\n            height += range.y;\n          }\n        }\n\n        if (width < 0 && height < 0) {\n          action = ACTION_NORTH_EAST;\n          height = 0;\n          width = 0;\n        } else if (width < 0) {\n          action = ACTION_SOUTH_EAST;\n          width = 0;\n        } else if (height < 0) {\n          action = ACTION_NORTH_WEST;\n          height = 0;\n        }\n\n        break;\n\n      case ACTION_SOUTH_EAST:\n        if (aspectRatio) {\n          if (range.x >= 0 && (right >= maxWidth || bottom >= maxHeight)) {\n            renderable = false;\n            break;\n          }\n\n          check(ACTION_EAST);\n          width += range.x;\n          height = width / aspectRatio;\n        } else {\n          check(ACTION_SOUTH);\n          check(ACTION_EAST);\n\n          if (range.x >= 0) {\n            if (right < maxWidth) {\n              width += range.x;\n            } else if (range.y >= 0 && bottom >= maxHeight) {\n              renderable = false;\n            }\n          } else {\n            width += range.x;\n          }\n\n          if (range.y >= 0) {\n            if (bottom < maxHeight) {\n              height += range.y;\n            }\n          } else {\n            height += range.y;\n          }\n        }\n\n        if (width < 0 && height < 0) {\n          action = ACTION_NORTH_WEST;\n          height = 0;\n          width = 0;\n        } else if (width < 0) {\n          action = ACTION_SOUTH_WEST;\n          width = 0;\n        } else if (height < 0) {\n          action = ACTION_NORTH_EAST;\n          height = 0;\n        }\n\n        break;\n\n      // Move canvas\n      case ACTION_MOVE:\n        this.move(range.x, range.y);\n        renderable = false;\n        break;\n\n      // Zoom canvas\n      case ACTION_ZOOM:\n        this.zoom(getMaxZoomRatio(pointers), e.originalEvent);\n        renderable = false;\n        break;\n\n      // Create crop box\n      case ACTION_CROP:\n        if (!range.x || !range.y) {\n          renderable = false;\n          break;\n        }\n\n        offset = this.$cropper.offset();\n        left = pointer.startX - offset.left;\n        top = pointer.startY - offset.top;\n        width = cropBox.minWidth;\n        height = cropBox.minHeight;\n\n        if (range.x > 0) {\n          action = range.y > 0 ? ACTION_SOUTH_EAST : ACTION_NORTH_EAST;\n        } else if (range.x < 0) {\n          left -= width;\n          action = range.y > 0 ? ACTION_SOUTH_WEST : ACTION_NORTH_WEST;\n        }\n\n        if (range.y < 0) {\n          top -= height;\n        }\n\n        // Show the crop box if is hidden\n        if (!this.cropped) {\n          this.$cropBox.removeClass(CLASS_HIDDEN);\n          this.cropped = true;\n\n          if (this.limited) {\n            this.limitCropBox(true, true);\n          }\n        }\n\n        break;\n\n      default:\n    }\n\n    if (renderable) {\n      cropBox.width = width;\n      cropBox.height = height;\n      cropBox.left = left;\n      cropBox.top = top;\n      this.action = action;\n      this.renderCropBox();\n    }\n\n    // Override\n    $.each(pointers, function (i, p) {\n      p.startX = p.endX;\n      p.startY = p.endY;\n    });\n  }\n};\n\nvar methods = {\n  // Show the crop box manually\n  crop: function crop() {\n    if (!this.ready || this.disabled) {\n      return;\n    }\n\n    if (!this.cropped) {\n      this.cropped = true;\n      this.limitCropBox(true, true);\n\n      if (this.options.modal) {\n        this.$dragBox.addClass(CLASS_MODAL);\n      }\n\n      this.$cropBox.removeClass(CLASS_HIDDEN);\n    }\n\n    this.setCropBoxData(this.initialCropBox);\n  },\n\n\n  // Reset the image and crop box to their initial states\n  reset: function reset() {\n    if (!this.ready || this.disabled) {\n      return;\n    }\n\n    this.image = $.extend({}, this.initialImage);\n    this.canvas = $.extend({}, this.initialCanvas);\n    this.cropBox = $.extend({}, this.initialCropBox);\n    this.renderCanvas();\n\n    if (this.cropped) {\n      this.renderCropBox();\n    }\n  },\n\n\n  // Clear the crop box\n  clear: function clear() {\n    if (!this.cropped || this.disabled) {\n      return;\n    }\n\n    $.extend(this.cropBox, {\n      left: 0,\n      top: 0,\n      width: 0,\n      height: 0\n    });\n\n    this.cropped = false;\n    this.renderCropBox();\n    this.limitCanvas(true, true);\n\n    // Render canvas after crop box rendered\n    this.renderCanvas();\n    this.$dragBox.removeClass(CLASS_MODAL);\n    this.$cropBox.addClass(CLASS_HIDDEN);\n  },\n\n\n  /**\n   * Replace the image's src and rebuild the cropper\n   * @param {string} url - The new URL.\n   * @param {boolean} [onlyColorChanged] - Indicate if the new image only changed color.\n   */\n  replace: function replace(url, onlyColorChanged) {\n    if (!this.disabled && url) {\n      if (this.isImg) {\n        this.$element.attr('src', url);\n      }\n\n      if (onlyColorChanged) {\n        this.url = url;\n        this.$clone.attr('src', url);\n\n        if (this.ready) {\n          this.$preview.find('img').add(this.$clone2).attr('src', url);\n        }\n      } else {\n        if (this.isImg) {\n          this.replaced = true;\n        }\n\n        // Clear previous data\n        this.options.data = null;\n        this.load(url);\n      }\n    }\n  },\n\n\n  // Enable (unfreeze) the cropper\n  enable: function enable() {\n    if (this.ready) {\n      this.disabled = false;\n      this.$cropper.removeClass(CLASS_DISABLED);\n    }\n  },\n\n\n  // Disable (freeze) the cropper\n  disable: function disable() {\n    if (this.ready) {\n      this.disabled = true;\n      this.$cropper.addClass(CLASS_DISABLED);\n    }\n  },\n\n\n  // Destroy the cropper and remove the instance from the image\n  destroy: function destroy() {\n    var $element = this.$element;\n\n\n    if (this.loaded) {\n      if (this.isImg && this.replaced) {\n        $element.attr('src', this.originalUrl);\n      }\n\n      this.unbuild();\n      $element.removeClass(CLASS_HIDDEN);\n    } else if (this.isImg) {\n      $element.off(EVENT_LOAD, this.start);\n    } else if (this.$clone) {\n      this.$clone.remove();\n    }\n\n    $element.removeData(NAMESPACE);\n  },\n\n\n  /**\n   * Move the canvas with relative offsets\n   * @param {number} offsetX - The relative offset distance on the x-axis.\n   * @param {number} offsetY - The relative offset distance on the y-axis.\n   */\n  move: function move(offsetX, offsetY) {\n    var _canvas = this.canvas,\n        left = _canvas.left,\n        top = _canvas.top;\n\n\n    this.moveTo(isUndefined(offsetX) ? offsetX : left + Number(offsetX), isUndefined(offsetY) ? offsetY : top + Number(offsetY));\n  },\n\n\n  /**\n   * Move the canvas to an absolute point\n   * @param {number} x - The x-axis coordinate.\n   * @param {number} [y=x] - The y-axis coordinate.\n   */\n  moveTo: function moveTo(x, y) {\n    var canvas = this.canvas;\n\n    var changed = false;\n\n    // If \"y\" is not present, its default value is \"x\"\n    if (isUndefined(y)) {\n      y = x;\n    }\n\n    x = Number(x);\n    y = Number(y);\n\n    if (this.ready && !this.disabled && this.options.movable) {\n      if (isNumber(x)) {\n        canvas.left = x;\n        changed = true;\n      }\n\n      if (isNumber(y)) {\n        canvas.top = y;\n        changed = true;\n      }\n\n      if (changed) {\n        this.renderCanvas(true);\n      }\n    }\n  },\n\n\n  /**\n   * Zoom the canvas with a relative ratio\n   * @param {Number} ratio - The target ratio.\n   * @param {Event} _event - The related event if any.\n   */\n  zoom: function zoom(ratio, _event) {\n    var canvas = this.canvas;\n\n\n    ratio = Number(ratio);\n\n    if (ratio < 0) {\n      ratio = 1 / (1 - ratio);\n    } else {\n      ratio = 1 + ratio;\n    }\n\n    this.zoomTo(canvas.width * ratio / canvas.naturalWidth, _event);\n  },\n\n\n  /**\n   * Zoom the canvas to an absolute ratio\n   * @param {number} ratio - The target ratio.\n   * @param {Event} _event - The related event if any.\n   */\n  zoomTo: function zoomTo(ratio, _event) {\n    var options = this.options,\n        pointers = this.pointers,\n        canvas = this.canvas;\n    var width = canvas.width,\n        height = canvas.height,\n        naturalWidth = canvas.naturalWidth,\n        naturalHeight = canvas.naturalHeight;\n\n\n    ratio = Number(ratio);\n\n    if (ratio >= 0 && this.ready && !this.disabled && options.zoomable) {\n      var newWidth = naturalWidth * ratio;\n      var newHeight = naturalHeight * ratio;\n      var originalEvent = void 0;\n\n      if (_event) {\n        originalEvent = _event.originalEvent;\n      }\n\n      if (this.trigger(EVENT_ZOOM, {\n        originalEvent: originalEvent,\n        oldRatio: width / naturalWidth,\n        ratio: newWidth / naturalWidth\n      }).isDefaultPrevented()) {\n        return;\n      }\n\n      if (originalEvent) {\n        var offset = this.$cropper.offset();\n        var center = pointers && objectKeys(pointers).length ? getPointersCenter(pointers) : {\n          pageX: _event.pageX || originalEvent.pageX || 0,\n          pageY: _event.pageY || originalEvent.pageY || 0\n        };\n\n        // Zoom from the triggering point of the event\n        canvas.left -= (newWidth - width) * ((center.pageX - offset.left - canvas.left) / width);\n        canvas.top -= (newHeight - height) * ((center.pageY - offset.top - canvas.top) / height);\n      } else {\n        // Zoom from the center of the canvas\n        canvas.left -= (newWidth - width) / 2;\n        canvas.top -= (newHeight - height) / 2;\n      }\n\n      canvas.width = newWidth;\n      canvas.height = newHeight;\n      this.renderCanvas(true);\n    }\n  },\n\n\n  /**\n   * Rotate the canvas with a relative degree\n   * @param {number} degree - The rotate degree.\n   */\n  rotate: function rotate(degree) {\n    this.rotateTo((this.image.rotate || 0) + Number(degree));\n  },\n\n\n  /**\n   * Rotate the canvas to an absolute degree\n   * @param {number} degree - The rotate degree.\n   */\n  rotateTo: function rotateTo(degree) {\n    degree = Number(degree);\n\n    if (isNumber(degree) && this.ready && !this.disabled && this.options.rotatable) {\n      this.image.rotate = degree % 360;\n      this.renderCanvas(true, true);\n    }\n  },\n\n\n  /**\n   * Scale the image on the x-axis.\n   * @param {number} scaleX - The scale ratio on the x-axis.\n   */\n  scaleX: function scaleX(_scaleX) {\n    var scaleY = this.image.scaleY;\n\n\n    this.scale(_scaleX, isNumber(scaleY) ? scaleY : 1);\n  },\n\n\n  /**\n   * Scale the image on the y-axis.\n   * @param {number} scaleY - The scale ratio on the y-axis.\n   */\n  scaleY: function scaleY(_scaleY) {\n    var scaleX = this.image.scaleX;\n\n\n    this.scale(isNumber(scaleX) ? scaleX : 1, _scaleY);\n  },\n\n\n  /**\n   * Scale the image\n   * @param {number} scaleX - The scale ratio on the x-axis.\n   * @param {number} [scaleY=scaleX] - The scale ratio on the y-axis.\n   */\n  scale: function scale(scaleX) {\n    var scaleY = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : scaleX;\n    var image = this.image;\n\n    var transformed = false;\n\n    scaleX = Number(scaleX);\n    scaleY = Number(scaleY);\n\n    if (this.ready && !this.disabled && this.options.scalable) {\n      if (isNumber(scaleX)) {\n        image.scaleX = scaleX;\n        transformed = true;\n      }\n\n      if (isNumber(scaleY)) {\n        image.scaleY = scaleY;\n        transformed = true;\n      }\n\n      if (transformed) {\n        this.renderCanvas(true, true);\n      }\n    }\n  },\n\n\n  /**\n   * Get the cropped area position and size data (base on the original image)\n   * @param {boolean} [rounded=false] - Indicate if round the data values or not.\n   * @returns {Object} The result cropped data.\n   */\n  getData: function getData() {\n    var rounded = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;\n    var options = this.options,\n        image = this.image,\n        canvas = this.canvas,\n        cropBox = this.cropBox;\n\n    var data = void 0;\n\n    if (this.ready && this.cropped) {\n      data = {\n        x: cropBox.left - canvas.left,\n        y: cropBox.top - canvas.top,\n        width: cropBox.width,\n        height: cropBox.height\n      };\n\n      var ratio = image.width / image.naturalWidth;\n\n      $.each(data, function (i, n) {\n        n /= ratio;\n        data[i] = rounded ? Math.round(n) : n;\n      });\n    } else {\n      data = {\n        x: 0,\n        y: 0,\n        width: 0,\n        height: 0\n      };\n    }\n\n    if (options.rotatable) {\n      data.rotate = image.rotate || 0;\n    }\n\n    if (options.scalable) {\n      data.scaleX = image.scaleX || 1;\n      data.scaleY = image.scaleY || 1;\n    }\n\n    return data;\n  },\n\n\n  /**\n   * Set the cropped area position and size with new data\n   * @param {Object} data - The new data.\n   */\n  setData: function setData(data) {\n    var options = this.options,\n        image = this.image,\n        canvas = this.canvas;\n\n    var cropBoxData = {};\n\n    if ($.isFunction(data)) {\n      data = data.call(this.element);\n    }\n\n    if (this.ready && !this.disabled && $.isPlainObject(data)) {\n      var transformed = false;\n\n      if (options.rotatable) {\n        if (isNumber(data.rotate) && data.rotate !== image.rotate) {\n          image.rotate = data.rotate;\n          transformed = true;\n        }\n      }\n\n      if (options.scalable) {\n        if (isNumber(data.scaleX) && data.scaleX !== image.scaleX) {\n          image.scaleX = data.scaleX;\n          transformed = true;\n        }\n\n        if (isNumber(data.scaleY) && data.scaleY !== image.scaleY) {\n          image.scaleY = data.scaleY;\n          transformed = true;\n        }\n      }\n\n      if (transformed) {\n        this.renderCanvas(true, true);\n      }\n\n      var ratio = image.width / image.naturalWidth;\n\n      if (isNumber(data.x)) {\n        cropBoxData.left = data.x * ratio + canvas.left;\n      }\n\n      if (isNumber(data.y)) {\n        cropBoxData.top = data.y * ratio + canvas.top;\n      }\n\n      if (isNumber(data.width)) {\n        cropBoxData.width = data.width * ratio;\n      }\n\n      if (isNumber(data.height)) {\n        cropBoxData.height = data.height * ratio;\n      }\n\n      this.setCropBoxData(cropBoxData);\n    }\n  },\n\n\n  /**\n   * Get the container size data.\n   * @returns {Object} The result container data.\n   */\n  getContainerData: function getContainerData() {\n    return this.ready ? $.extend({}, this.container) : {};\n  },\n\n\n  /**\n   * Get the image position and size data.\n   * @returns {Object} The result image data.\n   */\n  getImageData: function getImageData() {\n    return this.loaded ? $.extend({}, this.image) : {};\n  },\n\n\n  /**\n   * Get the canvas position and size data.\n   * @returns {Object} The result canvas data.\n   */\n  getCanvasData: function getCanvasData() {\n    var canvas = this.canvas;\n\n    var data = {};\n\n    if (this.ready) {\n      $.each(['left', 'top', 'width', 'height', 'naturalWidth', 'naturalHeight'], function (i, n) {\n        data[n] = canvas[n];\n      });\n    }\n\n    return data;\n  },\n\n\n  /**\n   * Set the canvas position and size with new data.\n   * @param {Object} data - The new canvas data.\n   */\n  setCanvasData: function setCanvasData(data) {\n    var canvas = this.canvas;\n    var aspectRatio = canvas.aspectRatio;\n\n\n    if ($.isFunction(data)) {\n      data = data.call(this.$element);\n    }\n\n    if (this.ready && !this.disabled && $.isPlainObject(data)) {\n      if (isNumber(data.left)) {\n        canvas.left = data.left;\n      }\n\n      if (isNumber(data.top)) {\n        canvas.top = data.top;\n      }\n\n      if (isNumber(data.width)) {\n        canvas.width = data.width;\n        canvas.height = data.width / aspectRatio;\n      } else if (isNumber(data.height)) {\n        canvas.height = data.height;\n        canvas.width = data.height * aspectRatio;\n      }\n\n      this.renderCanvas(true);\n    }\n  },\n\n\n  /**\n   * Get the crop box position and size data.\n   * @returns {Object} The result crop box data.\n   */\n  getCropBoxData: function getCropBoxData() {\n    var cropBox = this.cropBox;\n\n\n    return this.ready && this.cropped ? {\n      left: cropBox.left,\n      top: cropBox.top,\n      width: cropBox.width,\n      height: cropBox.height\n    } : {};\n  },\n\n\n  /**\n   * Set the crop box position and size with new data.\n   * @param {Object} data - The new crop box data.\n   */\n  setCropBoxData: function setCropBoxData(data) {\n    var cropBox = this.cropBox;\n    var aspectRatio = this.options.aspectRatio;\n\n    var widthChanged = void 0;\n    var heightChanged = void 0;\n\n    if ($.isFunction(data)) {\n      data = data.call(this.$element);\n    }\n\n    if (this.ready && this.cropped && !this.disabled && $.isPlainObject(data)) {\n      if (isNumber(data.left)) {\n        cropBox.left = data.left;\n      }\n\n      if (isNumber(data.top)) {\n        cropBox.top = data.top;\n      }\n\n      if (isNumber(data.width) && data.width !== cropBox.width) {\n        widthChanged = true;\n        cropBox.width = data.width;\n      }\n\n      if (isNumber(data.height) && data.height !== cropBox.height) {\n        heightChanged = true;\n        cropBox.height = data.height;\n      }\n\n      if (aspectRatio) {\n        if (widthChanged) {\n          cropBox.height = cropBox.width / aspectRatio;\n        } else if (heightChanged) {\n          cropBox.width = cropBox.height * aspectRatio;\n        }\n      }\n\n      this.renderCropBox();\n    }\n  },\n\n\n  /**\n   * Get a canvas drawn the cropped image.\n   * @param {Object} [options={}] - The config options.\n   * @returns {HTMLCanvasElement} - The result canvas.\n   */\n  getCroppedCanvas: function getCroppedCanvas() {\n    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};\n\n    if (!this.ready || !window.HTMLCanvasElement) {\n      return null;\n    }\n\n    var canvasData = this.canvas;\n\n    var source = getSourceCanvas(this.$clone[0], this.image, canvasData, options);\n\n    // Returns the source canvas if it is not cropped.\n    if (!this.cropped) {\n      return source;\n    }\n\n    var _getData = this.getData(),\n        x = _getData.x,\n        y = _getData.y,\n        initialWidth = _getData.width,\n        initialHeight = _getData.height;\n\n    var aspectRatio = initialWidth / initialHeight;\n    var maxSizes = getContainSizes({\n      aspectRatio: aspectRatio,\n      width: options.maxWidth || Infinity,\n      height: options.maxHeight || Infinity\n    });\n    var minSizes = getContainSizes({\n      aspectRatio: aspectRatio,\n      width: options.minWidth || 0,\n      height: options.minHeight || 0\n    });\n\n    var _getContainSizes = getContainSizes({\n      aspectRatio: aspectRatio,\n      width: options.width || initialWidth,\n      height: options.height || initialHeight\n    }),\n        width = _getContainSizes.width,\n        height = _getContainSizes.height;\n\n    width = Math.min(maxSizes.width, Math.max(minSizes.width, width));\n    height = Math.min(maxSizes.height, Math.max(minSizes.height, height));\n\n    var canvas = document.createElement('canvas');\n    var context = canvas.getContext('2d');\n\n    canvas.width = normalizeDecimalNumber(width);\n    canvas.height = normalizeDecimalNumber(height);\n    context.fillStyle = options.fillColor || 'transparent';\n    context.fillRect(0, 0, width, height);\n\n    var _options$imageSmoothi = options.imageSmoothingEnabled,\n        imageSmoothingEnabled = _options$imageSmoothi === undefined ? true : _options$imageSmoothi,\n        imageSmoothingQuality = options.imageSmoothingQuality;\n\n\n    context.imageSmoothingEnabled = imageSmoothingEnabled;\n\n    if (imageSmoothingQuality) {\n      context.imageSmoothingQuality = imageSmoothingQuality;\n    }\n\n    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D.drawImage\n    var sourceWidth = source.width;\n    var sourceHeight = source.height;\n\n    // Source canvas parameters\n    var srcX = x;\n    var srcY = y;\n    var srcWidth = void 0;\n    var srcHeight = void 0;\n\n    // Destination canvas parameters\n    var dstX = void 0;\n    var dstY = void 0;\n    var dstWidth = void 0;\n    var dstHeight = void 0;\n\n    if (srcX <= -initialWidth || srcX > sourceWidth) {\n      srcX = 0;\n      srcWidth = 0;\n      dstX = 0;\n      dstWidth = 0;\n    } else if (srcX <= 0) {\n      dstX = -srcX;\n      srcX = 0;\n      srcWidth = Math.min(sourceWidth, initialWidth + srcX);\n      dstWidth = srcWidth;\n    } else if (srcX <= sourceWidth) {\n      dstX = 0;\n      srcWidth = Math.min(initialWidth, sourceWidth - srcX);\n      dstWidth = srcWidth;\n    }\n\n    if (srcWidth <= 0 || srcY <= -initialHeight || srcY > sourceHeight) {\n      srcY = 0;\n      srcHeight = 0;\n      dstY = 0;\n      dstHeight = 0;\n    } else if (srcY <= 0) {\n      dstY = -srcY;\n      srcY = 0;\n      srcHeight = Math.min(sourceHeight, initialHeight + srcY);\n      dstHeight = srcHeight;\n    } else if (srcY <= sourceHeight) {\n      dstY = 0;\n      srcHeight = Math.min(initialHeight, sourceHeight - srcY);\n      dstHeight = srcHeight;\n    }\n\n    // All the numerical parameters should be integer for `drawImage`\n    // https://github.com/fengyuanchen/cropper/issues/476\n    var params = [srcX, srcY, srcWidth, srcHeight];\n\n    // Avoid \"IndexSizeError\"\n    if (dstWidth > 0 && dstHeight > 0) {\n      var scale = width / initialWidth;\n\n      params.push(dstX * scale, dstY * scale, dstWidth * scale, dstHeight * scale);\n    }\n\n    context.drawImage.apply(context, [source].concat(toConsumableArray($.map(params, function (param) {\n      return Math.floor(normalizeDecimalNumber(param));\n    }))));\n    return canvas;\n  },\n\n\n  /**\n   * Change the aspect ratio of the crop box.\n   * @param {number} aspectRatio - The new aspect ratio.\n   */\n  setAspectRatio: function setAspectRatio(aspectRatio) {\n    var options = this.options;\n\n\n    if (!this.disabled && !isUndefined(aspectRatio)) {\n      // 0 -> NaN\n      options.aspectRatio = Math.max(0, aspectRatio) || NaN;\n\n      if (this.ready) {\n        this.initCropBox();\n\n        if (this.cropped) {\n          this.renderCropBox();\n        }\n      }\n    }\n  },\n\n\n  /**\n   * Change the drag mode.\n   * @param {string} mode - The new drag mode.\n   */\n  setDragMode: function setDragMode(mode) {\n    var options = this.options;\n\n    var croppable = void 0;\n    var movable = void 0;\n\n    if (this.loaded && !this.disabled) {\n      croppable = mode === DRAG_MODE_CROP;\n      movable = options.movable && mode === DRAG_MODE_MOVE;\n      mode = croppable || movable ? mode : DRAG_MODE_NONE;\n\n      this.$dragBox.data(DATA_ACTION, mode).toggleClass(CLASS_CROP, croppable).toggleClass(CLASS_MOVE, movable);\n\n      if (!options.cropBoxMovable) {\n        // Sync drag mode to crop box when it is not movable(#300)\n        this.$face.data(DATA_ACTION, mode).toggleClass(CLASS_CROP, croppable).toggleClass(CLASS_MOVE, movable);\n      }\n    }\n  }\n};\n\nvar Cropper = function () {\n  /**\n   * Create a new Cropper.\n   * @param {Element} element - The target element for cropping.\n   * @param {Object} [options={}] - The configuration options.\n   */\n  function Cropper(element) {\n    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};\n    classCallCheck(this, Cropper);\n\n    if (!element || !REGEXP_TAG_NAME.test(element.tagName)) {\n      throw new Error('The first argument is required and must be an <img> or <canvas> element.');\n    }\n\n    this.element = element;\n    this.$element = $(element);\n    this.options = $.extend({}, DEFAULTS, $.isPlainObject(options) && options);\n    this.completed = false;\n    this.cropped = false;\n    this.disabled = false;\n    this.isImg = false;\n    this.limited = false;\n    this.loaded = false;\n    this.ready = false;\n    this.replaced = false;\n    this.wheeling = false;\n    this.originalUrl = '';\n    this.canvas = null;\n    this.cropBox = null;\n    this.pointers = {};\n    this.init();\n  }\n\n  createClass(Cropper, [{\n    key: 'init',\n    value: function init() {\n      var $element = this.$element;\n\n      var url = void 0;\n\n      if ($element.is('img')) {\n        this.isImg = true;\n\n        // Should use `$.fn.attr` here. e.g.: \"img/picture.jpg\"\n        url = $element.attr('src') || '';\n        this.originalUrl = url;\n\n        // Stop when it's a blank image\n        if (!url) {\n          return;\n        }\n\n        // Should use `$.fn.prop` here. e.g.: \"http://example.com/img/picture.jpg\"\n        url = $element.prop('src');\n      } else if ($element.is('canvas') && window.HTMLCanvasElement) {\n        url = $element[0].toDataURL();\n      }\n\n      this.load(url);\n    }\n\n    // A shortcut for triggering custom events\n\n  }, {\n    key: 'trigger',\n    value: function trigger(type, data) {\n      var e = $.Event(type, data);\n\n      this.$element.trigger(e);\n\n      return e;\n    }\n  }, {\n    key: 'load',\n    value: function load(url) {\n      var _this = this;\n\n      if (!url) {\n        return;\n      }\n\n      this.url = url;\n      this.image = {};\n\n      var $element = this.$element,\n          options = this.options;\n\n\n      if (!options.checkOrientation || !window.ArrayBuffer) {\n        this.clone();\n        return;\n      }\n\n      // XMLHttpRequest disallows to open a Data URL in some browsers like IE11 and Safari\n      if (REGEXP_DATA_URL.test(url)) {\n        if (REGEXP_DATA_URL_JPEG.test(url)) {\n          this.read(dataURLToArrayBuffer(url));\n        } else {\n          this.clone();\n        }\n\n        return;\n      }\n\n      var xhr = new XMLHttpRequest();\n\n      xhr.onerror = function () {\n        _this.clone();\n      };\n\n      xhr.onload = function () {\n        _this.read(xhr.response);\n      };\n\n      // Bust cache when there is a \"crossOrigin\" property\n      if (options.checkCrossOrigin && isCrossOriginURL(url) && !$element.prop('crossOrigin')) {\n        url = addTimestamp(url);\n      }\n\n      xhr.open('get', url);\n      xhr.responseType = 'arraybuffer';\n      xhr.withCredentials = $element.prop('crossOrigin') === 'use-credentials';\n      xhr.send();\n    }\n  }, {\n    key: 'read',\n    value: function read(arrayBuffer) {\n      var options = this.options,\n          image = this.image;\n\n      var orientation = getOrientation(arrayBuffer);\n      var rotate = 0;\n      var scaleX = 1;\n      var scaleY = 1;\n\n      if (orientation > 1) {\n        this.url = arrayBufferToDataURL(arrayBuffer, 'image/jpeg');\n\n        var _parseOrientation = parseOrientation(orientation);\n\n        rotate = _parseOrientation.rotate;\n        scaleX = _parseOrientation.scaleX;\n        scaleY = _parseOrientation.scaleY;\n      }\n\n      if (options.rotatable) {\n        image.rotate = rotate;\n      }\n\n      if (options.scalable) {\n        image.scaleX = scaleX;\n        image.scaleY = scaleY;\n      }\n\n      this.clone();\n    }\n  }, {\n    key: 'clone',\n    value: function clone() {\n      var $element = this.$element,\n          options = this.options,\n          url = this.url;\n\n      var crossOrigin = '';\n      var crossOriginUrl = void 0;\n\n      if (options.checkCrossOrigin && isCrossOriginURL(url)) {\n        crossOrigin = $element.prop('crossOrigin');\n\n        if (crossOrigin) {\n          crossOriginUrl = url;\n        } else {\n          crossOrigin = 'anonymous';\n\n          // Bust cache (#148) when there is not a \"crossOrigin\" property\n          crossOriginUrl = addTimestamp(url);\n        }\n      }\n\n      this.crossOrigin = crossOrigin;\n      this.crossOriginUrl = crossOriginUrl;\n\n      var image = document.createElement('img');\n\n      if (crossOrigin) {\n        image.crossOrigin = crossOrigin;\n      }\n\n      image.src = crossOriginUrl || url;\n\n      var $clone = $(image);\n\n      this.$clone = $clone;\n\n      if (this.isImg) {\n        if (this.element.complete) {\n          this.start();\n        } else {\n          $element.one(EVENT_LOAD, $.proxy(this.start, this));\n        }\n      } else {\n        $clone.one(EVENT_LOAD, $.proxy(this.start, this)).one(EVENT_ERROR, $.proxy(this.stop, this)).addClass(CLASS_HIDE).insertAfter($element);\n      }\n    }\n  }, {\n    key: 'start',\n    value: function start() {\n      var _this2 = this;\n\n      var $clone = this.$clone;\n\n      var $image = this.$element;\n\n      if (!this.isImg) {\n        $clone.off(EVENT_ERROR, this.stop);\n        $image = $clone;\n      }\n\n      getImageNaturalSizes($image[0], function (naturalWidth, naturalHeight) {\n        $.extend(_this2.image, {\n          naturalWidth: naturalWidth,\n          naturalHeight: naturalHeight,\n          aspectRatio: naturalWidth / naturalHeight\n        });\n\n        _this2.loaded = true;\n        _this2.build();\n      });\n    }\n  }, {\n    key: 'stop',\n    value: function stop() {\n      this.$clone.remove();\n      this.$clone = null;\n    }\n  }, {\n    key: 'build',\n    value: function build() {\n      var _this3 = this;\n\n      if (!this.loaded) {\n        return;\n      }\n\n      // Unbuild first when replace\n      if (this.ready) {\n        this.unbuild();\n      }\n\n      var $element = this.$element,\n          options = this.options,\n          $clone = this.$clone;\n\n      var $cropper = $(TEMPLATE);\n      var $cropBox = $cropper.find('.' + NAMESPACE + '-crop-box');\n      var $face = $cropBox.find('.' + NAMESPACE + '-face');\n\n      // Create cropper elements\n      this.$container = $element.parent();\n      this.$cropper = $cropper;\n      this.$canvas = $cropper.find('.' + NAMESPACE + '-canvas').append($clone);\n      this.$dragBox = $cropper.find('.' + NAMESPACE + '-drag-box');\n      this.$cropBox = $cropBox;\n      this.$viewBox = $cropper.find('.' + NAMESPACE + '-view-box');\n      this.$face = $face;\n\n      // Hide the original image\n      $element.addClass(CLASS_HIDDEN).after($cropper);\n\n      // Show the clone image if is hidden\n      if (!this.isImg) {\n        $clone.removeClass(CLASS_HIDE);\n      }\n\n      this.initPreview();\n      this.bind();\n\n      options.aspectRatio = Math.max(0, options.aspectRatio) || NaN;\n      options.viewMode = Math.max(0, Math.min(3, Math.round(options.viewMode))) || 0;\n\n      this.cropped = options.autoCrop;\n\n      if (options.autoCrop) {\n        if (options.modal) {\n          this.$dragBox.addClass(CLASS_MODAL);\n        }\n      } else {\n        $cropBox.addClass(CLASS_HIDDEN);\n      }\n\n      if (!options.guides) {\n        $cropBox.find('.' + NAMESPACE + '-dashed').addClass(CLASS_HIDDEN);\n      }\n\n      if (!options.center) {\n        $cropBox.find('.' + NAMESPACE + '-center').addClass(CLASS_HIDDEN);\n      }\n\n      if (options.cropBoxMovable) {\n        $face.addClass(CLASS_MOVE).data(DATA_ACTION, ACTION_ALL);\n      }\n\n      if (!options.highlight) {\n        $face.addClass(CLASS_INVISIBLE);\n      }\n\n      if (options.background) {\n        $cropper.addClass(NAMESPACE + '-bg');\n      }\n\n      if (!options.cropBoxResizable) {\n        $cropBox.find('.' + NAMESPACE + '-line,.' + NAMESPACE + '-point').addClass(CLASS_HIDDEN);\n      }\n\n      this.setDragMode(options.dragMode);\n      this.render();\n      this.ready = true;\n      this.setData(options.data);\n\n      // Trigger the ready event asynchronously to keep `data('cropper')` is defined\n      this.completing = setTimeout(function () {\n        if ($.isFunction(options.ready)) {\n          $element.one(EVENT_READY, options.ready);\n        }\n\n        _this3.trigger(EVENT_READY);\n        _this3.trigger(EVENT_CROP, _this3.getData());\n        _this3.completed = true;\n      }, 0);\n    }\n  }, {\n    key: 'unbuild',\n    value: function unbuild() {\n      if (!this.ready) {\n        return;\n      }\n\n      if (!this.completed) {\n        clearTimeout(this.completing);\n      }\n\n      this.ready = false;\n      this.completed = false;\n      this.initialImage = null;\n\n      // Clear `initialCanvas` is necessary when replace\n      this.initialCanvas = null;\n      this.initialCropBox = null;\n      this.container = null;\n      this.canvas = null;\n\n      // Clear `cropBox` is necessary when replace\n      this.cropBox = null;\n      this.unbind();\n\n      this.resetPreview();\n      this.$preview = null;\n\n      this.$viewBox = null;\n      this.$cropBox = null;\n      this.$dragBox = null;\n      this.$canvas = null;\n      this.$container = null;\n\n      this.$cropper.remove();\n      this.$cropper = null;\n    }\n\n    /**\n     * Change the default options.\n     * @param {Object} options - The new default options.\n     */\n\n  }], [{\n    key: 'setDefaults',\n    value: function setDefaults(options) {\n      $.extend(DEFAULTS, $.isPlainObject(options) && options);\n    }\n  }]);\n  return Cropper;\n}();\n\nif ($.extend) {\n  $.extend(Cropper.prototype, render, preview, events, handlers, change, methods);\n}\n\nif ($.fn) {\n  var AnotherCropper = $.fn.cropper;\n\n  $.fn.cropper = function jQueryCropper(option) {\n    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {\n      args[_key - 1] = arguments[_key];\n    }\n\n    var result = void 0;\n\n    this.each(function (i, element) {\n      var $element = $(element);\n      var data = $element.data(NAMESPACE);\n\n      if (!data) {\n        if (/destroy/.test(option)) {\n          return;\n        }\n\n        var options = $.extend({}, $element.data(), $.isPlainObject(option) && option);\n\n        data = new Cropper(element, options);\n        $element.data(NAMESPACE, data);\n      }\n\n      if (isString(option)) {\n        var fn = data[option];\n\n        if ($.isFunction(fn)) {\n          result = fn.apply(data, args);\n        }\n      }\n    });\n\n    return isUndefined(result) ? this : result;\n  };\n\n  $.fn.cropper.Constructor = Cropper;\n  $.fn.cropper.setDefaults = Cropper.setDefaults;\n  $.fn.cropper.noConflict = function noConflict() {\n    $.fn.cropper = AnotherCropper;\n    return this;\n  };\n}\n\n})));\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./node_modules/cropper/dist/cropper.js\n// module id = 11\n// module chunks = 0\n\n//# sourceURL=webpack:///./node_modules/cropper/dist/cropper.js?");
-
-/***/ }),
-/* 12 */
 /***/ (function(module, exports) {
 
-eval("module.exports = [\"ഽ\",\"ഺ\",\"ൿ\",\"൹\",\" \",\"!\",\"\\\"\",\"%\",\"'\",\"(\",\")\",\"*\",\"+\",\",\",\"-\",\".\",\"/\",\":\",\";\",\"=\",\"?\",\"[\",\"]\",\"^\",\"_\",\"`\",\"{\",\"}\",\"~\",\"അ\",\"ആ\",\"ഇ\",\"ഉ\",\"ഋ\",\"ൠ\",\"ഌ\",\"ൡ\",\"എ\",\"ഏ\",\"ഒ\",\"ക\",\"ഖ\",\"ഗ\",\"ഘ\",\"ങ\",\"ച\",\"ഛ\",\"ജ\",\"ഝ\",\"ഞ\",\"ട\",\"ഠ\",\"ഡ\",\"ഢ\",\"ണ\",\"ത\",\"ഥ\",\"ദ\",\"ധ\",\"ന\",\"പ\",\"ഫ\",\"ബ\",\"ഭ\",\"മ\",\"യ\",\"ര\",\"ല\",\"വ\",\"ശ\",\"ഷ\",\"സ\",\"ഹ\",\"ള\",\"ഴ\",\"റ\",\"ൾ\",\"ൽ\",\"ൻ\",\"ർ\",\"ൺ\",\"്\",\"ാ\",\"ി\",\"ീ\",\"ു\",\"ൂ\",\"ൃ\",\"ോ\",\"ൊ\",\"ഈ\",\"ൈ\",\"ഊ\",\"ഓ\",\"ഐ\",\"ൌ\",\"ൎ\",\"ഔ\",\"ഩ\",\"ൢ\",\"ൣ\",\"ൄ\",\"െ\",\"േ\",\"ൗ\",\"ം\",\"ഃ\",\"൦\",\"൧\",\"൨\",\"൩\",\"൪\",\"൫\",\"൬\",\"൭\",\"൮\",\"൯\",\"൰\",\"൱\",\"൲\",\"൳\",\"൴\",\"൵\",\"0\",\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\",\"9\",\"‌\",\"‍\"]\n\n//////////////////\n// WEBPACK FOOTER\n// ./data/glyphs.json\n// module id = 12\n// module chunks = 0\n\n//# sourceURL=webpack:///./data/glyphs.json?");
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-eval("// removed by extract-text-webpack-plugin\n\n//////////////////\n// WEBPACK FOOTER\n// ./css/app.css\n// module id = 13\n// module chunks = 0\n\n//# sourceURL=webpack:///./css/app.css?");
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
