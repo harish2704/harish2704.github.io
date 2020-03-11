@@ -106,6 +106,21 @@ $(function () {
   var imgCropper = img.cropper().data('cropper');
   var debugCheckbox = $('#cb_debug');
 
+  document.onpaste = function(event){
+    var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+    for (var index in items) {
+      var item = items[index];
+      if (item.kind === 'file') {
+        var blob = item.getAsFile();
+        var reader = new FileReader();
+        reader.onload = function(event){
+          imgCropper.replace( event.target.result );
+        };
+        reader.readAsDataURL(blob);
+      }
+    }
+  };
+
   function initUi() {
     img.on('ready', function () {
       imgCropper.setCropBoxData({
