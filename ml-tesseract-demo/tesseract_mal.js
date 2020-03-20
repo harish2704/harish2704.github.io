@@ -664,8 +664,8 @@ var wasmMemory;
 // In the wasm backend, we polyfill the WebAssembly object,
 // so this creates a (non-native-wasm) table for us.
 var wasmTable = new WebAssembly.Table({
-  'initial': 1195,
-  'maximum': 1195 + 0,
+  'initial': 1444,
+  'maximum': 1444 + 0,
   'element': 'anyfunc'
 });
 
@@ -1273,11 +1273,11 @@ function updateGlobalBufferAndViews(buf) {
 }
 
 var STATIC_BASE = 1024,
-    STACK_BASE = 5736192,
+    STACK_BASE = 5877232,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 493312,
-    DYNAMIC_BASE = 5736192,
-    DYNAMICTOP_PTR = 493152;
+    STACK_MAX = 634352,
+    DYNAMIC_BASE = 5877232,
+    DYNAMICTOP_PTR = 634192;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1805,7 +1805,7 @@ var ASM_CONSTS = {
 
 
 
-// STATICTOP = STATIC_BASE + 492288;
+// STATICTOP = STATIC_BASE + 633328;
 /* global initializers */  __ATINIT__.push({ func: function() { ___wasm_call_ctors() } });
 
 
@@ -7458,7 +7458,7 @@ var ASM_CONSTS = {
     }
 
   function _emscripten_get_sbrk_ptr() {
-      return 493152;
+      return 634192;
     }
 
   
@@ -7887,7 +7887,7 @@ var ASM_CONSTS = {
     }
 
   
-  var ___tm_timezone=(stringToUTF8("GMT", 493216, 4), 493216);function _gmtime_r(time, tmPtr) {
+  var ___tm_timezone=(stringToUTF8("GMT", 634256, 4), 634256);function _gmtime_r(time, tmPtr) {
       var date = new Date(HEAP32[((time)>>2)]*1000);
       HEAP32[((tmPtr)>>2)]=date.getUTCSeconds();
       HEAP32[(((tmPtr)+(4))>>2)]=date.getUTCMinutes();
@@ -9002,10 +9002,10 @@ function invoke_iiii(index,a1,a2,a3) {
   }
 }
 
-function invoke_iiiii(index,a1,a2,a3,a4) {
+function invoke_vi(index,a1) {
   var sp = stackSave();
   try {
-    return dynCall_iiiii(index,a1,a2,a3,a4);
+    dynCall_vi(index,a1);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0 && e !== 'longjmp') throw e;
@@ -9046,17 +9046,6 @@ function invoke_vii(index,a1,a2) {
   }
 }
 
-function invoke_viiii(index,a1,a2,a3,a4) {
-  var sp = stackSave();
-  try {
-    dynCall_viiii(index,a1,a2,a3,a4);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0 && e !== 'longjmp') throw e;
-    _setThrew(1, 0);
-  }
-}
-
 function invoke_iii(index,a1,a2) {
   var sp = stackSave();
   try {
@@ -9068,10 +9057,21 @@ function invoke_iii(index,a1,a2) {
   }
 }
 
-function invoke_vi(index,a1) {
+function invoke_iiiii(index,a1,a2,a3,a4) {
   var sp = stackSave();
   try {
-    dynCall_vi(index,a1);
+    return dynCall_iiiii(index,a1,a2,a3,a4);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0 && e !== 'longjmp') throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_viiii(index,a1,a2,a3,a4) {
+  var sp = stackSave();
+  try {
+    dynCall_viiii(index,a1,a2,a3,a4);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0 && e !== 'longjmp') throw e;
