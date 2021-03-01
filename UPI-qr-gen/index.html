@@ -6,6 +6,21 @@
     <title>UPI QR code generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+    <style>
+      .outputWrapper{
+        border: 1px solid #606c76;
+        border-radius: 4px;
+        padding: 2%;
+      }
+      .button-blue{
+        background-color: #007bff;
+        border-color: #007bff;
+      }
+      .button-green{
+        background-color: #28a745;
+        border-color: #28a745;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -22,10 +37,13 @@
               <input class="button-primary" type="submit" value="Generate QR code">
             </fieldset>
           </form>
-          <a href="#" class="button button-outline" target="_blank" id="appLink"><strong>Open UPI App</strong></a>
-          <label for="sharelink">Sharable link</label>
-          <input type="text" readonly id="sharelink">
-          <img src="//:0" alt="" id="outputImg">
+          <div class="outputWrapper">
+            <a href="#" class="button button-green" target="_blank" id="appLink"><strong>Pay using UPI App</strong></a>
+            <a onclick="copyToClipboard()" class="button button-blue" target="_blank" id="copyLink"><strong>Copy Link</strong></a>
+            <label for="sharelink">Sharable link</label>
+            <input type="text" readonly id="sharelink">
+            <img src="//:0" alt="" id="outputImg">
+          </div>
         </div>
       </div>
     </div>
@@ -35,6 +53,20 @@
 
       function $(sel){
         return document.getElementById(sel);
+      }
+
+      function copyToClipboard() {
+        // change btn text 
+        var link = $('copyLink');
+        link.innerText = 'Copied!'
+        setTimeout(()=>{
+          // restore btn text
+          link.innerText = 'Copy Link'
+        }, 1000)
+        var input = $('sharelink');
+        input.focus();
+        input.select();
+        document.execCommand('copy');
       }
 
       function renderQR(accNo, ifscCode, accountHolder){
@@ -59,7 +91,6 @@
             return;
           }
           $('outputImg').src = dataUrl;
-          console.log('success!');
         })
 
       }
